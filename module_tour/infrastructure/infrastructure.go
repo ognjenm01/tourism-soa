@@ -48,9 +48,9 @@ func createConnectionString() string {
 }
 
 func createTablePrefix() string {
-	prefix := os.Getenv("SCHEMA")
+	prefix := "tours."
 	if prefix == "" {
-		prefix = "tours"
+		prefix = "tours."
 	}
 	return prefix
 }

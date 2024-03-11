@@ -19,7 +19,7 @@ func startServer(handler *handler.TourHandler) {
 	router.HandleFunc("/api/tours/byauthor/{id}", handler.GetTourByAuthor).Methods("GET")
 	router.HandleFunc("/api/tours/bystatus", handler.GetToursByStatus).Methods("POST")
 	router.HandleFunc("/api/tours", handler.Create).Methods("POST")
-	router.HandleFunc("/api/tours", handler.Update).Methods("PUT")
+	router.HandleFunc("/api/tours/{id}", handler.Update).Methods("PUT")
 	log.Println("[SERVER] - Server starting...")
 
 	//FIXME: VERY UNSAFE! Add origins to env, fix the rest
@@ -42,8 +42,8 @@ func main() {
 	}
 	log.Println("[DB] - Successfully connected to database")
 
-	repo := &repo.TourRepository{DatabaseConnection: database}
-	service := &service.TourService{TourRepository: repo}
+	tourRepo := &repo.TourRepository{DatabaseConnection: database}
+	service := &service.TourService{TourRepository: tourRepo}
 	handler := &handler.TourHandler{TourService: service}
 	startServer(handler)
 }
