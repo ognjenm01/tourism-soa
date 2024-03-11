@@ -24,8 +24,25 @@ func (repo *TourRepository) FindById(id string) (model.Tour, error) {
 	return tour, nil
 }
 
+func (repo *TourRepository) FindAll() ([]model.Tour, error) {
+	tours := []model.Tour{}
+	result := repo.DatabaseConnection.Preload("Tags").Preload("Keypoints").Find(&tours)
+	if result != nil {
+		return tours, result.Error
+	}
+	return tours, nil
+}
+
 func (repo *TourRepository) Create(tour *model.Tour) error {
 	result := repo.DatabaseConnection.Create(tour)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
+func (repo *TourRepository) Save(tour *model.Tour) error {
+	result := repo.DatabaseConnection.Save(tour)
 	if result.Error != nil {
 		return result.Error
 	}

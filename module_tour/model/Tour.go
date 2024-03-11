@@ -1,7 +1,6 @@
 package model
 
 import (
-	"encoding/json"
 	"time"
 )
 
@@ -30,63 +29,11 @@ type TourTag struct {
 	Tag    string `json:"tag"`
 }
 
-func (t *TourDifficulty) UnmarshalJSON(bytes []byte) error {
-	var difficulty string
-	err := json.Unmarshal(bytes, &difficulty)
-	if err != nil {
-		return err
+func (t *Tour) ContainsStatus(statuses []TourStatus) bool {
+	for _, status := range statuses {
+		if t.Status == status {
+			return true
+		}
 	}
-	switch difficulty {
-	case "EASY":
-		*t = 0
-	case "MEDIUM":
-		*t = 1
-	case "HARD":
-		*t = 2
-	case "EXTREME":
-		*t = 3
-	}
-	return err
-}
-
-func (t *TourStatus) UnmarshalJSON(bytes []byte) error {
-	var status string
-	err := json.Unmarshal(bytes, &status)
-	if err != nil {
-		return err
-	}
-	switch status {
-	case "DRAFT":
-		*t = 0
-	case "PUBLISHED":
-		*t = 1
-	case "ARCHIVED":
-		*t = 2
-	case "DISABLED":
-		*t = 3
-	case "CUSTOM":
-		*t = 4
-	case "CAMPAIGN":
-		*t = 5
-	}
-	return err
-}
-
-func (t *TransportType) UnmarshalJSON(bytes []byte) error {
-	var transportType string
-	err := json.Unmarshal(bytes, &transportType)
-	if err != nil {
-		return err
-	}
-	switch transportType {
-	case "WALK":
-		*t = 0
-	case "CAR":
-		*t = 1
-	case "BIKE":
-		*t = 2
-	case "BOAT":
-		*t = 3
-	}
-	return err
+	return false
 }

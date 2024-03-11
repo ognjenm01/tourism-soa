@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"tour/handler"
@@ -14,17 +13,20 @@ import (
 )
 
 func startServer(handler *handler.TourHandler) {
-	fmt.Println("BBB")
 	router := mux.NewRouter().StrictSlash(true)
 
-	router.HandleFunc("/api/tours/{id}", handler.Find).Methods("GET")
+	router.HandleFunc("/api/tours/{id}", handler.GetTourById).Methods("GET")
+	router.HandleFunc("/api/tours/byauthor/{id}", handler.GetTourByAuthor).Methods("GET")
+	router.HandleFunc("/api/tours/bystatus", handler.GetToursByStatus).Methods("POST")
 	router.HandleFunc("/api/tours", handler.Create).Methods("POST")
+	router.HandleFunc("/api/tours", handler.Update).Methods("PUT")
 	log.Println("[SERVER] - Server starting...")
+
 	//FIXME: VERY UNSAFE! Add origins to env, fix the rest
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowCredentials: true,
-		AllowedMethods:   []string{"POST", "GET"},
+		AllowedMethods:   []string{"POST", "GET", "PUT"},
 		AllowedHeaders:   []string{"*"},
 	})
 
