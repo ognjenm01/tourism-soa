@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"tour/model"
 	"tour/service"
 
@@ -78,14 +79,22 @@ func (handler *TourHandler) Create(writer http.ResponseWriter, req *http.Request
 }
 
 func (handler *TourHandler) Update(writer http.ResponseWriter, req *http.Request) {
-	var tour model.Tour
-	error := json.NewDecoder(req.Body).Decode(&tour)
+	id := mux.Vars(req)["id"]
+	ID, error := strconv.Atoi(id)
+
 	if error != nil {
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	error = handler.TourService.Update(&tour)
+	var tour model.Tour
+	error = json.NewDecoder(req.Body).Decode(&tour)
+	if error != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	error = handler.TourService.Update(ID, &tour)
 	if error != nil {
 		writer.WriteHeader(http.StatusExpectationFailed)
 		return

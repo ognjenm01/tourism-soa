@@ -9,7 +9,7 @@ type TransportType int
 type TourStatus int
 
 type Tour struct {
-	ID               int            `json:"id" gorm:"primaryKey"`
+	ID               int            `json:"id" gorm:"primaryKey,unique"`
 	UserId           int            `json:"userid"`
 	Name             string         `json:"name"`
 	Description      string         `json:"description"`
@@ -22,11 +22,6 @@ type Tour struct {
 	Duration         int            `json:"duration"`
 	Distance         float64        `json:"distance"`
 	StatusUpdateTime time.Time      `json:"statusUpdateTime"`
-}
-
-type TourTag struct {
-	TourID int    `json:"TourID"`
-	Tag    string `json:"tag"`
 }
 
 func (t *Tour) ContainsStatus(statuses []TourStatus) bool {

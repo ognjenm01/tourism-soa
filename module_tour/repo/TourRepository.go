@@ -11,7 +11,7 @@ type TourRepository struct {
 	DatabaseConnection *gorm.DB
 }
 
-func (repo *TourRepository) FindById(id string) (model.Tour, error) {
+func (repo *TourRepository) GetById(id string) (model.Tour, error) {
 	tour := model.Tour{}
 	pk, err := strconv.ParseUint(id, 10, 64)
 	if err != nil {
@@ -24,7 +24,7 @@ func (repo *TourRepository) FindById(id string) (model.Tour, error) {
 	return tour, nil
 }
 
-func (repo *TourRepository) FindAll() ([]model.Tour, error) {
+func (repo *TourRepository) GetAll() ([]model.Tour, error) {
 	tours := []model.Tour{}
 	result := repo.DatabaseConnection.Preload("Tags").Preload("Keypoints").Find(&tours)
 	if result != nil {
@@ -41,10 +41,24 @@ func (repo *TourRepository) Create(tour *model.Tour) error {
 	return nil
 }
 
-func (repo *TourRepository) Save(tour *model.Tour) error {
-	result := repo.DatabaseConnection.Save(tour)
+func (repo *TourRepository) Update(id int, tour *model.Tour) error {
+	//FIXME Transcations
+	//repo.DatabaseConnection.Begin()
+	result := repo.DatabaseConnection.Model(tour).
+		Updates(map[string]interface{}{
+			"Name":          tour.Name,
+			"Description":   tour.Description,
+			"Price":         tour.Price,
+			"Difficulty":    tour.Difficulty,
+			"TransportType": tour.TransportType,
+		})
+	for _, tag := range tour.Tags {
+		repo.DatabaseConnection.Save(tag)
+	}
 	if result.Error != nil {
+		//repo.DatabaseConnection.Rollback()
 		return result.Error
 	}
+	//repo.DatabaseConnection.Commit()
 	return nil
 }

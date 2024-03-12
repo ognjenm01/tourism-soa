@@ -1,6 +1,7 @@
 package model
 
 type Keypoint struct {
+	ID          int     `json:"id" gorm:"primaryKey"`
 	TourID      int     `json:"tourID"`
 	Name        string  `json:"name"`
 	Latitude    float64 `json:"latitude"`

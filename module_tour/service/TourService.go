@@ -13,7 +13,7 @@ type TourService struct {
 }
 
 func (service *TourService) GetTourById(id string) (*model.Tour, error) {
-	tour, error := service.TourRepository.FindById(id)
+	tour, error := service.TourRepository.GetById(id)
 	if error != nil {
 		log.Fatalf("[DB] - Entity with id %s not found\n", id)
 		return nil, fmt.Errorf(fmt.Sprintf("[DB] - Entity with id %s not found\n", id))
@@ -22,7 +22,7 @@ func (service *TourService) GetTourById(id string) (*model.Tour, error) {
 }
 
 func (service *TourService) GetToursByStatus(statuses []model.TourStatus) (*[]model.Tour, error) {
-	tours, error := service.TourRepository.FindAll()
+	tours, error := service.TourRepository.GetAll()
 	var filteredTours []model.Tour
 	if error == nil {
 		for _, tour := range tours {
@@ -42,7 +42,7 @@ func (service *TourService) GetToursByAuthor(authorId string) (*[]model.Tour, er
 		return nil, error
 	}
 
-	tours, error := service.TourRepository.FindAll()
+	tours, error := service.TourRepository.GetAll()
 	var filteredTours []model.Tour
 	if error == nil {
 		for _, tour := range tours {
@@ -56,7 +56,7 @@ func (service *TourService) GetToursByAuthor(authorId string) (*[]model.Tour, er
 }
 
 func (service *TourService) GetAll() (*[]model.Tour, error) {
-	tours, error := service.TourRepository.FindAll()
+	tours, error := service.TourRepository.GetAll()
 	if error != nil {
 		log.Fatalf("[DB] - No tours in db!\n")
 		return nil, error
@@ -73,8 +73,9 @@ func (service *TourService) Create(tour *model.Tour) error {
 	return nil
 }
 
-func (service *TourService) Update(tour *model.Tour) error {
-	error := service.TourRepository.Save(tour)
+func (service *TourService) Update(id int, tour *model.Tour) error {
+	//Sacuvaj turu, pa onda tour tag i keypoints
+	error := service.TourRepository.Update(id, tour)
 	if error != nil {
 		log.Fatalf("[DB] - %s", error)
 		return error
