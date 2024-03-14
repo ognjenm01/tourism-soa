@@ -16,7 +16,7 @@ func (service *TourService) GetTourById(id string) (*model.Tour, error) {
 	tour, error := service.TourRepository.GetById(id)
 	if error != nil {
 		log.Fatalf("[DB] - Entity with id %s not found\n", id)
-		return nil, fmt.Errorf(fmt.Sprintf("[DB] - Entity with id %s not found\n", id))
+		return &model.Tour{}, fmt.Errorf(fmt.Sprintf("[DB] - Entity with id %s not found\n", id))
 	}
 	return &tour, nil
 }
@@ -32,7 +32,7 @@ func (service *TourService) GetToursByStatus(statuses []model.TourStatus) (*[]mo
 		}
 		return &filteredTours, nil
 	}
-	return &filteredTours, error
+	return &[]model.Tour{}, error
 }
 
 func (service *TourService) GetToursByAuthor(authorId string) (*[]model.Tour, error) {
@@ -52,14 +52,14 @@ func (service *TourService) GetToursByAuthor(authorId string) (*[]model.Tour, er
 		}
 		return &filteredTours, nil
 	}
-	return &filteredTours, error
+	return &[]model.Tour{}, error
 }
 
 func (service *TourService) GetAll() (*[]model.Tour, error) {
 	tours, error := service.TourRepository.GetAll()
 	if error != nil {
 		log.Fatalf("[DB] - No tours in db!\n")
-		return nil, error
+		return &[]model.Tour{}, error
 	}
 	return &tours, nil
 }
@@ -74,7 +74,6 @@ func (service *TourService) Create(tour *model.Tour) error {
 }
 
 func (service *TourService) Update(id int, tour *model.Tour) error {
-	//Sacuvaj turu, pa onda tour tag i keypoints
 	error := service.TourRepository.Update(id, tour)
 	if error != nil {
 		log.Fatalf("[DB] - %s", error)

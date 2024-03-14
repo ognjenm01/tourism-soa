@@ -17,7 +17,11 @@ func (repo *TourRepository) GetById(id string) (model.Tour, error) {
 	if err != nil {
 		return tour, err
 	}
-	result := repo.DatabaseConnection.Preload("Tags").First(&tour, "id = ?", pk)
+
+	result := repo.DatabaseConnection.Preload("Tags").
+		Preload("Keypoints").
+		First(&tour, "id = ?", pk)
+
 	if result != nil {
 		return tour, result.Error
 	}
@@ -26,7 +30,11 @@ func (repo *TourRepository) GetById(id string) (model.Tour, error) {
 
 func (repo *TourRepository) GetAll() ([]model.Tour, error) {
 	tours := []model.Tour{}
-	result := repo.DatabaseConnection.Preload("Tags").Preload("Keypoints").Find(&tours)
+
+	result := repo.DatabaseConnection.Preload("Tags").
+		Preload("Keypoints").
+		Find(&tours)
+
 	if result != nil {
 		return tours, result.Error
 	}
@@ -55,6 +63,11 @@ func (repo *TourRepository) Update(id int, tour *model.Tour) error {
 	for _, tag := range tour.Tags {
 		repo.DatabaseConnection.Save(tag)
 	}
+
+	for _, keypoint := range tour.Keypoints {
+		repo.DatabaseConnection.Save(keypoint)
+	}
+
 	if result.Error != nil {
 		//repo.DatabaseConnection.Rollback()
 		return result.Error

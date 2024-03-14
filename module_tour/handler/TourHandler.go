@@ -11,7 +11,8 @@ import (
 )
 
 type TourHandler struct {
-	TourService *service.TourService
+	TourService     *service.TourService
+	KeypointService *service.KeypointService
 }
 
 func (handler *TourHandler) GetTourById(writer http.ResponseWriter, req *http.Request) {
@@ -59,7 +60,7 @@ func (handler *TourHandler) GetTourByAuthor(writer http.ResponseWriter, req *htt
 	}
 }
 
-func (handler *TourHandler) Create(writer http.ResponseWriter, req *http.Request) {
+func (handler *TourHandler) CreateTour(writer http.ResponseWriter, req *http.Request) {
 	var tour model.Tour
 	error := json.NewDecoder(req.Body).Decode(&tour)
 	if error != nil {
@@ -101,4 +102,37 @@ func (handler *TourHandler) Update(writer http.ResponseWriter, req *http.Request
 
 	writer.WriteHeader(http.StatusCreated)
 	writer.Header().Set("Content-Type", "application/json")
+}
+
+func (handler *TourHandler) CreateKeypoint(writer http.ResponseWriter, req *http.Request) {
+	var keypoint model.Keypoint
+	error := json.NewDecoder(req.Body).Decode(&keypoint)
+	if error != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	error = handler.KeypointService.Create(&keypoint)
+	if error != nil {
+		writer.WriteHeader(http.StatusExpectationFailed)
+		return
+	}
+
+	writer.WriteHeader(http.StatusCreated)
+	writer.Header().Set("Content-Type", "application/json")
+}
+
+func (handler *TourHandler) GetKeypointsByTourId(writer http.ResponseWriter, req *http.Request) {
+	id := mux.Vars(req)["id"]
+
+	keypoints, error := handler.KeypointService.GetByTourId(id)
+
+	if error != nil {
+		writer.WriteHeader(http.StatusExpectationFailed)
+		return
+	}
+
+	writer.WriteHeader(http.StatusOK)
+	writer.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(writer).Encode(keypoints)
 }

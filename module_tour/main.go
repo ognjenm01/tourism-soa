@@ -18,8 +18,10 @@ func startServer(handler *handler.TourHandler) {
 	router.HandleFunc("/api/tours/{id}", handler.GetTourById).Methods("GET")
 	router.HandleFunc("/api/tours/byauthor/{id}", handler.GetTourByAuthor).Methods("GET")
 	router.HandleFunc("/api/tours/bystatus", handler.GetToursByStatus).Methods("POST")
-	router.HandleFunc("/api/tours", handler.Create).Methods("POST")
+	router.HandleFunc("/api/tours", handler.CreateTour).Methods("POST")
 	router.HandleFunc("/api/tours/{id}", handler.Update).Methods("PUT")
+	router.HandleFunc("/api/keypoints", handler.CreateKeypoint).Methods("POST")
+	router.HandleFunc("/api/keypoints/tour/{id}", handler.GetKeypointsByTourId).Methods("GET")
 	log.Println("[SERVER] - Server starting...")
 
 	//FIXME: VERY UNSAFE! Add origins to env, fix the rest
@@ -42,8 +44,16 @@ func main() {
 	}
 	log.Println("[DB] - Successfully connected to database")
 
-	tourRepo := &repo.TourRepository{DatabaseConnection: database}
-	service := &service.TourService{TourRepository: tourRepo}
-	handler := &handler.TourHandler{TourService: service}
+	tourRepository := &repo.TourRepository{DatabaseConnection: database}
+	keypointRepository := &repo.KeypointRepository{DatabaseConnection: database}
+
+	tourService := &service.TourService{TourRepository: tourRepository}
+	keypointService := &service.KeypointService{KeypointRepository: keypointRepository}
+
+	handler := &handler.TourHandler{
+		TourService:     tourService,
+		KeypointService: keypointService,
+	}
+
 	startServer(handler)
 }
