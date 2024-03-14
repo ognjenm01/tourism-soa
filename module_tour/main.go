@@ -19,6 +19,8 @@ func startServer(handler *handler.TourHandler) {
 	router.HandleFunc("/api/tours/byauthor/{id}", handler.GetTourByAuthor).Methods("GET")
 	router.HandleFunc("/api/tours/bystatus", handler.GetToursByStatus).Methods("POST")
 	router.HandleFunc("/api/tours", handler.CreateTour).Methods("POST")
+	router.HandleFunc("/api/tourreview", handler.CreateReview).Methods("POST")
+	router.HandleFunc("/api/tourreview", handler.FindAllReviews).Methods("GET")
 	router.HandleFunc("/api/tours/{id}", handler.Update).Methods("PUT")
 	router.HandleFunc("/api/keypoints", handler.CreateKeypoint).Methods("POST")
 	router.HandleFunc("/api/keypoints/tour/{id}", handler.GetKeypointsByTourId).Methods("GET")
@@ -50,9 +52,13 @@ func main() {
 	tourService := &service.TourService{TourRepository: tourRepository}
 	keypointService := &service.KeypointService{KeypointRepository: keypointRepository}
 
+	tourReviewRepository := &repo.TourReviewRepository{DatabaseConnection: database}
+	tourReviewService := &service.TourReviewService{TourReviewRepository: tourReviewRepository}
+
 	handler := &handler.TourHandler{
-		TourService:     tourService,
-		KeypointService: keypointService,
+		TourService:       tourService,
+		KeypointService:   keypointService,
+		TourReviewService: tourReviewService,
 	}
 
 	startServer(handler)
