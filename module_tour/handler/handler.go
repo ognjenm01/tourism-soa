@@ -16,6 +16,8 @@ type TourHandler struct {
 	TourReviewService *service.TourReviewService
 }
 
+// ------------------------------------------------------------------------------------------- TOUR CRUD
+
 func (handler *TourHandler) GetTourById(writer http.ResponseWriter, req *http.Request) {
 	id := mux.Vars(req)["id"]
 	tour, error := handler.TourService.GetTourById(id)
@@ -69,7 +71,7 @@ func (handler *TourHandler) CreateTour(writer http.ResponseWriter, req *http.Req
 		return
 	}
 
-	error = handler.TourService.Create(&tour)
+	error = handler.TourService.CreateTour(&tour)
 	if error != nil {
 		writer.WriteHeader(http.StatusExpectationFailed)
 		return
@@ -79,7 +81,7 @@ func (handler *TourHandler) CreateTour(writer http.ResponseWriter, req *http.Req
 	writer.Header().Set("Content-Type", "application/json")
 }
 
-func (handler *TourHandler) Update(writer http.ResponseWriter, req *http.Request) {
+func (handler *TourHandler) UpdateTour(writer http.ResponseWriter, req *http.Request) {
 	id := mux.Vars(req)["id"]
 	ID, error := strconv.Atoi(id)
 
@@ -95,7 +97,7 @@ func (handler *TourHandler) Update(writer http.ResponseWriter, req *http.Request
 		return
 	}
 
-	error = handler.TourService.Update(ID, &tour)
+	error = handler.TourService.UpdateTour(ID, &tour)
 	if error != nil {
 		writer.WriteHeader(http.StatusExpectationFailed)
 		return
@@ -103,6 +105,21 @@ func (handler *TourHandler) Update(writer http.ResponseWriter, req *http.Request
 
 	writer.WriteHeader(http.StatusCreated)
 	writer.Header().Set("Content-Type", "application/json")
+}
+
+//------------------------------------------------------------------------------------------- KEYPOINT CRUD
+
+func (handler *TourHandler) GetKeypointsByTourId(writer http.ResponseWriter, req *http.Request) {
+	id := mux.Vars(req)["id"]
+
+	keypoints, error := handler.KeypointService.GetKeypointsByTourId(id)
+	if error != nil {
+		writer.WriteHeader(http.StatusExpectationFailed)
+		return
+	}
+	writer.WriteHeader(http.StatusOK)
+	writer.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(writer).Encode(keypoints)
 }
 
 func (handler *TourHandler) CreateKeypoint(writer http.ResponseWriter, req *http.Request) {
@@ -112,7 +129,7 @@ func (handler *TourHandler) CreateKeypoint(writer http.ResponseWriter, req *http
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	error = handler.KeypointService.Create(&keypoint)
+	error = handler.KeypointService.CreateKeypoint(&keypoint)
 
 	if error != nil {
 		writer.WriteHeader(http.StatusExpectationFailed)
@@ -123,9 +140,11 @@ func (handler *TourHandler) CreateKeypoint(writer http.ResponseWriter, req *http
 	writer.Header().Set("Content-Type", "application/json")
 }
 
-func (handler *TourHandler) FindReviewById(writer http.ResponseWriter, req *http.Request) {
+//----------------------------------------------------------------------------------------TOUR REVIEW CRUD
+
+func (handler *TourHandler) GetReviewById(writer http.ResponseWriter, req *http.Request) {
 	id := mux.Vars(req)["id"]
-	tourReview, error := handler.TourReviewService.FindReviewById(id)
+	tourReview, error := handler.TourReviewService.GetReviewById(id)
 	writer.Header().Set("Content-Type", "application/json")
 	if error != nil {
 		writer.WriteHeader(http.StatusNotFound)
@@ -136,8 +155,8 @@ func (handler *TourHandler) FindReviewById(writer http.ResponseWriter, req *http
 	}
 }
 
-func (handler *TourHandler) FindAllReviews(writer http.ResponseWriter, req *http.Request) {
-	tourReviews, error := handler.TourReviewService.FindAllReviews()
+func (handler *TourHandler) GetAllReviews(writer http.ResponseWriter, req *http.Request) {
+	tourReviews, error := handler.TourReviewService.GetAllReviews()
 	writer.Header().Set("Content-Type", "application/json")
 	if error != nil {
 		writer.WriteHeader(http.StatusNotFound)
@@ -165,19 +184,6 @@ func (handler *TourHandler) CreateReview(writer http.ResponseWriter, req *http.R
 
 	writer.WriteHeader(http.StatusCreated)
 	writer.Header().Set("Content-Type", "application/json")
-}
-
-func (handler *TourHandler) GetKeypointsByTourId(writer http.ResponseWriter, req *http.Request) {
-	id := mux.Vars(req)["id"]
-
-	keypoints, error := handler.KeypointService.GetByTourId(id)
-	if error != nil {
-		writer.WriteHeader(http.StatusExpectationFailed)
-		return
-	}
-	writer.WriteHeader(http.StatusOK)
-	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(keypoints)
 }
 
 func (handler *TourHandler) UpdateReview(writer http.ResponseWriter, req *http.Request) {

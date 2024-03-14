@@ -50,8 +50,6 @@ func (repo *TourRepository) Create(tour *model.Tour) error {
 }
 
 func (repo *TourRepository) Update(id int, tour *model.Tour) error {
-	//FIXME Transcations
-	//repo.DatabaseConnection.Begin()
 	result := repo.DatabaseConnection.Model(tour).
 		Updates(map[string]interface{}{
 			"Name":          tour.Name,
@@ -60,6 +58,7 @@ func (repo *TourRepository) Update(id int, tour *model.Tour) error {
 			"Difficulty":    tour.Difficulty,
 			"TransportType": tour.TransportType,
 		})
+
 	for _, tag := range tour.Tags {
 		repo.DatabaseConnection.Save(tag)
 	}
@@ -69,9 +68,8 @@ func (repo *TourRepository) Update(id int, tour *model.Tour) error {
 	}
 
 	if result.Error != nil {
-		//repo.DatabaseConnection.Rollback()
 		return result.Error
 	}
-	//repo.DatabaseConnection.Commit()
+
 	return nil
 }

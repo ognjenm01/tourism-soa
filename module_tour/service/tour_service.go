@@ -64,7 +64,7 @@ func (service *TourService) GetAll() (*[]model.Tour, error) {
 	return &tours, nil
 }
 
-func (service *TourService) Create(tour *model.Tour) error {
+func (service *TourService) CreateTour(tour *model.Tour) error {
 	error := service.TourRepository.Create(tour)
 	if error != nil {
 		log.Fatalf("[DB] - %s", error)
@@ -73,7 +73,7 @@ func (service *TourService) Create(tour *model.Tour) error {
 	return nil
 }
 
-func (service *TourService) Update(id int, tour *model.Tour) error {
+func (service *TourService) UpdateTour(id int, tour *model.Tour) error {
 	error := service.TourRepository.Update(id, tour)
 	if error != nil {
 		log.Fatalf("[DB] - %s", error)

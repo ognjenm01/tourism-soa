@@ -20,7 +20,7 @@ func (service *KeypointService) GetAll() (*[]model.Keypoint, error) {
 	return &keypoints, nil
 }
 
-func (service *KeypointService) GetByTourId(tourid string) (*[]model.Keypoint, error) {
+func (service *KeypointService) GetKeypointsByTourId(tourid string) (*[]model.Keypoint, error) {
 	keypoints, error := service.KeypointRepository.GetAll()
 	if error != nil {
 		log.Fatalf("[DB] - No tours in db!\n")
@@ -41,7 +41,7 @@ func (service *KeypointService) GetByTourId(tourid string) (*[]model.Keypoint, e
 	return &filteredKeypoints, nil
 }
 
-func (service *KeypointService) Create(keypoint *model.Keypoint) error {
+func (service *KeypointService) CreateKeypoint(keypoint *model.Keypoint) error {
 	error := service.KeypointRepository.Save(keypoint)
 	if error != nil {
 		log.Fatalf("[DB] - %s", error)

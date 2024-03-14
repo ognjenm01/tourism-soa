@@ -1,22 +1,20 @@
-package infrastructure
+package test_infrastructure
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"tour/model"
 
-	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 )
 
 func createConnectionString() string {
-	err := godotenv.Load(".env")
+	/*err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatalf("Error loading .env file: %s", err)
-	}
+	}*/
 
 	host := os.Getenv("HOST")
 	if host == "" {
