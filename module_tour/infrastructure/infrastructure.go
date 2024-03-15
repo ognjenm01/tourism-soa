@@ -96,4 +96,6 @@ func fillDB(database *gorm.DB) {
 	database.AutoMigrate(&model.Keypoint{})
 	database.AutoMigrate(&model.TourReview{})
 	database.AutoMigrate(&model.ImageLink{})
+	database.AutoMigrate(&model.Equipment{})
+	database.AutoMigrate(&model.TourEquipment{})
 }
