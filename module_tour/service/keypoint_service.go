@@ -49,3 +49,12 @@ func (service *KeypointService) CreateKeypoint(keypoint *model.Keypoint) error {
 	}
 	return nil
 }
+
+func (service *KeypointService) DeleteKeypoint(id string) error {
+	error := service.KeypointRepository.Delete(id)
+	if error != nil {
+		log.Fatalf("[DB] - %s", error)
+		return error
+	}
+	return nil
+}

@@ -23,6 +23,8 @@ func InitRouter(handler *handler.TourHandler) *mux.Router {
 	// KEYPOINTS
 	router.HandleFunc("/api/keypoints", handler.CreateKeypoint).Methods("POST")
 	router.HandleFunc("/api/keypoints/tour/{id}", handler.GetKeypointsByTourId).Methods("GET")
+	router.HandleFunc("/api/keypoints", handler.CreateKeypoint).Methods("PUT")
+	router.HandleFunc("/api/keypoints/{id}", handler.DeleteKeypoint).Methods("DELETE")
 
 	return router
 }

@@ -26,3 +26,11 @@ func (repo *KeypointRepository) Save(keypoint *model.Keypoint) error {
 	}
 	return nil
 }
+
+func (repo *KeypointRepository) Delete(id string) error {
+	result := repo.DatabaseConnection.Delete(model.Keypoint{}, id)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}

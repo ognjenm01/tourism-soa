@@ -137,7 +137,38 @@ func (handler *TourHandler) CreateKeypoint(writer http.ResponseWriter, req *http
 	}
 
 	writer.WriteHeader(http.StatusCreated)
-	writer.Header().Set("Content-Type", "application/json")
+	//FIXME ??
+	//writer.Header().Set("Content-Type", "application/json")
+}
+
+func (handler *TourHandler) UpdateKeypoint(writer http.ResponseWriter, req *http.Request) {
+	var keypoint model.Keypoint
+	error := json.NewDecoder(req.Body).Decode(&keypoint)
+	if error != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	error = handler.KeypointService.CreateKeypoint(&keypoint)
+
+	if error != nil {
+		writer.WriteHeader(http.StatusExpectationFailed)
+		return
+	}
+
+	writer.WriteHeader(http.StatusOK)
+}
+
+func (handler *TourHandler) DeleteKeypoint(writer http.ResponseWriter, req *http.Request) {
+	id := mux.Vars(req)["id"]
+
+	error := handler.KeypointService.DeleteKeypoint(id)
+
+	if error != nil {
+		writer.WriteHeader(http.StatusExpectationFailed)
+		return
+	}
+
+	writer.WriteHeader(http.StatusOK)
 }
 
 //----------------------------------------------------------------------------------------TOUR REVIEW CRUD

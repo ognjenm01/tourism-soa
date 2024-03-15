@@ -18,7 +18,7 @@ func startServer(handler *handler.TourHandler) {
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowCredentials: true,
-		AllowedMethods:   []string{"POST", "GET", "PUT"},
+		AllowedMethods:   []string{"POST", "GET", "PUT", "DELETE"},
 		AllowedHeaders:   []string{"*"},
 	})
 
