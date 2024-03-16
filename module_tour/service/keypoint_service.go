@@ -14,7 +14,7 @@ type KeypointService struct {
 func (service *KeypointService) GetAll() (*[]model.Keypoint, error) {
 	keypoints, error := service.KeypointRepository.GetAll()
 	if error != nil {
-		log.Fatalf("[DB] - No tours in db!\n")
+		//log.Fatalf("[DB] - No tours in db!\n")
 		return &[]model.Keypoint{}, error
 	}
 	return &keypoints, nil
@@ -23,14 +23,14 @@ func (service *KeypointService) GetAll() (*[]model.Keypoint, error) {
 func (service *KeypointService) GetKeypointsByTourId(tourid string) (*[]model.Keypoint, error) {
 	keypoints, error := service.KeypointRepository.GetAll()
 	if error != nil {
-		log.Fatalf("[DB] - No tours in db!\n")
+		//log.Fatalf("[DB] - No tours in db!\n")
 		return &[]model.Keypoint{}, error
 	}
 
 	filteredKeypoints := []model.Keypoint{}
 	ID, error := strconv.Atoi(tourid)
 	if error != nil {
-		log.Fatalf("[DB] - No keypoints in db!\n")
+		//log.Fatalf("[DB] - No keypoints in db!\n")
 		return &[]model.Keypoint{}, error
 	}
 	for _, keypoint := range keypoints {

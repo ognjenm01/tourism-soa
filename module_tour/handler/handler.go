@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	"tour/model"
@@ -196,6 +197,21 @@ func (handler *TourHandler) CreateReview(writer http.ResponseWriter, req *http.R
 
 func (handler *TourHandler) GetAllReviews(writer http.ResponseWriter, req *http.Request) {
 	tourReviews, error := handler.TourReviewService.GetAllReviews()
+
+	for i, review := range *tourReviews {
+		resp, error := http.Get(fmt.Sprintf("https://localhost:44333/api/profile/userinfo/%d", review.UserId))
+		if error != nil {
+			writer.WriteHeader(http.StatusFailedDependency)
+			return
+		}
+		defer resp.Body.Close()
+		error = json.NewDecoder(resp.Body).Decode(&(*tourReviews)[i].UserInfo)
+		if error != nil {
+			writer.WriteHeader(http.StatusFailedDependency)
+			return
+		}
+	}
+
 	writer.Header().Set("Content-Type", "application/json")
 	if error != nil {
 		writer.WriteHeader(http.StatusNotFound)
@@ -209,6 +225,19 @@ func (handler *TourHandler) GetAllReviews(writer http.ResponseWriter, req *http.
 func (handler *TourHandler) GetReviewById(writer http.ResponseWriter, req *http.Request) {
 	id := mux.Vars(req)["id"]
 	tourReview, error := handler.TourReviewService.GetReviewById(id)
+	if error != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	resp, error := http.Get(fmt.Sprintf("https://localhost:44333/api/profile/userinfo/%d", tourReview.ID))
+	if error != nil {
+		writer.WriteHeader(http.StatusFailedDependency)
+		return
+	}
+	defer resp.Body.Close()
+	error = json.NewDecoder(resp.Body).Decode(&tourReview.UserInfo)
+
 	writer.Header().Set("Content-Type", "application/json")
 	if error != nil {
 		writer.WriteHeader(http.StatusNotFound)

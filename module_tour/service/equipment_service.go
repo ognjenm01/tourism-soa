@@ -22,7 +22,7 @@ func (service *EquipmentService) CreateEquipment(equipment *model.Equipment) err
 func (service *EquipmentService) GetAllEquipment() (*[]model.Equipment, error) {
 	equipment, error := service.EquipmentRepository.GetAll()
 	if error != nil {
-		log.Fatalf("[DB] - No equipment in db!\n")
+		//log.Fatalf("[DB] - No equipment in db!\n")
 		return nil, error
 	}
 	return &equipment, nil
@@ -31,7 +31,7 @@ func (service *EquipmentService) GetAllEquipment() (*[]model.Equipment, error) {
 func (service *EquipmentService) GetEquipmentById(id string) (*model.Equipment, error) {
 	equipment, error := service.EquipmentRepository.GetById(id)
 	if error != nil {
-		log.Fatalf("[DB] - No equipment in db!\n")
+		//log.Fatalf("[DB] - No equipment in db!\n")
 		return nil, error
 	}
 	return &equipment, nil
@@ -40,7 +40,7 @@ func (service *EquipmentService) GetEquipmentById(id string) (*model.Equipment, 
 func (service *EquipmentService) GetEquipmentByTourId(tourId string) (*[]model.Equipment, error) {
 	equipment, error := service.EquipmentRepository.GetEquipmentByTourId(tourId)
 	if error != nil {
-		log.Fatalf("Failled getting equipment by tourid %s", error)
+		//log.Fatalf("Failled getting equipment by tourid %s", error)
 		return nil, error
 	}
 

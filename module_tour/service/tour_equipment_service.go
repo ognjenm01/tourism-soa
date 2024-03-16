@@ -22,7 +22,7 @@ func (service *TourEquipmentService) CreateTourEquipment(tourEquipment *model.To
 func (service *TourEquipmentService) GetAllTourEquipment() (*[]model.TourEquipment, error) {
 	tourEquipment, error := service.TourEquipmentRepository.GetAll()
 	if error != nil {
-		log.Fatalf("[DB] - No equipment in db!\n")
+		//log.Fatalf("[DB] - No equipment in db!\n")
 		return nil, error
 	}
 	return &tourEquipment, nil

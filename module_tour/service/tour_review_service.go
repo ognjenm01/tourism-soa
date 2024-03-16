@@ -13,7 +13,7 @@ type TourReviewService struct {
 func (service *TourReviewService) GetReviewById(id string) (*model.TourReview, error) {
 	tourReview, error := service.TourReviewRepository.GetById(id)
 	if error != nil {
-		log.Fatalf("[DB] - No tour review in db!\n")
+		//log.Fatalf("[DB] - No tour review in db!\n")
 		return nil, error
 	}
 	return &tourReview, nil
@@ -22,7 +22,7 @@ func (service *TourReviewService) GetReviewById(id string) (*model.TourReview, e
 func (service *TourReviewService) GetAllReviews() (*[]model.TourReview, error) {
 	tourReviews, error := service.TourReviewRepository.GetAll()
 	if error != nil {
-		log.Fatalf("[DB] - No tour reviews in db!\n")
+		//log.Fatalf("[DB] - No tour reviews in db!\n")
 		return nil, error
 	}
 	return &tourReviews, nil

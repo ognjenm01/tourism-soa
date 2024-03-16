@@ -15,7 +15,7 @@ type TourService struct {
 func (service *TourService) GetTourById(id string) (*model.Tour, error) {
 	tour, error := service.TourRepository.GetById(id)
 	if error != nil {
-		log.Fatalf("[DB] - Entity with id %s not found\n", id)
+		//log.Fatalf("[DB] - Entity with id %s not found\n", id)
 		return &model.Tour{}, fmt.Errorf(fmt.Sprintf("[DB] - Entity with id %s not found\n", id))
 	}
 	return &tour, nil
@@ -58,7 +58,7 @@ func (service *TourService) GetToursByAuthor(authorId string) (*[]model.Tour, er
 func (service *TourService) GetAll() (*[]model.Tour, error) {
 	tours, error := service.TourRepository.GetAll()
 	if error != nil {
-		log.Fatalf("[DB] - No tours in db!\n")
+		//log.Fatalf("[DB] - No tours in db!\n")
 		return &[]model.Tour{}, error
 	}
 	return &tours, nil
