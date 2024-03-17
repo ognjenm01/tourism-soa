@@ -15,13 +15,13 @@ func initDB() *gorm.DB {
 	return db
 }
 
-func initService() TourService {
+func initTourService() TourService {
 	return TourService{TourRepository: &repo.TourRepository{DatabaseConnection: initDB()}}
 }
 
 // Testing insert for tour
 func TestCreateTour(t *testing.T) {
-	tourService := initService()
+	tourService := initTourService()
 	tour := model.Tour{ID: -1, UserId: -1, Name: "Debug tour", Description: "Debug test here", Price: 300.0, Difficulty: 1, TransportType: 1, Status: 1, Tags: []model.TourTag{}, Keypoints: []model.Keypoint{}, Duration: 5, Distance: 5, StatusUpdateTime: time.Date(
 		2009, 11, 17, 20, 34, 58, 651387237, time.UTC)}
 
@@ -34,7 +34,7 @@ func TestCreateTour(t *testing.T) {
 
 // Testing getting all tours
 func TestGetAll(t *testing.T) {
-	tourService := initService()
+	tourService := initTourService()
 
 	tours, error := tourService.GetAll()
 
@@ -49,7 +49,7 @@ func TestGetAll(t *testing.T) {
 
 // Testing getting tours by author
 func TestGetToursByAuthor(t *testing.T) {
-	tourService := initService()
+	tourService := initTourService()
 
 	tours, error := tourService.GetToursByAuthor("-1")
 
@@ -68,7 +68,7 @@ func TestGetToursByAuthor(t *testing.T) {
 
 // Testing getting tour by statuses, example {PUBLISHED, DRAFT} as {0, 1}
 func TestGetToursByStatuses(t *testing.T) {
-	tourService := initService()
+	tourService := initTourService()
 
 	tours, error := tourService.GetToursByStatus([]model.TourStatus{0})
 
@@ -83,7 +83,7 @@ func TestGetToursByStatuses(t *testing.T) {
 
 // Testing get tour by id
 func TestGetTourById(t *testing.T) {
-	tourService := initService()
+	tourService := initTourService()
 
 	tour, error := tourService.GetTourById("1")
 
@@ -101,7 +101,7 @@ func TestGetTourById(t *testing.T) {
 }
 
 func TestUpdateTour(t *testing.T) {
-	tourService := initService()
+	tourService := initTourService()
 	tour, error := tourService.GetTourById("1")
 
 	if error != nil {

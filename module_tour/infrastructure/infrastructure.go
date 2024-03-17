@@ -67,23 +67,22 @@ func InitDB() *gorm.DB {
 		return nil
 	}
 
+	clearDB(database)
 	fillDB(database)
 	return database
 }
 
-func ClearDB(database *gorm.DB) {
+func clearDB(database *gorm.DB) {
 	database.Exec("TRUNCATE tours.tours RESTART IDENTITY CASCADE;")
 	database.Exec("TRUNCATE tours.tour_reviews RESTART IDENTITY CASCADE;")
 	database.Exec("TRUNCATE tours.keypoints RESTART IDENTITY CASCADE;")
 	database.Exec("TRUNCATE tours.tour_tags RESTART IDENTITY CASCADE;")
+	database.Exec("TRUNCATE tours.image_links RESTART IDENTITY CASCADE;")
+	database.Exec("TRUNCATE tours.tour_equipments RESTART IDENTITY CASCADE;")
 
 }
 
 func fillDB(database *gorm.DB) {
-	database.Exec("TRUNCATE tours.tours RESTART IDENTITY CASCADE;")
-	database.Exec("TRUNCATE tours.tour_reviews RESTART IDENTITY CASCADE;")
-	database.Exec("TRUNCATE tours.keypoints RESTART IDENTITY CASCADE;")
-	database.Exec("TRUNCATE tours.tour_tags RESTART IDENTITY CASCADE;")
 
 	database.AutoMigrate(&model.Tour{})
 	database.Exec("INSERT INTO tours.tours(user_id, name, description, price, difficulty, transport_type, status, duration, distance, status_update_time) VALUES ('1', 'Fantastic tour to Serbia', 'Exceptional', '300', '0', '0', '0', '300', '300', '2004-10-19 10:23:54+02');")

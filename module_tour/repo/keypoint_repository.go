@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"errors"
 	"tour/model"
 
 	"gorm.io/gorm"
@@ -31,6 +32,8 @@ func (repo *KeypointRepository) Delete(id string) error {
 	result := repo.DatabaseConnection.Delete(model.Keypoint{}, id)
 	if result.Error != nil {
 		return result.Error
+	} else if result.RowsAffected == 0 {
+		return errors.New("id not found")
 	}
 	return nil
 }
