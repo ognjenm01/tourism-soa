@@ -13,7 +13,7 @@ type TourReviewService struct {
 func (service *TourReviewService) GetReviewById(id string) (*model.TourReview, error) {
 	tourReview, error := service.TourReviewRepository.GetById(id)
 	if error != nil {
-		//log.Fatalf("[DB] - No tour review in db!\n")
+		log.Printf("[DB] - No tour review in db!\n")
 		return nil, error
 	}
 	return &tourReview, nil
@@ -22,7 +22,7 @@ func (service *TourReviewService) GetReviewById(id string) (*model.TourReview, e
 func (service *TourReviewService) GetAllReviews() (*[]model.TourReview, error) {
 	tourReviews, error := service.TourReviewRepository.GetAll()
 	if error != nil {
-		//log.Fatalf("[DB] - No tour reviews in db!\n")
+		log.Printf("[DB] - No tour reviews in db!\n")
 		return nil, error
 	}
 	return &tourReviews, nil
@@ -31,7 +31,7 @@ func (service *TourReviewService) GetAllReviews() (*[]model.TourReview, error) {
 func (service *TourReviewService) CreateReview(tourReview *model.TourReview) error {
 	error := service.TourReviewRepository.Create(tourReview)
 	if error != nil {
-		log.Fatalf("[DB] - %s", error)
+		log.Printf("[DB] - %s", error)
 		return error
 	}
 	return nil
@@ -40,7 +40,7 @@ func (service *TourReviewService) CreateReview(tourReview *model.TourReview) err
 func (service *TourReviewService) UpdateReview(tourReview *model.TourReview) error {
 	error := service.TourReviewRepository.Update(tourReview)
 	if error != nil {
-		log.Fatalf("[DB] - %s", error)
+		log.Printf("[DB] - %s", error)
 		return error
 	}
 	return nil
