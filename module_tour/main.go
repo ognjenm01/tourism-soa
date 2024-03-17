@@ -23,7 +23,7 @@ func startServer(handler *handler.TourHandler) {
 	})
 
 	hnd := c.Handler(infrastructure.InitRouter(handler))
-	log.Fatal(http.ListenAndServe(":8080", hnd))
+	log.Fatal(http.ListenAndServe(":7777", hnd))
 }
 
 func main() {
