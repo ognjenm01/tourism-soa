@@ -141,3 +141,43 @@ func (t *TransportType) UnmarshalJSON(bytes []byte) error {
 	*t = string2TransportType(transportType)
 	return err
 }
+
+func string2TourProgressStatus(status string) TourProgressStatus {
+	switch status {
+	case "IN_PROGRESS":
+		return 0
+	case "ABANDONED":
+		return 1
+	case "COMPLETED":
+		return 2
+	default:
+		return -1
+	}
+}
+
+func tourProgressStatus2String(status TourProgressStatus) string {
+	switch status {
+	case 0:
+		return "IN_PROGRESS"
+	case 1:
+		return "ABANDONED"
+	case 2:
+		return "COMPLETED"
+	default:
+		return "UNDEFINED"
+	}
+}
+
+func (tp *TourProgressStatus) MarshalJSON() ([]byte, error) {
+	return json.Marshal(tourProgressStatus2String(*tp))
+}
+
+func (tp *TourProgressStatus) UnmarshalJSON(bytes []byte) error {
+	var status string
+	err := json.Unmarshal(bytes, &status)
+	if err != nil {
+		return err
+	}
+	*tp = string2TourProgressStatus(status)
+	return err
+}

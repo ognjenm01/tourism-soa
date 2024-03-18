@@ -38,5 +38,17 @@ func InitRouter(handler *handler.TourHandler) *mux.Router {
 	router.HandleFunc("/api/tourequipment", handler.CreateTourEquipment).Methods("POST")
 	router.HandleFunc("/api/tourequipment/delete", handler.DeleteTourEquipment).Methods("POST")
 
+	// TOUR PROGRESS
+	router.HandleFunc("/api/tourprogress", handler.CreateTourProgress).Methods("POST")
+	router.HandleFunc("/api/tourprogress", handler.GetAllTourProgress).Methods("GET")
+	router.HandleFunc("/api/tourprogress/{id}", handler.GetTourProgressById).Methods("GET")
+	router.HandleFunc("/api/tourprogress/{id}", handler.UpdateTourProgress).Methods("PUT")
+	router.HandleFunc("/api/tourprogress/{id}", handler.DeleteTourProgress).Methods("DELETE")
+
+	// TOURIST POSITION
+	router.HandleFunc("/api/touristposition", handler.CreateTouristPosition).Methods("POST")
+	router.HandleFunc("/api/touristposition/{id}", handler.GetTouristPositionById).Methods("GET")
+	router.HandleFunc("/api/touristposition/{id}", handler.UpdateTouristPosition).Methods("PUT")
+
 	return router
 }

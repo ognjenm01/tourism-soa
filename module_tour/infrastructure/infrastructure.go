@@ -76,7 +76,10 @@ func ClearDB(database *gorm.DB) {
 	database.Exec("TRUNCATE tours.tour_reviews RESTART IDENTITY CASCADE;")
 	database.Exec("TRUNCATE tours.keypoints RESTART IDENTITY CASCADE;")
 	database.Exec("TRUNCATE tours.tour_tags RESTART IDENTITY CASCADE;")
-
+	database.Exec("TRUNCATE tours.equipment RESTART IDENTITY CASCADE;")
+	database.Exec("TRUNCATE tours.tour_equipment RESTART IDENTITY CASCADE;")
+	database.Exec("TRUNCATE tours.tour_progress RESTART IDENTITY CASCADE;")
+	database.Exec("TRUNCATE tours.tourist_position RESTART IDENTITY CASCADE;")
 }
 
 func fillDB(database *gorm.DB) {
@@ -98,4 +101,6 @@ func fillDB(database *gorm.DB) {
 	database.AutoMigrate(&model.ImageLink{})
 	database.AutoMigrate(&model.Equipment{})
 	database.AutoMigrate(&model.TourEquipment{})
+	database.AutoMigrate(&model.TourProgress{})
+	database.AutoMigrate(&model.TouristPosition{})
 }

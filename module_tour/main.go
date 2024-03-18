@@ -50,12 +50,20 @@ func main() {
 	tourEquipmentRepository := &repo.TourEquipmentRepository{DatabaseConnection: database}
 	tourEquipmentService := &service.TourEquipmentService{TourEquipmentRepository: tourEquipmentRepository}
 
+	tourProgressRepository := &repo.TourProgressRepository{DatabaseConnection: database}
+	tourProgressService := &service.TourProgressService{TourProgressRepository: tourProgressRepository}
+
+	touristPositionRepository := &repo.TouristPositionRepository{DatabaseConnection: database}
+	touristPositionService := &service.TouristPositionService{TouristPositionRepository: touristPositionRepository}
+
 	handler := &handler.TourHandler{
-		TourService:          tourService,
-		KeypointService:      keypointService,
-		TourReviewService:    tourReviewService,
-		EquipmentService:     equipmentService,
-		TourEquipmentService: tourEquipmentService,
+		TourService:            tourService,
+		KeypointService:        keypointService,
+		TourReviewService:      tourReviewService,
+		EquipmentService:       equipmentService,
+		TourEquipmentService:   tourEquipmentService,
+		TourProgressService:    tourProgressService,
+		TouristPositionService: touristPositionService,
 	}
 
 	startServer(handler)
