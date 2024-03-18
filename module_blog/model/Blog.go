@@ -1,17 +1,38 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 type SystemStatus int
 
 type Blog struct {
-	Id           int
-	CreatorId    int
-	Title        string
-	Description  string
-	SystemStatus SystemStatus
-	ImageLinks   []string
-	CreationDate time.Time
-	BlogStatuses []BlogStatus
-	BlogRatings  []BlogRating
+	Id           int          `json:"id" gorm:"primaryKey,unique"`
+	CreatorId    int          `json:"creatorId"`
+	Title        string       `json:"title"`
+	Description  string       `json:"description"`
+	SystemStatus SystemStatus `json:"systemStatus"`
+	ImageLinks   string       `json:"imageLinks"`
+	CreationDate time.Time    `json:"creationDate"`
+	BlogStatuses []BlogStatus `json:"blogStatuses" gorm:"foreignKey:BlogId;references:Id"`
+	BlogRatings  []BlogRating `json:"blogRatings"`
 }
+
+/*func (r BlogRating) Value() (driver.Value, error) {
+	return json.Marshal(r)
+}
+
+func (r *BlogRating) Scan(value interface{}) error {
+	if value == nil {
+		*r = BlogRating{}
+		return nil
+	}
+
+	bytes, ok := value.([]byte)
+
+	if !ok {
+		return fmt.Errorf("Scan source is not []byte")
+	}
+
+	return json.Unmarshal(bytes, r)
+}*/

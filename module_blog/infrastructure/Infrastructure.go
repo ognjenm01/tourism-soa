@@ -2,21 +2,32 @@ package infrastructure
 
 import (
 	"fmt"
+	"log"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
 	"module_blog.xws.com/model"
 )
 
 func InitDb() *gorm.DB {
 	connectionString := formConnectionString()
-	database, err := gorm.Open(postgres.Open(connectionString), &gorm.Config{})
+	database, err := gorm.Open(postgres.Open(connectionString), &gorm.Config{
+		NamingStrategy: schema.NamingStrategy{
+			TablePrefix: "blog.",
+		},
+	})
 
 	if err != nil {
+		log.Fatalf(err.Error())
 		return nil
 	}
 
 	database.AutoMigrate(&model.Blog{})
+	database.AutoMigrate(&model.BlogRating{})
+	database.AutoMigrate(&model.BlogStatus{})
+	database.AutoMigrate(&model.BlogComment{})
+
 	return database
 }
 
