@@ -58,3 +58,13 @@ func (repo *BlogCommentRepository) Update(blogComment *model.BlogComment) error 
 
 	return nil
 }
+
+func (repo *BlogCommentRepository) Delete(id string) error {
+	result := repo.DatabaseConnection.Delete(model.BlogComment{}, id)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}
