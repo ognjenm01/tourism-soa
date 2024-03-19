@@ -57,3 +57,32 @@ func (handler *BlogHandler) Create(writer http.ResponseWriter, req *http.Request
 	writer.WriteHeader(http.StatusCreated)
 	writer.Header().Set("Content-Type", "application/json")
 }
+
+func (handler *BlogHandler) Update(writer http.ResponseWriter, req *http.Request) {
+	blog := model.Blog{}
+	err := json.NewDecoder(req.Body).Decode(&blog)
+	if err != nil {
+		log.Fatal(err)
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	err = handler.BlogService.Update(&blog)
+	if err != nil {
+		writer.WriteHeader(http.StatusExpectationFailed)
+		return
+	}
+
+	writer.WriteHeader(http.StatusCreated)
+	writer.Header().Set("Content-Type", "application/json")
+}
+
+func (handler *BlogHandler) Delete(writer http.ResponseWriter, req *http.Request) {
+	id := mux.Vars(req)["id"]
+	error := handler.BlogService.Delete(id)
+	if error != nil {
+		writer.WriteHeader(http.StatusExpectationFailed)
+	}
+
+	writer.WriteHeader(http.StatusOK)
+}

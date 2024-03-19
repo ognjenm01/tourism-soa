@@ -25,10 +25,22 @@ public class BlogController : BaseApiController
     }
 
     [HttpGet]
-    public ActionResult<PagedResult<BlogDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+    public async Task<ActionResult<PagedResult<BlogDto>>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
     {
-        var result = _blogService.GetPaged(page, pageSize);
-        return CreateResponse(result);
+        Uri uri = new Uri($"http://localhost:8080/blogs");
+        HttpResponseMessage response = await _httpClient.GetAsync(uri);
+
+        if (response.IsSuccessStatusCode)
+        {
+            string responseContent = await response.Content.ReadAsStringAsync();
+            List<BlogDto> blogs = JsonConvert.DeserializeObject<List<BlogDto>>(responseContent);
+            
+            var pagedResult = new PagedResult<BlogDto>(blogs, totalCount: blogs.Count);
+
+            return CreateResponse(Result.Ok(pagedResult));
+        }
+
+        return BadRequest();
     }
 
     [HttpGet("status")]
@@ -39,11 +51,19 @@ public class BlogController : BaseApiController
     }
 
     [HttpGet("{id:int}")]
-    public ActionResult<BlogDto> Get(int id)
+    public async Task<ActionResult<BlogDto>> Get(int id)
     {
-        
-        var result = _blogService.Get(id);
-        return CreateResponse(result);
+        Uri uri = new Uri($"http://localhost:8080/blogs/{id}");
+        HttpResponseMessage response = await _httpClient.GetAsync(uri);
+
+        if (response.IsSuccessStatusCode)
+        {
+            string responseContent = await response.Content.ReadAsStringAsync();
+            BlogDto blog = JsonConvert.DeserializeObject<BlogDto>(responseContent);
+            return CreateResponse(Result.Ok(blog));
+        }
+
+        return BadRequest();
     }
 
     [HttpPost]

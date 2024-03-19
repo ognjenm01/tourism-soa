@@ -49,3 +49,12 @@ func (service *BlogService) Update(blog *model.Blog) error {
 
 	return nil
 }
+
+func (service *BlogService) Delete(id string) error {
+	result := service.BlogRepo.Delete(id)
+	if result != nil {
+		return result
+	}
+
+	return nil
+}

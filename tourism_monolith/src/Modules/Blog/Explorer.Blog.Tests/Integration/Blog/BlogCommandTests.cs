@@ -82,7 +82,7 @@ public class BlogCommandTests : BaseBlogIntegrationTest
             CreatorId = -1,
             Title = "Spectacular visit to Russia",
             Description = "Spectacular!",
-            CreationDate = DateOnly.FromDateTime(DateTime.Now.ToUniversalTime()),
+            //CreationDate = DateOnly.FromDateTime(DateTime.Now.ToUniversalTime()),
             ImageLinks = "a",//new List<string> { "img1.jpg" },
             SystemStatus = BlogSystemStatus.DRAFT.ToString()
         };

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -18,6 +17,8 @@ func startServer(blogHandler *handler.BlogHandler, blogCommentHandler *handler.B
 	router.HandleFunc("/blogs", blogHandler.Create).Methods("POST")
 	router.HandleFunc("/blogs", blogHandler.GetAll).Methods("GET")
 	router.HandleFunc("/blogs/{id}", blogHandler.GetById).Methods("GET")
+	router.HandleFunc("/blogs", blogHandler.Update).Methods("PUT")
+	router.HandleFunc("/blogs/{id}", blogHandler.Delete).Methods("DELETE")
 
 	router.HandleFunc("/api/blogcomments", blogCommentHandler.CreateComment).Methods("POST")
 	router.HandleFunc("/api/blogcomments", blogCommentHandler.GetAllComments).Methods("GET")
@@ -34,8 +35,7 @@ func startServer(blogHandler *handler.BlogHandler, blogCommentHandler *handler.B
 func main() {
 	database := infrastructure.InitDb()
 	if database == nil {
-		fmt.Println("1")
-		log.Fatalln("Odjebi")
+		log.Fatalln("Ima decka")
 	}
 
 	blogRepo := &repo.BlogRepository{DatabaseConnection: database}
