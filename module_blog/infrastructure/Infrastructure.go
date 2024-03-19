@@ -28,6 +28,8 @@ func InitDb() *gorm.DB {
 	database.AutoMigrate(&model.BlogStatus{})
 	database.AutoMigrate(&model.BlogComment{})
 
+	clearDB(database)
+
 	return database
 }
 
@@ -41,4 +43,8 @@ func formConnectionString() string {
 	connectionString := fmt.Sprintf("postgres://%s:%s@%s:%d/%s", username, password, host, port, dbname)
 
 	return connectionString
+}
+
+func clearDB(database *gorm.DB) {
+	database.Exec("TRUNCATE blog.blogs RESTART IDENTITY CASCADE;")
 }

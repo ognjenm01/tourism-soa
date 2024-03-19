@@ -1,10 +1,13 @@
-﻿using Explorer.Blog.API.Dtos;
+﻿using System.Net.Http.Headers;
+using AutoMapper;
+using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public.Blog;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Explorer.API.Controllers.Tourist.Blog;
 
@@ -13,10 +16,12 @@ namespace Explorer.API.Controllers.Tourist.Blog;
 public class BlogController : BaseApiController
 {
     private readonly IBlogService _blogService;
+    private readonly HttpClient _httpClient;
 
     public BlogController(IBlogService blogService)
     {
         _blogService = blogService;
+        _httpClient = new HttpClient();
     }
 
     [HttpGet]
@@ -36,15 +41,34 @@ public class BlogController : BaseApiController
     [HttpGet("{id:int}")]
     public ActionResult<BlogDto> Get(int id)
     {
+        
         var result = _blogService.Get(id);
         return CreateResponse(result);
     }
 
     [HttpPost]
-    public ActionResult<BlogDto> Create([FromBody] BlogDto blog)
+    public async Task<ActionResult<BlogDto>> Create([FromBody] BlogDto blog)
     {
-        var result = _blogService.Create(blog);
-        return CreateResponse(result);
+        string jsonBlog = JsonConvert.SerializeObject(blog);
+
+        Uri uri = new Uri("http://localhost:8080/blogs");
+
+        var content = new StringContent(jsonBlog);
+        content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        HttpResponseMessage response = await _httpClient.PostAsync(uri, content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            string responseContent = await response.Content.ReadAsStringAsync();
+            
+            BlogDto createdBlog = JsonConvert.DeserializeObject<BlogDto>(responseContent);
+
+            return CreateResponse(Result.Ok(createdBlog));
+        }
+        else
+        {
+            return BadRequest();
+        }
     }
 
     [HttpPut("{id:int}")]

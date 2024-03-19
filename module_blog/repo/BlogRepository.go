@@ -1,6 +1,8 @@
 package repo
 
 import (
+	"log"
+
 	"gorm.io/gorm"
 	"module_blog.xws.com/model"
 )
@@ -9,15 +11,28 @@ type BlogRepository struct {
 	DatabaseConnection *gorm.DB
 }
 
-func (repo *BlogRepository) GetById(id int) (model.Blog, error) {
+func (repo *BlogRepository) GetById(id string) (model.Blog, error) {
 	blog := model.Blog{}
-	result := repo.DatabaseConnection.Preload("BlogRatings").First(&blog, "blog_id = ?", id)
+	result := repo.DatabaseConnection.Preload("BlogRatings").First(&blog, "id = ?", id)
 
 	if result != nil {
+
 		return blog, result.Error
 	}
 
 	return blog, nil
+}
+
+func (repo *BlogRepository) GetAll() ([]model.Blog, error) {
+	blogs := []model.Blog{}
+	result := repo.DatabaseConnection.Preload("BlogStatuses").Preload("BlogRatings").Find(&blogs)
+
+	if result != nil {
+		log.Fatal(result.Error)
+		return blogs, result.Error
+	}
+
+	return blogs, nil
 }
 
 func (repo *BlogRepository) Create(blog *model.Blog) error {
@@ -36,10 +51,6 @@ func (repo *BlogRepository) Update(blog *model.Blog) error {
 			"Description":  blog.Description,
 			"SystemStatus": blog.SystemStatus,
 		})
-
-	for _, img := range blog.ImageLinks {
-		repo.DatabaseConnection.Save(img)
-	}
 
 	if result.Error != nil {
 		return result.Error

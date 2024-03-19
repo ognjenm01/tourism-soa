@@ -2,8 +2,10 @@ package handler
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"module_blog.xws.com/model"
 	"module_blog.xws.com/service"
 )
@@ -12,11 +14,36 @@ type BlogHandler struct {
 	BlogService *service.BlogService
 }
 
+func (handler *BlogHandler) GetById(writer http.ResponseWriter, req *http.Request) {
+	id := mux.Vars(req)["id"]
+	blog, err := handler.BlogService.GetById(id)
+	writer.Header().Set("Content-Type", "application/json")
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
+	writer.WriteHeader(http.StatusOK)
+	json.NewEncoder(writer).Encode(blog)
+}
+
+func (handler *BlogHandler) GetAll(writer http.ResponseWriter, req *http.Request) {
+	blogs, error := handler.BlogService.GetAll()
+	writer.Header().Set("Content-Type", "application/json")
+
+	if error != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	} else {
+		writer.WriteHeader(http.StatusOK)
+		json.NewEncoder(writer).Encode(blogs)
+	}
+}
+
 func (handler *BlogHandler) Create(writer http.ResponseWriter, req *http.Request) {
 	blog := model.Blog{}
 	err := json.NewDecoder(req.Body).Decode(&blog)
 	if err != nil {
-		println("Error while parsing json")
+		log.Fatal(err)
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}

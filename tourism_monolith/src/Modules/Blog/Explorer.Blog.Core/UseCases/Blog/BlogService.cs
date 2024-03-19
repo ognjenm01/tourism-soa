@@ -80,7 +80,7 @@ public class BlogService : BaseService<BlogDto, Domain.Blog>, IBlogService
                 foreach (var ratingDto in newDto.BlogRatings)
                 {
                     var user = _userService.GetPaged(0, 0).Value.Results.Find(u => u.Id == ratingDto.UserId);
-                    if (user != null) ratingDto.Username = user.Username;
+                    //if (user != null) ratingDto.Username = user.Username;
                 }
             }
 
@@ -110,7 +110,7 @@ public class BlogService : BaseService<BlogDto, Domain.Blog>, IBlogService
         foreach (var ratingDto in dto.BlogRatings)
         {
             var user = _userService.GetPaged(0, 0).Value.Results.Find(u => u.Id == ratingDto.UserId);
-            if (user != null) ratingDto.Username = user.Username;
+            //if (user != null) ratingDto.Username = user.Username;
         }
 
         PagedResult<BlogDto> res = new(dtos, dtos.Count);
@@ -171,14 +171,14 @@ public class BlogService : BaseService<BlogDto, Domain.Blog>, IBlogService
         if (dto.CreatorId != 0)
         {
             var person = _profileService.GetProfile(dto.CreatorId).Value;
-            dto.CreatorName = person.Name;
-            dto.CreatorSurname = person.Surname;
+            //dto.CreatorName = person.Name;
+            //dto.CreatorSurname = person.Surname;
         }
     }
 
     public void LoadUserInformation(BlogDto dto, UserDto user)
     {
-        if (user.Id == dto.CreatorId && dto.CreatorId != 0) dto.CreatorRole = user.Role;
+        //if (user.Id == dto.CreatorId && dto.CreatorId != 0) dto.CreatorRole = user.Role;
     }
 
     public void DetermineStatus(Domain.Blog blog)

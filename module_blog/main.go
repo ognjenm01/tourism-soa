@@ -16,6 +16,8 @@ func startServer(blogHandler *handler.BlogHandler) {
 	router := mux.NewRouter().StrictSlash(true)
 
 	router.HandleFunc("/blogs", blogHandler.Create).Methods("POST")
+	router.HandleFunc("/blogs", blogHandler.GetAll).Methods("GET")
+	router.HandleFunc("/blogs/{id}", blogHandler.GetById).Methods("GET")
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
 	println("Server starting")
 	log.Fatal(http.ListenAndServe("localhost:8080", router))
