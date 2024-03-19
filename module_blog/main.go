@@ -27,7 +27,8 @@ func startServer(blogHandler *handler.BlogHandler, blogCommentHandler *handler.B
 
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
 	println("Server starting")
-	log.Fatal(http.ListenAndServe("localhost:7777", router))
+	//log.Fatal(http.ListenAndServe("localhost:7777", router))
+	log.Fatal(http.ListenAndServe("localhost:8080", router))
 }
 
 func main() {
