@@ -48,6 +48,7 @@ func InitRouter(handler *handler.TourHandler) *mux.Router {
 	// TOURIST POSITION
 	router.HandleFunc("/api/touristposition", handler.CreateTouristPosition).Methods("POST")
 	router.HandleFunc("/api/touristposition/{id}", handler.GetTouristPositionById).Methods("GET")
+	router.HandleFunc("/api/touristposition/byuser/{id}", handler.GetTouristPositionByUser).Methods("GET")
 	router.HandleFunc("/api/touristposition/{id}", handler.UpdateTouristPosition).Methods("PUT")
 
 	return router

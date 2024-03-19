@@ -19,6 +19,17 @@ func (repo *TouristPositionRepository) Create(touristPosition *model.TouristPosi
 	return nil
 }
 
+func (repo *TouristPositionRepository) GetAll() ([]model.TouristPosition, error) {
+	touristPositions := []model.TouristPosition{}
+
+	result := repo.DatabaseConnection.Find(&touristPositions)
+
+	if result != nil {
+		return touristPositions, result.Error
+	}
+	return touristPositions, nil
+}
+
 func (repo *TouristPositionRepository) GetById(id string) (model.TouristPosition, error) {
 	touristPosition := model.TouristPosition{}
 	pk, err := strconv.ParseUint(id, 10, 64)

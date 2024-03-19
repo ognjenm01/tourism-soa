@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Explorer.API.Controllers.Tourist.Marketplace;
 
 [Authorize(Policy = "personPolicy")]
+[AllowAnonymous]
 [Route("api/marketplace/tours/")]
 public class TourController : BaseApiController
 {

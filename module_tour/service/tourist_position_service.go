@@ -2,6 +2,7 @@ package service
 
 import (
 	"log"
+	"strconv"
 	"tour/model"
 	"tour/repo"
 )
@@ -19,6 +20,15 @@ func (service *TouristPositionService) CreateTouristPosition(touristPosition *mo
 	return nil
 }
 
+func (service *TouristPositionService) GetAllTouristPosition() (*[]model.TouristPosition, error) {
+	touristPositions, error := service.TouristPositionRepository.GetAll()
+	if error != nil {
+		log.Printf("[DB] - No tourist positions in db!\n")
+		return &[]model.TouristPosition{}, error
+	}
+	return &touristPositions, nil
+}
+
 func (service *TouristPositionService) GetTouristPositionById(id string) (*model.TouristPosition, error) {
 	touristPosition, error := service.TouristPositionRepository.GetById(id)
 	if error != nil {
@@ -26,6 +36,26 @@ func (service *TouristPositionService) GetTouristPositionById(id string) (*model
 		return nil, error
 	}
 	return &touristPosition, nil
+}
+
+func (service *TouristPositionService) GetTouristPositionByUser(userId string) (*[]model.TouristPosition, error) {
+	UserId, error := strconv.Atoi(userId)
+	if error != nil {
+		log.Printf("[DB] - invalid userid!")
+		return nil, error
+	}
+
+	touristPositions, error := service.TouristPositionRepository.GetAll()
+	var filteredTouristPositions []model.TouristPosition
+	if error == nil {
+		for _, touristPosition := range touristPositions {
+			if touristPosition.UserId == UserId {
+				filteredTouristPositions = append(filteredTouristPositions, touristPosition)
+			}
+		}
+		return &filteredTouristPositions, nil
+	}
+	return &[]model.TouristPosition{}, error
 }
 
 func (service *TouristPositionService) UpdateTouristPosition(touristPosition *model.TouristPosition) error {

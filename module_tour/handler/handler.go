@@ -511,6 +511,19 @@ func (handler *TourHandler) GetTouristPositionById(writer http.ResponseWriter, r
 	}
 }
 
+func (handler *TourHandler) GetTouristPositionByUser(writer http.ResponseWriter, req *http.Request) {
+	id := mux.Vars(req)["id"]
+	touristPosition, error := handler.TouristPositionService.GetTouristPositionByUser(id)
+	writer.Header().Set("Content-Type", "application/json")
+	if error != nil || len(*touristPosition) == 0 {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	} else {
+		writer.WriteHeader(http.StatusOK)
+		json.NewEncoder(writer).Encode(touristPosition)
+	}
+}
+
 func (handler *TourHandler) UpdateTouristPosition(writer http.ResponseWriter, req *http.Request) {
 	var touristPosition model.TouristPosition
 	error := json.NewDecoder(req.Body).Decode(&touristPosition)
