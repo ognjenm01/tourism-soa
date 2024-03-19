@@ -2,7 +2,6 @@ package service
 
 import (
 	"log"
-	"strconv"
 	"tour/model"
 	"tour/repo"
 )
@@ -38,31 +37,34 @@ func (service *TouristPositionService) GetTouristPositionById(id string) (*model
 	return &touristPosition, nil
 }
 
-func (service *TouristPositionService) GetTouristPositionByUser(userId string) (*[]model.TouristPosition, error) {
-	UserId, error := strconv.Atoi(userId)
+func (service *TouristPositionService) GetTouristPositionByUser(userId int) (*model.TouristPosition, error) {
+	/*UserId, error := strconv.Atoi(userId)
 	if error != nil {
 		log.Printf("[DB] - invalid userid!")
 		return nil, error
-	}
+	}*/
 
 	touristPositions, error := service.TouristPositionRepository.GetAll()
-	var filteredTouristPositions []model.TouristPosition
 	if error == nil {
 		for _, touristPosition := range touristPositions {
-			if touristPosition.UserId == UserId {
-				filteredTouristPositions = append(filteredTouristPositions, touristPosition)
+			if touristPosition.UserId == userId {
+				return &touristPosition, nil
 			}
 		}
-		return &filteredTouristPositions, nil
 	}
-	return &[]model.TouristPosition{}, error
+	return nil, error
 }
 
 func (service *TouristPositionService) UpdateTouristPosition(touristPosition *model.TouristPosition) error {
-	error := service.TouristPositionRepository.Update(touristPosition)
-	if error != nil {
-		log.Fatalf("[DB] - %s", error)
-		return error
+	oldposition, error := service.GetTouristPositionByUser(touristPosition.UserId)
+	if oldposition != nil && error == nil {
+		touristPosition.ID = oldposition.ID
+		error = service.TouristPositionRepository.Update(touristPosition)
+		if error != nil {
+			log.Fatalf("[DB] - %s", error)
+			return error
+		}
+		return nil
 	}
-	return nil
+	return error
 }

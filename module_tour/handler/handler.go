@@ -513,9 +513,14 @@ func (handler *TourHandler) GetTouristPositionById(writer http.ResponseWriter, r
 
 func (handler *TourHandler) GetTouristPositionByUser(writer http.ResponseWriter, req *http.Request) {
 	id := mux.Vars(req)["id"]
-	touristPosition, error := handler.TouristPositionService.GetTouristPositionByUser(id)
+	ID, error := strconv.Atoi(id)
+	if error != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	touristPosition, error := handler.TouristPositionService.GetTouristPositionByUser(ID)
 	writer.Header().Set("Content-Type", "application/json")
-	if error != nil || len(*touristPosition) == 0 {
+	if error != nil {
 		writer.WriteHeader(http.StatusNotFound)
 		return
 	} else {
