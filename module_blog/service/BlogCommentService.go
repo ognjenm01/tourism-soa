@@ -54,3 +54,14 @@ func (service *BlogCommentService) UpdateComment(blogComment *model.BlogComment)
 
 	return nil
 }
+
+func (service *BlogCommentService) DeleteComment(id string) error {
+	error := service.BlogCommentRepository.Delete(id)
+
+	if error != nil {
+		log.Fatalf("[DB] - %s", error)
+		return error
+	}
+
+	return nil
+}
