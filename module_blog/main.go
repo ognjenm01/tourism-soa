@@ -11,7 +11,7 @@ import (
 	"module_blog.xws.com/service"
 )
 
-func startServer(blogHandler *handler.BlogHandler, blogCommentHandler *handler.BlogCommentHandler) {
+func startServer(blogHandler *handler.BlogHandler, blogCommentHandler *handler.BlogCommentHandler, ratingHandler *handler.BlogRatingHandler) {
 	router := mux.NewRouter().StrictSlash(true)
 
 	router.HandleFunc("/blogs", blogHandler.Create).Methods("POST")
@@ -19,6 +19,7 @@ func startServer(blogHandler *handler.BlogHandler, blogCommentHandler *handler.B
 	router.HandleFunc("/blogs/{id}", blogHandler.GetById).Methods("GET")
 	router.HandleFunc("/blogs", blogHandler.Update).Methods("PUT")
 	router.HandleFunc("/blogs/{id}", blogHandler.Delete).Methods("DELETE")
+	router.HandleFunc("/blogs/rate", blogHandler.AddRating).Methods("POST")
 
 	router.HandleFunc("/api/blogcomments", blogCommentHandler.CreateComment).Methods("POST")
 	router.HandleFunc("/api/blogcomments", blogCommentHandler.GetAllComments).Methods("GET")
@@ -27,16 +28,18 @@ func startServer(blogHandler *handler.BlogHandler, blogCommentHandler *handler.B
 	router.HandleFunc("/api/blogcomments/{id}", blogCommentHandler.DeleteComment).Methods("DELETE")
 	router.HandleFunc("/api/blogcomments/blog/{id}", blogCommentHandler.GetCommentsByBlogId).Methods("GET")
 
+	router.HandleFunc("/ratings/{id}", ratingHandler.GetByBlog).Methods("GET")
+
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
 	println("Server starting")
-	log.Fatal(http.ListenAndServe("localhost:3333", router))
-	//log.Fatal(http.ListenAndServe("localhost:8080", router))
+	//log.Fatal(http.ListenAndServe("localhost:3333", router))
+	log.Fatal(http.ListenAndServe("localhost:8080", router))
 }
 
 func main() {
 	database := infrastructure.InitDb()
 	if database == nil {
-		log.Fatalln("Ima decka")
+		log.Fatalln("Hit the road jack")
 	}
 
 	blogRepo := &repo.BlogRepository{DatabaseConnection: database}
@@ -47,5 +50,9 @@ func main() {
 	blogCommentService := &service.BlogCommentService{BlogCommentRepository: blogCommentRepository}
 	blogCommentHandler := &handler.BlogCommentHandler{BlogCommentService: blogCommentService}
 
-	startServer(blogHandler, blogCommentHandler)
+	ratingRepo := &repo.BlogRatingRepository{DatabaseConnection: database}
+	ratingService := &service.BlogRatingService{BlogRatingRepo: ratingRepo}
+	ratingHandler := &handler.BlogRatingHandler{BlogRatingService: ratingService}
+
+	startServer(blogHandler, blogCommentHandler, ratingHandler)
 }
