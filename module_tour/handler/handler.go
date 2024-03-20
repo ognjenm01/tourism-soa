@@ -112,6 +112,18 @@ func (handler *TourHandler) UpdateTour(writer http.ResponseWriter, req *http.Req
 	writer.Header().Set("Content-Type", "application/json")
 }
 
+func (handler *TourHandler) GetAllTours(writer http.ResponseWriter, req *http.Request) {
+	tours, error := handler.TourService.GetAll()
+	writer.Header().Set("Content-Type", "application/json")
+	if error != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	} else {
+		writer.WriteHeader(http.StatusOK)
+		json.NewEncoder(writer).Encode(tours)
+	}
+}
+
 //------------------------------------------------------------------------------------------- KEYPOINT CRUD
 
 func (handler *TourHandler) CreateKeypoint(writer http.ResponseWriter, req *http.Request) {

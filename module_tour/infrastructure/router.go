@@ -15,6 +15,7 @@ func InitRouter(handler *handler.TourHandler) *mux.Router {
 	router.HandleFunc("/api/tours/bystatus", handler.GetToursByStatus).Methods("POST")
 	router.HandleFunc("/api/tours", handler.CreateTour).Methods("POST")
 	router.HandleFunc("/api/tours/{id}", handler.UpdateTour).Methods("PUT")
+	router.HandleFunc("/api/tours", handler.GetAllTours).Methods("GET")
 
 	// REVIEWS
 	router.HandleFunc("/api/tourreview", handler.CreateReview).Methods("POST")

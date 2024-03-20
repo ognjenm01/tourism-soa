@@ -43,7 +43,7 @@ func (repo *EquipmentRepository) GetById(id string) (model.Equipment, error) {
 
 func (repo *EquipmentRepository) GetEquipmentByTourId(id string) ([]model.Equipment, error) {
 	equipment := []model.Equipment{}
-	result := repo.DatabaseConnection.Raw("select tours.equipment.id, name, description from tours.equipment join tours.tour_equipments on tours.equipment.id = tours.tour_equipments.id where tours.tour_equipments.tour_id = ?", id).Scan(&equipment)
+	result := repo.DatabaseConnection.Raw("select tours.equipment.id, name, description from tours.equipment join tours.tour_equipments on tours.equipment.id = tours.tour_equipments.equipment_id where tours.tour_equipments.tour_id = ?", id).Scan(&equipment)
 	if result.Error != nil {
 		return equipment, result.Error
 	}

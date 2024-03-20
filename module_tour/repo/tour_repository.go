@@ -59,12 +59,16 @@ func (repo *TourRepository) Update(id int, tour *model.Tour) error {
 			"TransportType": tour.TransportType,
 		})
 
-	for _, tag := range tour.Tags {
-		repo.DatabaseConnection.Save(tag)
+	if tour.Tags != nil {
+		for _, tag := range tour.Tags {
+			repo.DatabaseConnection.Save(tag)
+		}
 	}
 
-	for _, keypoint := range tour.Keypoints {
-		repo.DatabaseConnection.Save(keypoint)
+	if tour.Keypoints != nil {
+		for _, keypoint := range tour.Keypoints {
+			repo.DatabaseConnection.Save(keypoint)
+		}
 	}
 
 	if result.Error != nil {
