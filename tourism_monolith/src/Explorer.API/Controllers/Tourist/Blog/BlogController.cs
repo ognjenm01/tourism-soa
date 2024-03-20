@@ -92,10 +92,23 @@ public class BlogController : BaseApiController
     }
 
     [HttpPut("{id:int}")]
-    public ActionResult<BlogDto> Update([FromBody] BlogDto blog)
+    public async Task<ActionResult<BlogDto>> Update([FromBody] BlogDto blog)
     {
-        var result = _blogService.Update(blog);
-        return CreateResponse(result);
+        string jsonBlog = JsonConvert.SerializeObject(blog);
+        
+        Uri uri = new Uri("http://localhost:8080/blogs");
+        var content = new StringContent(jsonBlog);
+        content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        
+        HttpResponseMessage responseMessage = await _httpClient.PutAsync(uri,content);
+        if (responseMessage.IsSuccessStatusCode)
+        {
+            string responseContent = await responseMessage.Content.ReadAsStringAsync();
+            BlogDto updatedBlog = JsonConvert.DeserializeObject<BlogDto>(responseContent);
+            return CreateResponse(Result.Ok(updatedBlog));
+        }
+
+        return BadRequest();
     }
 
     [HttpDelete("{id:int}")]

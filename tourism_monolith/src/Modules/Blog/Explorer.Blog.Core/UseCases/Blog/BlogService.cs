@@ -152,7 +152,7 @@ public class BlogService : BaseService<BlogDto, Domain.Blog>, IBlogService
         }
     }
 
-    public Result<BlogDto> AddRating(BlogRatingDto blogRatingDto, long userId)
+    /*public Result<BlogDto> AddRating(BlogRatingDto blogRatingDto, long userId)
     {
         var blog = _repository.GetBlog(Convert.ToInt32(blogRatingDto.BlogId));
         if (blog.SystemStatus == Domain.Enum.BlogSystemStatus.CLOSED)
@@ -164,7 +164,7 @@ public class BlogService : BaseService<BlogDto, Domain.Blog>, IBlogService
         blog.AddRating(rating);
         DetermineStatus(blog);
         return Update(MapToDto(blog));
-    }
+    }*/
 
     public void LoadPersonInformation(BlogDto dto)
     {
