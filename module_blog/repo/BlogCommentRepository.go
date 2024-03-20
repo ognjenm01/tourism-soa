@@ -68,3 +68,13 @@ func (repo *BlogCommentRepository) Delete(id string) error {
 
 	return nil
 }
+
+// IZMENI UPIT
+func (repo *BlogCommentRepository) GetCommentsByBlogId(id string) ([]model.BlogComment, error) {
+	blogComments := []model.BlogComment{}
+	result := repo.DatabaseConnection.Raw("SELECT * FROM blog.blog_comments WHERE blog.blog_comments.blog_id = ?", id).Scan(&blogComments)
+	if result.Error != nil {
+		return blogComments, result.Error
+	}
+	return blogComments, result.Error
+}
