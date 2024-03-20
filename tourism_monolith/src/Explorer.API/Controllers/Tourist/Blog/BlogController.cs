@@ -1,8 +1,8 @@
 ﻿using System.Net.Http.Headers;
-using AutoMapper;
 using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public.Blog;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
@@ -99,16 +99,41 @@ public class BlogController : BaseApiController
     }
 
     [HttpDelete("{id:int}")]
-    public ActionResult Delete(int id)
+    public async Task<ActionResult> Delete(int id)
     {
-        var result = _blogService.Delete(id);
-        return CreateResponse(result);
+        Uri uri = new Uri($"http://localhost:8080/blogs/{id}");
+        HttpResponseMessage response = await _httpClient.DeleteAsync(uri);
+
+        if (response.IsSuccessStatusCode)
+        {
+            return Ok();
+        }
+        else
+        {
+            return BadRequest();
+        }
     }
 
     [HttpPost("rate")]
-    public ActionResult<BlogDto> AddRating([FromBody] BlogRatingDto blogRatingDto)
+    public async Task<ActionResult<BlogDto>> AddRating([FromBody] BlogRatingDto blogRatingDto)
     {
-        var result = _blogService.AddRating(blogRatingDto, User.PersonId());
-        return CreateResponse(result);
+        string jsonRating = JsonConvert.SerializeObject(blogRatingDto);
+        Uri uri = new Uri("http://localhost:8080/blogs/rate");
+        
+        var content = new StringContent(jsonRating);
+        content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        HttpResponseMessage response = await _httpClient.PostAsync(uri, content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            string responseContent = await response.Content.ReadAsStringAsync();
+            
+            BlogDto blog = JsonConvert.DeserializeObject<BlogDto>(responseContent);
+
+            return CreateResponse(Result.Ok(blog));
+        }
+        
+        return BadRequest();
+        
     }
 }

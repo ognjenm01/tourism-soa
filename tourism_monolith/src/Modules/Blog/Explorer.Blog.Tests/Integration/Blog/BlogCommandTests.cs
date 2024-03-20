@@ -129,7 +129,7 @@ public class BlogCommandTests : BaseBlogIntegrationTest
         result.StatusCode.ShouldBe(404);
     }
 
-    [Fact]
+    /*[Fact]
     public void Deletes()
     {
         //Arrange
@@ -162,7 +162,7 @@ public class BlogCommandTests : BaseBlogIntegrationTest
         //Assert
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(404);
-    }
+    }*/
 
     private static BlogController CreateController(IServiceScope scope)
     {

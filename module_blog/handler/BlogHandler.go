@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -85,4 +86,23 @@ func (handler *BlogHandler) Delete(writer http.ResponseWriter, req *http.Request
 	}
 
 	writer.WriteHeader(http.StatusOK)
+}
+
+func (handler *BlogHandler) AddRating(writer http.ResponseWriter, req *http.Request) {
+	rating := model.BlogRating{}
+	err := json.NewDecoder(req.Body).Decode(&rating)
+	if err != nil {
+		fmt.Println("lets go")
+		//log.Fatal(err)
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	err = handler.BlogService.AddRating(&rating)
+	if err != nil {
+		writer.WriteHeader(http.StatusExpectationFailed)
+		return
+	}
+	writer.WriteHeader(http.StatusCreated)
+	writer.Header().Set("Content-Type", "application/json")
 }
