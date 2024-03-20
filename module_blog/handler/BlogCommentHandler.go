@@ -91,3 +91,17 @@ func (handler *BlogCommentHandler) DeleteComment(writer http.ResponseWriter, req
 
 	writer.WriteHeader(http.StatusOK)
 }
+
+func (handler *BlogCommentHandler) GetCommentsByBlogId(writer http.ResponseWriter, req *http.Request) {
+	id := mux.Vars(req)["id"]
+
+	blogComments, error := handler.BlogCommentService.GetCommentsByBlogId(id)
+	if error != nil {
+		writer.WriteHeader(http.StatusExpectationFailed)
+		return
+	}
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusOK)
+	json.NewEncoder(writer).Encode(blogComments)
+}

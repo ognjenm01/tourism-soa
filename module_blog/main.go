@@ -25,11 +25,12 @@ func startServer(blogHandler *handler.BlogHandler, blogCommentHandler *handler.B
 	router.HandleFunc("/api/blogcomments/{id}", blogCommentHandler.UpdateComment).Methods("PUT")
 	router.HandleFunc("/api/blogcomments/{id}", blogCommentHandler.GetCommentById).Methods("GET")
 	router.HandleFunc("/api/blogcomments/{id}", blogCommentHandler.DeleteComment).Methods("DELETE")
+	router.HandleFunc("/api/blogcomments/blog/{id}", blogCommentHandler.GetCommentsByBlogId).Methods("GET")
 
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
 	println("Server starting")
-	//log.Fatal(http.ListenAndServe("localhost:7777", router))
-	log.Fatal(http.ListenAndServe("localhost:8080", router))
+	log.Fatal(http.ListenAndServe("localhost:3333", router))
+	//log.Fatal(http.ListenAndServe("localhost:8080", router))
 }
 
 func main() {

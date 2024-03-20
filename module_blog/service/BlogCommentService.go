@@ -65,3 +65,13 @@ func (service *BlogCommentService) DeleteComment(id string) error {
 
 	return nil
 }
+
+func (service *BlogCommentService) GetCommentsByBlogId(blogId string) (*[]model.BlogComment, error) {
+	blogComments, error := service.BlogCommentRepository.GetCommentsByBlogId(blogId)
+	if error != nil {
+		log.Fatalf("Failled getting comments by blogId %s", error)
+		return nil, error
+	}
+
+	return &blogComments, error
+}
