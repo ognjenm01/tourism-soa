@@ -12,5 +12,7 @@ public class TourReviewDto
     //public Tourist Tourist { get; set; }
     public DateTime VisitDate { get; set; }
     public DateTime RatingDate { get; set; }
-    public List<string>? ImageLinks { get; set; }
+    public List<ImageLinkDto>? ImageLinks { get; set; }
+    
+    public UserInfoDto UserInfo { get; set; }
 }

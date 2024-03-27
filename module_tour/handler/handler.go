@@ -8,6 +8,8 @@ import (
 	"tour/model"
 	"tour/service"
 
+	"crypto/tls"
+
 	"github.com/gorilla/mux"
 )
 
@@ -211,8 +213,8 @@ func (handler *TourHandler) CreateReview(writer http.ResponseWriter, req *http.R
 
 func (handler *TourHandler) GetAllReviews(writer http.ResponseWriter, req *http.Request) {
 	tourReviews, error := handler.TourReviewService.GetAllReviews()
-
 	for i, review := range *tourReviews {
+		http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 		resp, error := http.Get(fmt.Sprintf("https://localhost:44333/api/profile/userinfo/%d", review.UserId))
 		if error != nil {
 			writer.WriteHeader(http.StatusFailedDependency)

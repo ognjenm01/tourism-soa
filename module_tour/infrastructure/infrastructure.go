@@ -87,9 +87,9 @@ func clearDB(database *gorm.DB) {
 func fillDB(database *gorm.DB) {
 
 	database.AutoMigrate(&model.Tour{})
-	database.Exec("INSERT INTO tours.tours(user_id, name, description, price, difficulty, transport_type, status, duration, distance, status_update_time) VALUES ('1', 'Fantastic tour to Serbia', 'Exceptional', '300', '0', '0', '0', '300', '300', '2004-10-19 10:23:54+02');")
-	database.Exec("INSERT INTO tours.tours(user_id, name, description, price, difficulty, transport_type, status, duration, distance, status_update_time) VALUES ('1', 'Tour to Spain', 'Fenomenal', '400', '1', '0', '1', '300', '300', '2004-10-20 11:23:54+02');")
-	database.Exec("INSERT INTO tours.tours(user_id, name, description, price, difficulty, transport_type, status, duration, distance, status_update_time) VALUES ('1', 'Tour to Argentina', 'Wonderful', '500', '1', '2', '0', '300', '300', '2004-10-21 12:23:54+02');")
+	database.Exec("INSERT INTO tours.tours(user_id, name, description, price, difficulty, transport_type, status, duration, distance, status_update_time) VALUES ('2', 'Fantastic tour to Serbia', 'Exceptional', '300', '0', '0', '0', '300', '300', '2004-10-19 10:23:54+02');")
+	database.Exec("INSERT INTO tours.tours(user_id, name, description, price, difficulty, transport_type, status, duration, distance, status_update_time) VALUES ('2', 'Tour to Spain', 'Fenomenal', '400', '1', '0', '1', '300', '300', '2004-10-20 11:23:54+02');")
+	database.Exec("INSERT INTO tours.tours(user_id, name, description, price, difficulty, transport_type, status, duration, distance, status_update_time) VALUES ('2', 'Tour to Argentina', 'Wonderful', '500', '1', '2', '0', '300', '300', '2004-10-21 12:23:54+02');")
 
 	database.AutoMigrate(&model.TourTag{})
 	database.Exec("INSERT INTO tours.tour_tags(tour_id, tag) VALUES ('1', 'Hot');")

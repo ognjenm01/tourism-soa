@@ -1,3 +1,5 @@
+using System.Text;
+using System.Text.Json;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.TourAuthoring;
@@ -11,6 +13,10 @@ namespace Explorer.API.Controllers.Author;
 public class KeypointController : BaseApiController
 {
     private readonly IKeypointService _keypointService;
+    private static HttpClient httpKeypointClient = new()
+    {
+        BaseAddress = new Uri("http://localhost:8080/api/keypoints/"),
+    };
 
     public KeypointController(IKeypointService keypointService)
     {
@@ -25,18 +31,28 @@ public class KeypointController : BaseApiController
     }
 
     [HttpGet("tour/{tourId:int}")]
-    public ActionResult<PagedResult<KeypointDto>> GetByTour([FromQuery] int page, [FromQuery] int pageSize,
+    public async Task<string> GetByTour([FromQuery] int page, [FromQuery] int pageSize,
         [FromRoute] int tourId)
     {
-        var result = _keypointService.GetByTourId(page, pageSize, tourId);
-        return CreateResponse(result);
+        //var result = _keypointService.GetByTourId(page, pageSize, tourId);
+        //return CreateResponse(result);
+        using HttpResponseMessage response = await httpKeypointClient.GetAsync("tour/"+tourId);
+        
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        return jsonResponse;
     }
 
     [HttpPost]
-    public ActionResult<KeypointDto> Create([FromBody] KeypointDto keypoint)
+    public async Task<string> Create([FromBody] KeypointDto keypoint)
     {
-        var result = _keypointService.Create(keypoint);
-        return CreateResponse(result);
+        //var result = _keypointService.Create(keypoint);
+        //return CreateResponse(result);
+        using StringContent jsonContent = new(
+            JsonSerializer.Serialize(keypoint), Encoding.UTF8, "application/json");
+        using HttpResponseMessage response = await httpKeypointClient.PostAsync("http://localhost:8080/api/keypoints",  jsonContent);
+        
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        return jsonResponse;
     }
 
     [HttpPost("/multiple")]
@@ -47,16 +63,26 @@ public class KeypointController : BaseApiController
     }
 
     [HttpPut("{id:int}")]
-    public ActionResult<KeypointDto> Update([FromBody] KeypointDto keypoint)
+    public async Task<string> Update([FromBody] KeypointDto keypoint)
     {
-        var result = _keypointService.Update(keypoint);
-        return CreateResponse(result);
+        //var result = _keypointService.Update(keypoint);
+        //return CreateResponse(result);
+        using StringContent jsonContent = new(
+            JsonSerializer.Serialize(keypoint), Encoding.UTF8, "application/json");
+        using HttpResponseMessage response = await httpKeypointClient.PutAsync("http://localhost:8080/api/keypoints",  jsonContent);
+        
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        return jsonResponse;
     }
 
     [HttpDelete("{id:int}")]
-    public ActionResult Delete(int id)
+    public async Task<string> Delete(int id)
     {
-        var result = _keypointService.Delete(id);
-        return CreateResponse(result);
+        //var result = _keypointService.Delete(id);
+        //return CreateResponse(result);
+        using HttpResponseMessage response = await httpKeypointClient.DeleteAsync(id.ToString());
+        
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        return jsonResponse;
     }
 }

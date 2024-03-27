@@ -1,3 +1,5 @@
+using System.Text;
+using System.Text.Json;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
@@ -14,6 +16,10 @@ namespace Explorer.API.Controllers.Tourist.Marketplace;
 public class TourController : BaseApiController
 {
     private readonly ITourService _tourService;
+    private static HttpClient httpToursClient = new()
+    {
+        BaseAddress = new Uri("http://localhost:8080/api/tours/"),
+    };
 
     public TourController(ITourService tourService)
     {
@@ -21,10 +27,16 @@ public class TourController : BaseApiController
     }
 
     [HttpGet]
-    public ActionResult<PagedResult<TourDto>> GetPublished([FromQuery] int page, [FromQuery] int pageSize)
+    public async Task<string> GetPublished([FromQuery] int page, [FromQuery] int pageSize)
     {
-        var result = _tourService.GetPublishedPaged(page, pageSize);
-        return CreateResponse(result);
+        //var result = _tourService.GetPublishedPaged(page, pageSize);
+        //return CreateResponse(result);
+        using StringContent jsonContent = new(
+            JsonSerializer.Serialize(new string[]{"ARCHIVED", "PUBLISHED"}), Encoding.UTF8, "application/json");
+        using HttpResponseMessage response = await httpToursClient.PostAsync("bystatus",  jsonContent);
+        
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        return jsonResponse;
     }
 
     [HttpGet("arhived-published")]
