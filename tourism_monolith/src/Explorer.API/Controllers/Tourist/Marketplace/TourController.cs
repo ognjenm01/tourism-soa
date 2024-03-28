@@ -16,9 +16,10 @@ namespace Explorer.API.Controllers.Tourist.Marketplace;
 public class TourController : BaseApiController
 {
     private readonly ITourService _tourService;
+    private static readonly string _tourAppPort = Environment.GetEnvironmentVariable("TOURS_APP_PORT") ?? "8080";
     private static HttpClient httpToursClient = new()
     {
-        BaseAddress = new Uri("http://localhost:8080/api/tours/"),
+        BaseAddress = new Uri("http://localhost:" + _tourAppPort + "/api/tours/"),
     };
 
     public TourController(ITourService tourService)

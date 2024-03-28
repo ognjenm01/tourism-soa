@@ -12,13 +12,14 @@ namespace Explorer.API.Controllers.Author;
 public class TourEquipmentController : BaseApiController
 {
     private readonly ITourEquipmentService _tourEquipmentService;
+    private static readonly string _tourAppPort = Environment.GetEnvironmentVariable("TOURS_APP_PORT") ?? "8080";
     private static HttpClient httpEquipmentClient = new()
     {
-        BaseAddress = new Uri("http://localhost:8080/api/equipment/"),
+        BaseAddress = new Uri("http://localhost:" + _tourAppPort + "/api/equipment/"),
     };
     private static HttpClient httpTourEquipmentClient = new()
     {
-        BaseAddress = new Uri("http://localhost:8080/api/tourequipment/"),
+        BaseAddress = new Uri("http://localhost:" + _tourAppPort + "/api/tourequipment/"),
     };
 
     
@@ -34,7 +35,7 @@ public class TourEquipmentController : BaseApiController
         //return Ok(result);
         using StringContent jsonContent = new(
             JsonSerializer.Serialize(tourEquipmentDto), Encoding.UTF8, "application/json");
-        using HttpResponseMessage response = await httpTourEquipmentClient.PostAsync("http://localhost:8080/api/tourequipment",  jsonContent);
+        using HttpResponseMessage response = await httpTourEquipmentClient.PostAsync("http://localhost:" + _tourAppPort + "/api/tourequipment",  jsonContent);
         
         var jsonResponse = await response.Content.ReadAsStringAsync();
         return jsonResponse;
@@ -45,7 +46,7 @@ public class TourEquipmentController : BaseApiController
     {
         //var result = _tourEquipmentService.GetEquipmentForTour(tourId);
         //return CreateResponse(result);
-        using HttpResponseMessage response = await httpEquipmentClient.GetAsync("http://localhost:8080/api/equipment/tour/"+tourId);
+        using HttpResponseMessage response = await httpEquipmentClient.GetAsync("http://localhost:" + _tourAppPort + "/api/equipment/tour/"+tourId);
         
         var jsonResponse = await response.Content.ReadAsStringAsync();
         return jsonResponse;
@@ -59,7 +60,7 @@ public class TourEquipmentController : BaseApiController
         //return CreateResponse(result);
         using StringContent jsonContent = new(
             JsonSerializer.Serialize(tourEquipmentDto), Encoding.UTF8, "application/json");
-        using HttpResponseMessage response = await httpEquipmentClient.PostAsync("http://localhost:8080/api/tourequipment/delete", jsonContent);
+        using HttpResponseMessage response = await httpEquipmentClient.PostAsync("http://localhost:" +  _tourAppPort + "/api/tourequipment/delete", jsonContent);
         
         var jsonResponse = await response.Content.ReadAsStringAsync();
         return jsonResponse;

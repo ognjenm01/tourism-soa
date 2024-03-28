@@ -14,9 +14,10 @@ namespace Explorer.API.Controllers.Tourist.TourExecution;
 public class TourReviewController : BaseApiController
 {
     private readonly ITourReviewService _tourReviewService;
+    private static readonly string _tourAppPort = Environment.GetEnvironmentVariable("TOURS_APP_PORT") ?? "8080";
     private static HttpClient httpReviewClient = new()
     {
-        BaseAddress = new Uri("http://localhost:8080/api/tourreview"),
+        BaseAddress = new Uri("http://localhost:" + _tourAppPort + "/api/tourreview"),
     };
     public TourReviewController(ITourReviewService tourReviewService)
     {

@@ -11,9 +11,10 @@ namespace Explorer.API.Controllers.Administrator.Administration;
 public class EquipmentController : BaseApiController
 {
     private readonly IEquipmentService _equipmentService;
+    private static readonly string _tourAppPort = Environment.GetEnvironmentVariable("TOURS_APP_PORT") ?? "8080";
     private static HttpClient httpEquipmentClient = new()
     {
-        BaseAddress = new Uri("http://localhost:8080/api/equipment/"),
+        BaseAddress = new Uri("http://localhost:" + _tourAppPort + "/api/equipment/"),
     };
 
     public EquipmentController(IEquipmentService equipmentService)

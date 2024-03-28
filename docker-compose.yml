@@ -3,14 +3,14 @@ services:
   tours-module:
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: Tours_Dockerfile
     image: toursmodule
     container_name: tours_module
     restart: always
     networks:
       - servers
     ports:
-      - ${TOURS_APP_PORT}:${TOURS_APP_PORT}
+      - "${TOURS_APP_PORT}:${TOURS_APP_PORT}"
     environment:
       TOURS_DB_HOST: ${TOURS_DB_HOST}
       TOURS_DB_USERNAME: ${TOURS_DB_USERNAME}
@@ -18,6 +18,29 @@ services:
       TOURS_DB: ${TOURS_DB}
       TOURS_DB_PORT: ${TOURS_DB_PORT}
       TOURS_SCHEMA: ${TOURS_SCHEMA}
+      TOURS_APP_PORT: ${TOURS_APP_PORT}
+    depends_on:
+      - database
+
+  explorer:
+    build:
+      dockerfile: Monolith_Dockerfile
+      context: .
+      target: final
+    image: explorer
+    restart: on-failure
+    networks:
+      - servers
+    ports:
+      - "44333:443"
+    environment:
+      DATABASE_HOST: database
+      DATABASE_PORT: 5432
+      DATABASE_PASSWORD: super
+      DATABASE_USER: postgres
+      DATABASE_SCHEMA: explorer-v1
+      ASPNETCORE_ENVIROMENT: Development
+      TOURS_APP_PORT: ${TOURS_APP_PORT}
     depends_on:
       - database
   

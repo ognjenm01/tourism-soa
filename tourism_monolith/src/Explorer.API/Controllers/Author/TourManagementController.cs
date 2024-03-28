@@ -14,9 +14,10 @@ namespace Explorer.API.Controllers.Author;
 public class TourManagementController : BaseApiController
 {
     private readonly ITourService _tourService;
+    private static readonly string _tourAppPort = Environment.GetEnvironmentVariable("TOURS_APP_PORT") ?? "8080";
     private static HttpClient httpTourClient = new()
     {
-        BaseAddress = new Uri("http://localhost:8080/api/tours/"),
+        BaseAddress = new Uri("http://localhost:" + _tourAppPort + "/api/tours/"),
     };
 
     public TourManagementController(ITourService tourService)
@@ -32,7 +33,7 @@ public class TourManagementController : BaseApiController
         //return CreateResponse(result);
         //var result = _tourService.Get(tourId);
         //return CreateResponse(result);
-        using HttpResponseMessage response = await httpTourClient.GetAsync("http://localhost:8080/api/tours");
+        using HttpResponseMessage response = await httpTourClient.GetAsync("http://localhost:" + _tourAppPort + "/api/tours");
         
         var jsonResponse = await response.Content.ReadAsStringAsync();
         return jsonResponse;
@@ -60,7 +61,7 @@ public class TourManagementController : BaseApiController
         //return CreateResponse(result);
         using StringContent jsonContent = new(
             JsonSerializer.Serialize(tour), Encoding.UTF8, "application/json");
-        using HttpResponseMessage response = await httpTourClient.PostAsync("http://localhost:8080/api/tours",  jsonContent);
+        using HttpResponseMessage response = await httpTourClient.PostAsync("http://localhost:" + _tourAppPort + "/api/tours",  jsonContent);
         
         var jsonResponse = await response.Content.ReadAsStringAsync();
         return jsonResponse;

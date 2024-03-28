@@ -26,9 +26,10 @@ func startServer(handler *handler.TourHandler) {
 	hnd := c.Handler(infrastructure.InitRouter(handler))
 	port := os.Getenv("TOURS_APP_PORT")
 	if port == "" {
-		port = ":8080"
+		port = "8080"
 	}
-
+	port = ":" + port
+	log.Printf("[SERVER] - Listening on port %s\n", port)
 	log.Fatal(http.ListenAndServe(port, hnd))
 }
 

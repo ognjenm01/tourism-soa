@@ -13,9 +13,10 @@ namespace Explorer.API.Controllers.Author;
 public class KeypointController : BaseApiController
 {
     private readonly IKeypointService _keypointService;
+    private static readonly string _tourAppPort = Environment.GetEnvironmentVariable("TOURS_APP_PORT") ?? "8080";
     private static HttpClient httpKeypointClient = new()
     {
-        BaseAddress = new Uri("http://localhost:8080/api/keypoints/"),
+        BaseAddress = new Uri("http://localhost:" + _tourAppPort + "/api/keypoints/"),
     };
 
     public KeypointController(IKeypointService keypointService)
@@ -49,7 +50,7 @@ public class KeypointController : BaseApiController
         //return CreateResponse(result);
         using StringContent jsonContent = new(
             JsonSerializer.Serialize(keypoint), Encoding.UTF8, "application/json");
-        using HttpResponseMessage response = await httpKeypointClient.PostAsync("http://localhost:8080/api/keypoints",  jsonContent);
+        using HttpResponseMessage response = await httpKeypointClient.PostAsync("http://localhost:" + _tourAppPort + "/api/keypoints",  jsonContent);
         
         var jsonResponse = await response.Content.ReadAsStringAsync();
         return jsonResponse;
@@ -69,7 +70,7 @@ public class KeypointController : BaseApiController
         //return CreateResponse(result);
         using StringContent jsonContent = new(
             JsonSerializer.Serialize(keypoint), Encoding.UTF8, "application/json");
-        using HttpResponseMessage response = await httpKeypointClient.PutAsync("http://localhost:8080/api/keypoints",  jsonContent);
+        using HttpResponseMessage response = await httpKeypointClient.PutAsync("http://localhost:" + _tourAppPort + "/api/keypoints",  jsonContent);
         
         var jsonResponse = await response.Content.ReadAsStringAsync();
         return jsonResponse;
