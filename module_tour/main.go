@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 	"tour/handler"
 	"tour/infrastructure"
 	"tour/repo"
@@ -23,7 +24,12 @@ func startServer(handler *handler.TourHandler) {
 	})
 
 	hnd := c.Handler(infrastructure.InitRouter(handler))
-	log.Fatal(http.ListenAndServe(":8080", hnd))
+	port := os.Getenv("TOURS_APP_PORT")
+	if port == "" {
+		port = ":8080"
+	}
+
+	log.Fatal(http.ListenAndServe(port, hnd))
 }
 
 func main() {

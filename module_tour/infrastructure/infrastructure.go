@@ -2,43 +2,42 @@ package infrastructure
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"tour/model"
 
-	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 )
 
 func createConnectionString() string {
-	err := godotenv.Load(".env")
+	//TODO Remove this later, global env will exists
+	/*err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatalf("Error loading .env file: %s", err)
-	}
+	}*/
 
-	host := os.Getenv("HOST")
+	host := os.Getenv("TOURS_DB_HOST")
 	if host == "" {
 		host = "localhost"
 	}
 
-	username := os.Getenv("DB_USERNAME")
+	username := os.Getenv("TOURS_DB_USERNAME")
 	if username == "" {
 		username = "postgres"
 	}
 
-	password := os.Getenv("DB_PASSWORD")
+	password := os.Getenv("TOURS_DB_PASSWORD")
 	if password == "" {
 		password = "super"
 	}
 
-	dbname := os.Getenv("DB")
+	dbname := os.Getenv("TOURS_DB")
 	if dbname == "" {
 		dbname = "explorer-v1"
 	}
 
-	port := os.Getenv("DB_PORT")
+	port := os.Getenv("TOURS_DB_PORT")
 	if port == "" {
 		port = "5432"
 	}

@@ -1,0 +1,45 @@
+version: "3.7"
+services:
+  tours-module:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: toursmodule
+    container_name: tours_module
+    restart: always
+    networks:
+      - servers
+    ports:
+      - ${TOURS_APP_PORT}:${TOURS_APP_PORT}
+    environment:
+      TOURS_DB_HOST: ${TOURS_DB_HOST}
+      TOURS_DB_USERNAME: ${TOURS_DB_USERNAME}
+      TOURS_DB_PASSWORD: ${TOURS_DB_PASSWORD}
+      TOURS_DB: ${TOURS_DB}
+      TOURS_DB_PORT: ${TOURS_DB_PORT}
+      TOURS_SCHEMA: ${TOURS_SCHEMA}
+    depends_on:
+      - database
+  
+  database:
+    image: postgres
+    container_name: postgres_container
+    restart: always
+    networks:
+      - servers
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: super
+      POSTGRES_DB: explorer-v1
+    volumes:
+      - database-data:/var/lib/postgresql/data
+
+volumes:
+  database-data:
+    name: server-database
+
+networks:
+  servers:
+    name: servers
+    driver: bridge
