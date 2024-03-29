@@ -36,10 +36,10 @@ public class ProfileService : CrudService<PersonDto, Person>, IProfileService, I
         return people;
     }
 
-    public UserInfoDto GetUserInfoById(int id)
+    public GoUserInfoDto GetUserInfoById(int id)
     {
         var person = _personRepository.Get(id);
-        return new UserInfoDto { FirstName = person.Name, LastName = person.Surname };
+        return new GoUserInfoDto { FirstName = person.Name, LastName = person.Surname };
     }
 
     public void AddXP(int userId, int addedXp)

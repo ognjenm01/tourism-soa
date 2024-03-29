@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.API.Dtos
 {
-    public class UserInfoDto
+    public class GoUserInfoDto
     {
         public string FirstName {  get; set; }
         public string LastName { get; set; }

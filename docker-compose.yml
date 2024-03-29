@@ -3,7 +3,7 @@ services:
   tours-module:
     build:
       context: ./
-      dockerfile: Tours_Dockerfile
+      dockerfile: module_tour/Dockerfile
     image: toursmodule
     container_name: tours_module
     restart: always
@@ -24,7 +24,7 @@ services:
 
   explorer:
     build:
-      dockerfile: Monolith_Dockerfile
+      dockerfile: tourism_monolith/Dockerfile
       context: .
       target: final
     image: explorer
@@ -39,8 +39,8 @@ services:
       DATABASE_PASSWORD: super
       DATABASE_USER: postgres
       DATABASE_SCHEMA: explorer-v1
-      ASPNETCORE_ENVIROMENT: Development
       TOURS_APP_PORT: ${TOURS_APP_PORT}
+      ASPNETCORE_URLS: https://+:443;http://+:80
     depends_on:
       - database
   

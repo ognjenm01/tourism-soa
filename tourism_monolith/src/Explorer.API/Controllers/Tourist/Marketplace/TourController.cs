@@ -19,7 +19,7 @@ public class TourController : BaseApiController
     private static readonly string _tourAppPort = Environment.GetEnvironmentVariable("TOURS_APP_PORT") ?? "8080";
     private static HttpClient httpToursClient = new()
     {
-        BaseAddress = new Uri("http://localhost:" + _tourAppPort + "/api/tours/"),
+        BaseAddress = new Uri("http://tours-module:" + _tourAppPort + "/api/tours/"),
     };
 
     public TourController(ITourService tourService)

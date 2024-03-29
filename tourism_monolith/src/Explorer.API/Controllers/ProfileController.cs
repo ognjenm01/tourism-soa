@@ -35,7 +35,7 @@ public class ProfileController : BaseApiController
 
     [AllowAnonymous]
     [HttpGet("userinfo/{id:int}")]
-    public UserInfoDto GetUserInfoDto(int id)
+    public GoUserInfoDto GetUserInfoDto(int id)
     {
         var result = _profileService.GetUserInfoById(id);
         return result;
