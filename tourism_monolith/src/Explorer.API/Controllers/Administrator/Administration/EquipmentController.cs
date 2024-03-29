@@ -14,7 +14,7 @@ public class EquipmentController : BaseApiController
     private static readonly string _tourAppPort = Environment.GetEnvironmentVariable("TOURS_APP_PORT") ?? "8080";
     private static HttpClient httpEquipmentClient = new()
     {
-        BaseAddress = new Uri("http://localhost:" + _tourAppPort + "/api/equipment/"),
+        BaseAddress = new Uri("http://tours-module:" + _tourAppPort + "/api/equipment/"),
     };
 
     public EquipmentController(IEquipmentService equipmentService)

@@ -16,7 +16,7 @@ public class TourLifecycleController : BaseApiController
     private static readonly string _tourAppPort = Environment.GetEnvironmentVariable("TOURS_APP_PORT") ?? "8080";
     private static HttpClient httpPositionClient = new()
     {
-        BaseAddress = new Uri("http://localhost:" + _tourAppPort + "/api/touristposition"),
+        BaseAddress = new Uri("http://tours-module:" + _tourAppPort + "/api/touristposition"),
     };
 
     public TourLifecycleController(ITourLifecycleService tourLifecycleService)
@@ -41,7 +41,7 @@ public class TourLifecycleController : BaseApiController
     [HttpGet("position/{id:int}")]
     public async Task<string> GetPosition(int id)
     {
-        using HttpResponseMessage response = await httpPositionClient.GetAsync("http://localhost:" + _tourAppPort + "/api/touristposition/byuser/"+id);
+        using HttpResponseMessage response = await httpPositionClient.GetAsync("http://tours-module:" + _tourAppPort + "/api/touristposition/byuser/"+id);
         
         var jsonResponse = await response.Content.ReadAsStringAsync();
         return jsonResponse;

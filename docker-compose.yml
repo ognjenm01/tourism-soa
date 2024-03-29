@@ -33,6 +33,7 @@ services:
       - servers
     ports:
       - "44333:443"
+      - "1234:80"
     environment:
       DATABASE_HOST: database
       DATABASE_PORT: 5432

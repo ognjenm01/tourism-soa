@@ -215,7 +215,7 @@ func (handler *TourHandler) GetAllReviews(writer http.ResponseWriter, req *http.
 	tourReviews, error := handler.TourReviewService.GetAllReviews()
 	for i, review := range *tourReviews {
 		http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
-		resp, error := http.Get(fmt.Sprintf("https://localhost:44333/api/profile/userinfo/%d", review.UserId))
+		resp, error := http.Get(fmt.Sprintf("http://explorer:80/api/profile/userinfo/%d", review.UserId))
 		if error != nil {
 			writer.WriteHeader(http.StatusFailedDependency)
 			return
