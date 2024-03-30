@@ -35,7 +35,7 @@ func (repo *TourReviewRepository) GetById(id string) (model.TourReview, error) {
 		return tourReview, err
 	}
 	result := repo.DatabaseConnection.First(&tourReview, "id = ?", pk)
-	if result != nil {
+	if result.Error != nil {
 		return tourReview, result.Error
 	}
 	return tourReview, nil

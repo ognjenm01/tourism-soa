@@ -33,6 +33,14 @@ public class ProfileController : BaseApiController
         return CreateResponse(result);
     }
 
+    [AllowAnonymous]
+    [HttpGet("userinfo/{id:int}")]
+    public GoUserInfoDto GetUserInfoDto(int id)
+    {
+        var result = _profileService.GetUserInfoById(id);
+        return result;
+    }
+
     [HttpGet("not-followed")]
     public ActionResult<PagedResult<PersonDto>> GetNonFollowedProfiles([FromQuery] int page, [FromQuery] int pageSize)
     {

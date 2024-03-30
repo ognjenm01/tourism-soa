@@ -13,7 +13,7 @@ type TourEquipmentService struct {
 func (service *TourEquipmentService) CreateTourEquipment(tourEquipment *model.TourEquipment) error {
 	error := service.TourEquipmentRepository.Create(tourEquipment)
 	if error != nil {
-		log.Fatalf("[DB] - %s", error)
+		log.Printf("[DB] - %s", error)
 		return error
 	}
 	return nil
@@ -22,7 +22,7 @@ func (service *TourEquipmentService) CreateTourEquipment(tourEquipment *model.To
 func (service *TourEquipmentService) GetAllTourEquipment() (*[]model.TourEquipment, error) {
 	tourEquipment, error := service.TourEquipmentRepository.GetAll()
 	if error != nil {
-		log.Fatalf("[DB] - No equipment in db!\n")
+		log.Printf("[DB] - No equipment in db!\n")
 		return nil, error
 	}
 	return &tourEquipment, nil
@@ -31,7 +31,7 @@ func (service *TourEquipmentService) GetAllTourEquipment() (*[]model.TourEquipme
 func (service *TourEquipmentService) DeleteTourEquipment(tourEquipment *model.TourEquipment) error {
 	error := service.TourEquipmentRepository.Delete(tourEquipment)
 	if error != nil {
-		log.Fatalf("[DB] - %s", error)
+		log.Printf("[DB] - %s", error)
 		return error
 	}
 	return nil

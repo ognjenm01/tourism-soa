@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 	"tour/handler"
 	"tour/infrastructure"
 	"tour/repo"
@@ -23,7 +24,13 @@ func startServer(handler *handler.TourHandler) {
 	})
 
 	hnd := c.Handler(infrastructure.InitRouter(handler))
-	log.Fatal(http.ListenAndServe(":8080", hnd))
+	port := os.Getenv("TOURS_APP_PORT")
+	if port == "" {
+		port = "8080"
+	}
+	port = ":" + port
+	log.Printf("[SERVER] - Listening on port %s\n", port)
+	log.Fatal(http.ListenAndServe(port, hnd))
 }
 
 func main() {
@@ -50,12 +57,20 @@ func main() {
 	tourEquipmentRepository := &repo.TourEquipmentRepository{DatabaseConnection: database}
 	tourEquipmentService := &service.TourEquipmentService{TourEquipmentRepository: tourEquipmentRepository}
 
+	tourProgressRepository := &repo.TourProgressRepository{DatabaseConnection: database}
+	tourProgressService := &service.TourProgressService{TourProgressRepository: tourProgressRepository}
+
+	touristPositionRepository := &repo.TouristPositionRepository{DatabaseConnection: database}
+	touristPositionService := &service.TouristPositionService{TouristPositionRepository: touristPositionRepository}
+
 	handler := &handler.TourHandler{
-		TourService:          tourService,
-		KeypointService:      keypointService,
-		TourReviewService:    tourReviewService,
-		EquipmentService:     equipmentService,
-		TourEquipmentService: tourEquipmentService,
+		TourService:            tourService,
+		KeypointService:        keypointService,
+		TourReviewService:      tourReviewService,
+		EquipmentService:       equipmentService,
+		TourEquipmentService:   tourEquipmentService,
+		TourProgressService:    tourProgressService,
+		TouristPositionService: touristPositionService,
 	}
 
 	startServer(handler)

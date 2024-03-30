@@ -22,6 +22,7 @@ type Tour struct {
 	Duration         int            `json:"duration"`
 	Distance         float64        `json:"distance"`
 	StatusUpdateTime time.Time      `json:"statusUpdateTime"`
+	TourProgress     []TourProgress `json:"tourprogress" gorm:"foreignKey:TourId;references:ID"`
 }
 
 func (t *Tour) ContainsStatus(statuses []TourStatus) bool {

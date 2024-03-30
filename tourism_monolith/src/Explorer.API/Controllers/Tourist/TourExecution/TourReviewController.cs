@@ -1,4 +1,6 @@
-﻿using Explorer.BuildingBlocks.Core.UseCases;
+﻿using System.Text;
+using System.Text.Json;
+using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.TourExecution;
@@ -12,17 +14,25 @@ namespace Explorer.API.Controllers.Tourist.TourExecution;
 public class TourReviewController : BaseApiController
 {
     private readonly ITourReviewService _tourReviewService;
-
+    private static readonly string _tourAppPort = Environment.GetEnvironmentVariable("TOURS_APP_PORT") ?? "8080";
+    private static HttpClient httpReviewClient = new()
+    {
+        BaseAddress = new Uri("http://tours-module:" + _tourAppPort + "/api/tourreview"),
+    };
     public TourReviewController(ITourReviewService tourReviewService)
     {
         _tourReviewService = tourReviewService;
     }
 
     [HttpGet]
-    public ActionResult<PagedResult<TourReviewDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+    public async Task<string> GetAll([FromQuery] int page, [FromQuery] int pageSize)
     {
-        var result = _tourReviewService.GetPaged(page, pageSize);
-        return CreateResponse(result);
+        //var result = _tourReviewService.GetPaged(page, pageSize);
+        //return CreateResponse(result);
+        using HttpResponseMessage response = await httpReviewClient.GetAsync(httpReviewClient.BaseAddress);
+        
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        return jsonResponse;
     }
 
     [HttpGet("{id:int}")]
@@ -33,11 +43,17 @@ public class TourReviewController : BaseApiController
     }
 
     [HttpPost]
-    public ActionResult<TourReviewDto> Create([FromBody] TourReviewDto tourReview)
+    public async Task<string> Create([FromBody] TourReviewDto tourReview)
     {
         tourReview.UserId = User.PersonId();
-        var result = _tourReviewService.Create(tourReview);
-        return CreateResponse(result);
+        //var result = _tourReviewService.Create(tourReview);
+        //return CreateResponse(result);
+        using StringContent jsonContent = new(
+            JsonSerializer.Serialize(tourReview), Encoding.UTF8, "application/json");
+        using HttpResponseMessage response = await httpReviewClient.PostAsync(httpReviewClient.BaseAddress,  jsonContent);
+        
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        return jsonResponse;
     }
 
     [HttpPut("{id:int}")]

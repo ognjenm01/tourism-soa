@@ -2,20 +2,25 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	"tour/model"
 	"tour/service"
 
+	"crypto/tls"
+
 	"github.com/gorilla/mux"
 )
 
 type TourHandler struct {
-	TourService          *service.TourService
-	KeypointService      *service.KeypointService
-	TourReviewService    *service.TourReviewService
-	EquipmentService     *service.EquipmentService
-	TourEquipmentService *service.TourEquipmentService
+	TourService            *service.TourService
+	KeypointService        *service.KeypointService
+	TourReviewService      *service.TourReviewService
+	EquipmentService       *service.EquipmentService
+	TourEquipmentService   *service.TourEquipmentService
+	TourProgressService    *service.TourProgressService
+	TouristPositionService *service.TouristPositionService
 }
 
 // ------------------------------------------------------------------------------------------- TOUR CRUD
@@ -109,6 +114,18 @@ func (handler *TourHandler) UpdateTour(writer http.ResponseWriter, req *http.Req
 	writer.Header().Set("Content-Type", "application/json")
 }
 
+func (handler *TourHandler) GetAllTours(writer http.ResponseWriter, req *http.Request) {
+	tours, error := handler.TourService.GetAll()
+	writer.Header().Set("Content-Type", "application/json")
+	if error != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	} else {
+		writer.WriteHeader(http.StatusOK)
+		json.NewEncoder(writer).Encode(tours)
+	}
+}
+
 //------------------------------------------------------------------------------------------- KEYPOINT CRUD
 
 func (handler *TourHandler) CreateKeypoint(writer http.ResponseWriter, req *http.Request) {
@@ -196,6 +213,21 @@ func (handler *TourHandler) CreateReview(writer http.ResponseWriter, req *http.R
 
 func (handler *TourHandler) GetAllReviews(writer http.ResponseWriter, req *http.Request) {
 	tourReviews, error := handler.TourReviewService.GetAllReviews()
+	for i, review := range *tourReviews {
+		http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+		resp, error := http.Get(fmt.Sprintf("http://explorer:80/api/profile/userinfo/%d", review.UserId))
+		if error != nil {
+			writer.WriteHeader(http.StatusFailedDependency)
+			return
+		}
+		defer resp.Body.Close()
+		error = json.NewDecoder(resp.Body).Decode(&(*tourReviews)[i].UserInfo)
+		if error != nil {
+			writer.WriteHeader(http.StatusFailedDependency)
+			return
+		}
+	}
+
 	writer.Header().Set("Content-Type", "application/json")
 	if error != nil {
 		writer.WriteHeader(http.StatusNotFound)
@@ -209,6 +241,19 @@ func (handler *TourHandler) GetAllReviews(writer http.ResponseWriter, req *http.
 func (handler *TourHandler) GetReviewById(writer http.ResponseWriter, req *http.Request) {
 	id := mux.Vars(req)["id"]
 	tourReview, error := handler.TourReviewService.GetReviewById(id)
+	if error != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	resp, error := http.Get(fmt.Sprintf("https://localhost:44333/api/profile/userinfo/%d", tourReview.ID))
+	if error != nil {
+		writer.WriteHeader(http.StatusFailedDependency)
+		return
+	}
+	defer resp.Body.Close()
+	error = json.NewDecoder(resp.Body).Decode(&tourReview.UserInfo)
+
 	writer.Header().Set("Content-Type", "application/json")
 	if error != nil {
 		writer.WriteHeader(http.StatusNotFound)
@@ -365,4 +410,153 @@ func (handler *TourHandler) DeleteTourEquipment(writer http.ResponseWriter, req 
 	} else {
 		writer.WriteHeader(http.StatusOK)
 	}
+}
+
+//---------------------------------------------------------------------------------------- TOUR PROGRESS CRUD
+
+func (handler *TourHandler) CreateTourProgress(writer http.ResponseWriter, req *http.Request) {
+	var tourProgress model.TourProgress
+
+	error := json.NewDecoder(req.Body).Decode(&tourProgress)
+	if error != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	error = handler.TourProgressService.CreateTourProgress(&tourProgress)
+
+	if error != nil {
+		writer.WriteHeader(http.StatusExpectationFailed)
+		return
+	}
+
+	writer.WriteHeader(http.StatusCreated)
+	writer.Header().Set("Content-Type", "application/json")
+}
+
+func (handler *TourHandler) GetTourProgressById(writer http.ResponseWriter, req *http.Request) {
+	id := mux.Vars(req)["id"]
+	tourProgress, error := handler.TourProgressService.GetTourProgressById(id)
+	writer.Header().Set("Content-Type", "application/json")
+	if error != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	} else {
+		writer.WriteHeader(http.StatusOK)
+		json.NewEncoder(writer).Encode(tourProgress)
+	}
+}
+
+func (handler *TourHandler) GetAllTourProgress(writer http.ResponseWriter, req *http.Request) {
+	tourProgress, error := handler.TourProgressService.GetAllTourProgress()
+	writer.Header().Set("Content-Type", "application/json")
+	if error != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	} else {
+		writer.WriteHeader(http.StatusOK)
+		json.NewEncoder(writer).Encode(tourProgress)
+	}
+}
+
+func (handler *TourHandler) UpdateTourProgress(writer http.ResponseWriter, req *http.Request) {
+	var tourProgress model.TourProgress
+	error := json.NewDecoder(req.Body).Decode(&tourProgress)
+	if error != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	error = handler.TourProgressService.UpdateTourProgress(&tourProgress)
+	if error != nil {
+		writer.WriteHeader(http.StatusExpectationFailed)
+		return
+	}
+
+	writer.WriteHeader(http.StatusCreated)
+	writer.Header().Set("Content-Type", "application/json")
+}
+
+func (handler *TourHandler) DeleteTourProgress(writer http.ResponseWriter, req *http.Request) {
+	id := mux.Vars(req)["id"]
+
+	error := handler.TourProgressService.DeleteTourProgress(id)
+
+	if error != nil {
+		writer.WriteHeader(http.StatusExpectationFailed)
+		return
+	}
+
+	writer.WriteHeader(http.StatusOK)
+}
+
+//---------------------------------------------------------------------------------------- TOURIST POSITION CRUD
+
+func (handler *TourHandler) CreateTouristPosition(writer http.ResponseWriter, req *http.Request) {
+	var touristPosition model.TouristPosition
+
+	error := json.NewDecoder(req.Body).Decode(&touristPosition)
+	if error != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	error = handler.TouristPositionService.CreateTouristPosition(&touristPosition)
+
+	if error != nil {
+		writer.WriteHeader(http.StatusExpectationFailed)
+		return
+	}
+
+	writer.WriteHeader(http.StatusCreated)
+	writer.Header().Set("Content-Type", "application/json")
+}
+
+func (handler *TourHandler) GetTouristPositionById(writer http.ResponseWriter, req *http.Request) {
+	id := mux.Vars(req)["id"]
+	touristPosition, error := handler.TouristPositionService.GetTouristPositionById(id)
+	writer.Header().Set("Content-Type", "application/json")
+	if error != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	} else {
+		writer.WriteHeader(http.StatusOK)
+		json.NewEncoder(writer).Encode(touristPosition)
+	}
+}
+
+func (handler *TourHandler) GetTouristPositionByUser(writer http.ResponseWriter, req *http.Request) {
+	id := mux.Vars(req)["id"]
+	ID, error := strconv.Atoi(id)
+	if error != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	touristPosition, error := handler.TouristPositionService.GetTouristPositionByUser(ID)
+	writer.Header().Set("Content-Type", "application/json")
+	if error != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	} else {
+		writer.WriteHeader(http.StatusOK)
+		json.NewEncoder(writer).Encode(touristPosition)
+	}
+}
+
+func (handler *TourHandler) UpdateTouristPosition(writer http.ResponseWriter, req *http.Request) {
+	var touristPosition model.TouristPosition
+	error := json.NewDecoder(req.Body).Decode(&touristPosition)
+	if error != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	error = handler.TouristPositionService.UpdateTouristPosition(&touristPosition)
+	if error != nil {
+		writer.WriteHeader(http.StatusExpectationFailed)
+		return
+	}
+
+	writer.WriteHeader(http.StatusCreated)
+	writer.Header().Set("Content-Type", "application/json")
 }
