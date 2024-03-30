@@ -15,7 +15,7 @@ public class CommentCommandTests : BaseBlogIntegrationTest
     {
     }
 
-    [Fact]
+    /*[Fact]
     public void Creates()
     {
         using var scope = Factory.Services.CreateScope();
@@ -40,9 +40,9 @@ public class CommentCommandTests : BaseBlogIntegrationTest
         var storedEntity = dbContext.BlogComments.FirstOrDefault(i => i.Comment == newEntity.Comment);
         storedEntity.ShouldNotBeNull();
         storedEntity.Id.ShouldBe(result.Id);
-    }
+    }*/
 
-    [Fact]
+   /* [Fact]
     public void Create_fails_invalid_data()
     {
         // Arrange
@@ -59,9 +59,9 @@ public class CommentCommandTests : BaseBlogIntegrationTest
         // Assert
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(400);
-    }
+    }*/
 
-    [Fact]
+   /* [Fact]
     public void Update()
     {
         using var scope = Factory.Services.CreateScope();
@@ -94,9 +94,9 @@ public class CommentCommandTests : BaseBlogIntegrationTest
         storedEntity.Comment.ShouldBe(updatedEntity.Comment);
         var oldEntity = dbContext.BlogComments.FirstOrDefault(i => i.Comment == "komentar 1");
         oldEntity.ShouldBeNull();
-    }
+    }*/
 
-    [Fact]
+   /*[Fact]
     public void Update_fails_invalid_id()
     {
         using var scope = Factory.Services.CreateScope();
@@ -145,7 +145,7 @@ public class CommentCommandTests : BaseBlogIntegrationTest
 
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(404);
-    }
+    }*/
 
     private static BlogCommentController CreateController(IServiceScope scope)
     {

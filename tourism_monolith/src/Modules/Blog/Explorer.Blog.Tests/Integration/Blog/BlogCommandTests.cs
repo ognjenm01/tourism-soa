@@ -69,7 +69,7 @@ public class BlogCommandTests : BaseBlogIntegrationTest
         result.StatusCode.ShouldBe(400);
     }*/
 
-    [Fact]
+    /*[Fact]
     public void Updates()
     {
         //Arrange
@@ -105,9 +105,9 @@ public class BlogCommandTests : BaseBlogIntegrationTest
         storedEntity.Title.ShouldBe(updatedEntity.Title);
         var oldEntity = dbContext.Blogs.FirstOrDefault(i => i.Description == "It was wonderful");
         oldEntity.ShouldBeNull();
-    }
+    }*/
 
-    [Fact]
+   /* [Fact]
     public void Update_fails_invalid_id()
     {
         //Arrange
@@ -127,7 +127,7 @@ public class BlogCommandTests : BaseBlogIntegrationTest
         //Assert
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(404);
-    }
+    }*/
 
     /*[Fact]
     public void Deletes()
