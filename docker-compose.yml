@@ -58,6 +58,29 @@ services:
       POSTGRES_DB: explorer-v1
     volumes:
       - database-data:/var/lib/postgresql/data
+  
+  blogs-module:
+    build: 
+      context: ./
+      dockerfile: module_blog/Dockerfile
+    image: blogsmodule
+    container_name: blogs_module
+    restart: always
+    networks:
+      -servers:
+    ports:
+      - $"{BLOGS_APP_PORT}:${BLOGS_APP_PORT}"
+    environment:
+      BLOGS_DB_HOST: ${BLOGS_DB_HOST}
+      BLOGS_DB_USERNAME: ${BLOGS_DB_USERNAME}
+      BLOGS_DB_PASSWORD: ${BLOGS_DB_PASSWORD}
+      BLOGS_DB: ${BLOGS_DB}
+      BLOGS_DB_PORT: ${BLOGS_DB_PORT}
+      BLOGS_SCHEMA: ${BLOGS_SCHEMA}
+      BLOGS_APP_PORT: ${BLOGS_APP_PORT}
+    depends_on:
+      - database
+
 
 volumes:
   database-data:

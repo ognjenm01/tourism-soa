@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 	"module_blog.xws.com/handler"
@@ -33,7 +34,8 @@ func startServer(blogHandler *handler.BlogHandler, blogCommentHandler *handler.B
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
 	println("Server starting")
 	//log.Fatal(http.ListenAndServe("localhost:3333", router))
-	log.Fatal(http.ListenAndServe("localhost:8080", router))
+	port := ":" + os.Getenv("BLOGS_APP_PORT")
+	log.Fatal(http.ListenAndServe(port, router))
 }
 
 func main() {

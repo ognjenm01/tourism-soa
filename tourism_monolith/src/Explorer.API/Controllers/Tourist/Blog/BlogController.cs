@@ -15,20 +15,22 @@ namespace Explorer.API.Controllers.Tourist.Blog;
 [Route("api/blog")]
 public class BlogController : BaseApiController
 {
-    private readonly IBlogService _blogService;
+    private static readonly string _blogServicePort = Environment.GetEnvironmentVariable("BLOGS_APP_PORT") ?? "8080";
     private readonly HttpClient _httpClient;
 
-    public BlogController(IBlogService blogService)
+    public BlogController()
     {
-        _blogService = blogService;
-        _httpClient = new HttpClient();
+        _httpClient = new()
+        {
+            BaseAddress = new Uri($"http://blogs-module:" + _blogServicePort + "/blogs")
+        };
     }
 
     [HttpGet]
     public async Task<ActionResult<PagedResult<BlogDto>>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
     {
-        Uri uri = new Uri($"http://localhost:8080/blogs");
-        HttpResponseMessage response = await _httpClient.GetAsync(uri);
+        //Uri uri = new Uri($"http://localhost:8080/blogs");
+        HttpResponseMessage response = await _httpClient.GetAsync(".");
 
         if (response.IsSuccessStatusCode)
         {
@@ -43,18 +45,18 @@ public class BlogController : BaseApiController
         return BadRequest();
     }
 
-    [HttpGet("status")]
+   /* [HttpGet("status")]
     public ActionResult<PagedResult<BlogDto>> GetWithStatuses([FromQuery] int page, [FromQuery] int pageSize)
     {
         var result = _blogService.GetWithStatuses(page, pageSize);
         return CreateResponse(result.ToResult());
-    }
+    }*/
 
     [HttpGet("{id:int}")]
     public async Task<ActionResult<BlogDto>> Get(int id)
     {
-        Uri uri = new Uri($"http://localhost:8080/blogs/{id}");
-        HttpResponseMessage response = await _httpClient.GetAsync(uri);
+        //Uri uri = new Uri($"http://localhost:8080/blogs/{id}");
+        HttpResponseMessage response = await _httpClient.GetAsync($"/{id}");
 
         if (response.IsSuccessStatusCode)
         {
@@ -71,11 +73,11 @@ public class BlogController : BaseApiController
     {
         string jsonBlog = JsonConvert.SerializeObject(blog);
 
-        Uri uri = new Uri("http://localhost:8080/blogs");
+       // Uri uri = new Uri("http://localhost:8080/blogs");
 
         var content = new StringContent(jsonBlog);
         content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-        HttpResponseMessage response = await _httpClient.PostAsync(uri, content);
+        HttpResponseMessage response = await _httpClient.PostAsync(".", content);
 
         if (response.IsSuccessStatusCode)
         {
@@ -96,11 +98,11 @@ public class BlogController : BaseApiController
     {
         string jsonBlog = JsonConvert.SerializeObject(blog);
         
-        Uri uri = new Uri("http://localhost:8080/blogs");
+        //Uri uri = new Uri("http://localhost:8080/blogs");
         var content = new StringContent(jsonBlog);
         content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
         
-        HttpResponseMessage responseMessage = await _httpClient.PutAsync(uri,content);
+        HttpResponseMessage responseMessage = await _httpClient.PutAsync(".",content);
         if (responseMessage.IsSuccessStatusCode)
         {
             string responseContent = await responseMessage.Content.ReadAsStringAsync();
@@ -114,8 +116,8 @@ public class BlogController : BaseApiController
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> Delete(int id)
     {
-        Uri uri = new Uri($"http://localhost:8080/blogs/{id}");
-        HttpResponseMessage response = await _httpClient.DeleteAsync(uri);
+        //Uri uri = new Uri($"http://localhost:8080/blogs/{id}");
+        HttpResponseMessage response = await _httpClient.DeleteAsync($"/{id}");
 
         if (response.IsSuccessStatusCode)
         {
@@ -131,11 +133,11 @@ public class BlogController : BaseApiController
     public async Task<ActionResult<BlogDto>> AddRating([FromBody] BlogRatingDto blogRatingDto)
     {
         string jsonRating = JsonConvert.SerializeObject(blogRatingDto);
-        Uri uri = new Uri("http://localhost:8080/blogs/rate");
+        //Uri uri = new Uri("http://localhost:8080/blogs/rate");
         
         var content = new StringContent(jsonRating);
         content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-        HttpResponseMessage response = await _httpClient.PostAsync(uri, content);
+        HttpResponseMessage response = await _httpClient.PostAsync("/rate", content);
 
         if (response.IsSuccessStatusCode)
         {

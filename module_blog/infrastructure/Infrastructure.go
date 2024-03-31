@@ -3,6 +3,7 @@ package infrastructure
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -34,13 +35,13 @@ func InitDb() *gorm.DB {
 }
 
 func formConnectionString() string {
-	host := "localhost"
-	port := 5432
-	username := "postgres"
-	password := "super"
-	dbname := "explorer-v1"
+	host := os.Getenv("BLOGS_DB_HOST")
+	port := os.Getenv("BLOGS_DB_PORT")
+	username := os.Getenv("BLOGS_DB_USERNAME")
+	password := os.Getenv("BLOGS_DB_PASSWORD")
+	dbname := os.Getenv("BLOGS_DB")
 
-	connectionString := fmt.Sprintf("postgres://%s:%s@%s:%d/%s", username, password, host, port, dbname)
+	connectionString := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", username, password, host, port, dbname)
 
 	return connectionString
 }
