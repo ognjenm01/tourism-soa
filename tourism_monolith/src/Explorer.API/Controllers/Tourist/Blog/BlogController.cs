@@ -22,7 +22,7 @@ public class BlogController : BaseApiController
     {
         _httpClient = new()
         {
-            BaseAddress = new Uri($"http://blogs-module:" + _blogServicePort + "/blogs")
+            BaseAddress = new Uri("http://blogs-module:" + _blogServicePort + "api/blogs")
         };
     }
 
