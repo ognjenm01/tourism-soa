@@ -39,6 +39,7 @@ func startServer(blogHandler *handler.BlogHandler, blogCommentHandler *handler.B
 }
 
 func main() {
+
 	database := infrastructure.InitDb()
 	if database == nil {
 		log.Fatalln("Hit the road jack")

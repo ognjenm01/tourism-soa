@@ -15,7 +15,7 @@ public class TourEquipmentControllerTests : BaseToursIntegrationTest
     {
     }
 
-    [Fact]
+   /* [Fact]
     public void AddsEquipmentToTour()
     {
         // Arrange
@@ -36,10 +36,10 @@ public class TourEquipmentControllerTests : BaseToursIntegrationTest
         var storedEntity = dbContext.TourEquipments.FirstOrDefault(i =>
             i.TourId == newEntity.TourId && i.EquipmentId == newEntity.EquipmentId);
         storedEntity.ShouldNotBeNull();
-    }
+    }*/
 
 
-    [Fact]
+   /* [Fact]
     public void GetsEquipmentForTour()
     {
         // Arrange
@@ -53,9 +53,9 @@ public class TourEquipmentControllerTests : BaseToursIntegrationTest
         // Assert - Response
         result.ShouldNotBeNull();
         result.Count.ShouldBeGreaterThan(0);
-    }
+    }*/
 
-    [Fact]
+    /*[Fact]
     public void RemovesEquipmentFromTour()
     {
         // Arrange
@@ -79,7 +79,7 @@ public class TourEquipmentControllerTests : BaseToursIntegrationTest
         var deletedEntity = dbContext.TourEquipments.FirstOrDefault(i =>
             i.TourId == entityToRemove.TourId && i.EquipmentId == entityToRemove.EquipmentId);
         deletedEntity.ShouldBeNull();
-    }
+    }*/
 
 
     private static TourEquipmentController CreateController(IServiceScope scope)

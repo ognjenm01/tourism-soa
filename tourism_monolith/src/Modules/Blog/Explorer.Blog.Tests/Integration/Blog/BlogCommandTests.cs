@@ -164,11 +164,11 @@ public class BlogCommandTests : BaseBlogIntegrationTest
         result.StatusCode.ShouldBe(404);
     }*/
 
-    private static BlogController CreateController(IServiceScope scope)
+    /*private static BlogController CreateController(IServiceScope scope)
     {
         return new BlogController(scope.ServiceProvider.GetRequiredService<IBlogService>())
         {
             ControllerContext = BuildContext("-1")
         };
-    }
+    }*/
 }

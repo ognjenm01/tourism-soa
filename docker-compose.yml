@@ -67,9 +67,9 @@ services:
     container_name: blogs_module
     restart: always
     networks:
-      -servers:
+      - servers
     ports:
-      - $"{BLOGS_APP_PORT}:${BLOGS_APP_PORT}"
+      - "${BLOGS_APP_PORT}:${BLOGS_APP_PORT}"
     environment:
       BLOGS_DB_HOST: ${BLOGS_DB_HOST}
       BLOGS_DB_USERNAME: ${BLOGS_DB_USERNAME}

@@ -31,11 +31,11 @@ public class BlogQueryTests : BaseBlogIntegrationTest
         result.TotalCount.ShouldBe(3);
     }*/
 
-    private static BlogController CreateController(IServiceScope scope)
+    /*private static BlogController CreateController(IServiceScope scope)
     {
         return new BlogController(scope.ServiceProvider.GetRequiredService<IBlogService>())
         {
             ControllerContext = BuildContext("-1")
         };
-    }
+    }*/
 }
