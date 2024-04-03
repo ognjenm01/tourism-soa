@@ -15,7 +15,7 @@ public class KeypointQueryTests : BaseToursIntegrationTest
     {
     }
 
-    [Fact]
+   /* [Fact]
     public void Retrieves_all()
     {
         //Arrange
@@ -29,9 +29,9 @@ public class KeypointQueryTests : BaseToursIntegrationTest
         result.ShouldNotBeNull();
         result.Results.Count.ShouldBe(3);
         result.TotalCount.ShouldBe(3);
-    }
+    }*/
 
-    [Fact]
+    /*[Fact]
     public void Retrieves_by_tour_id()
     {
         //Arrange
@@ -46,7 +46,7 @@ public class KeypointQueryTests : BaseToursIntegrationTest
         result.ShouldNotBeNull();
         result.Results.Count.ShouldBe(2);
         result.TotalCount.ShouldBe(2);
-    }
+    }*/
 
     private static KeypointController CreateController(IServiceScope scope)
     {

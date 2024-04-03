@@ -1,10 +1,13 @@
-﻿using Explorer.Blog.API.Dtos;
+﻿using System.Net.Http.Headers;
+using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public.Blog;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Explorer.API.Controllers.Tourist.Blog;
 
@@ -12,59 +15,140 @@ namespace Explorer.API.Controllers.Tourist.Blog;
 [Route("api/blog")]
 public class BlogController : BaseApiController
 {
-    private readonly IBlogService _blogService;
+    private static readonly string _blogServicePort = Environment.GetEnvironmentVariable("BLOGS_APP_PORT") ?? "8080";
+    private readonly HttpClient _httpClient;
 
-    public BlogController(IBlogService blogService)
+    public BlogController()
     {
-        _blogService = blogService;
+        _httpClient = new()
+        {
+            BaseAddress = new Uri($"http://blogs-module:" + _blogServicePort + "/blogs")
+        };
     }
 
     [HttpGet]
-    public ActionResult<PagedResult<BlogDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+    public async Task<ActionResult<PagedResult<BlogDto>>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
     {
-        var result = _blogService.GetPaged(page, pageSize);
-        return CreateResponse(result);
+        //Uri uri = new Uri($"http://localhost:8080/blogs");
+        HttpResponseMessage response = await _httpClient.GetAsync(".");
+
+        if (response.IsSuccessStatusCode)
+        {
+            string responseContent = await response.Content.ReadAsStringAsync();
+            List<BlogDto> blogs = JsonConvert.DeserializeObject<List<BlogDto>>(responseContent);
+            
+            var pagedResult = new PagedResult<BlogDto>(blogs, totalCount: blogs.Count);
+
+            return CreateResponse(Result.Ok(pagedResult));
+        }
+
+        return BadRequest();
     }
 
-    [HttpGet("status")]
+   /* [HttpGet("status")]
     public ActionResult<PagedResult<BlogDto>> GetWithStatuses([FromQuery] int page, [FromQuery] int pageSize)
     {
         var result = _blogService.GetWithStatuses(page, pageSize);
         return CreateResponse(result.ToResult());
-    }
+    }*/
 
     [HttpGet("{id:int}")]
-    public ActionResult<BlogDto> Get(int id)
+    public async Task<ActionResult<BlogDto>> Get(int id)
     {
-        var result = _blogService.Get(id);
-        return CreateResponse(result);
+        //Uri uri = new Uri($"http://localhost:8080/blogs/{id}");
+        HttpResponseMessage response = await _httpClient.GetAsync($"/{id}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            string responseContent = await response.Content.ReadAsStringAsync();
+            BlogDto blog = JsonConvert.DeserializeObject<BlogDto>(responseContent);
+            return CreateResponse(Result.Ok(blog));
+        }
+
+        return BadRequest();
     }
 
     [HttpPost]
-    public ActionResult<BlogDto> Create([FromBody] BlogDto blog)
+    public async Task<ActionResult<BlogDto>> Create([FromBody] BlogDto blog)
     {
-        var result = _blogService.Create(blog);
-        return CreateResponse(result);
+        string jsonBlog = JsonConvert.SerializeObject(blog);
+
+       // Uri uri = new Uri("http://localhost:8080/blogs");
+
+        var content = new StringContent(jsonBlog);
+        content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        HttpResponseMessage response = await _httpClient.PostAsync(".", content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            string responseContent = await response.Content.ReadAsStringAsync();
+            
+            BlogDto createdBlog = JsonConvert.DeserializeObject<BlogDto>(responseContent);
+
+            return CreateResponse(Result.Ok(createdBlog));
+        }
+        else
+        {
+            return BadRequest();
+        }
     }
 
     [HttpPut("{id:int}")]
-    public ActionResult<BlogDto> Update([FromBody] BlogDto blog)
+    public async Task<ActionResult<BlogDto>> Update([FromBody] BlogDto blog)
     {
-        var result = _blogService.Update(blog);
-        return CreateResponse(result);
+        string jsonBlog = JsonConvert.SerializeObject(blog);
+        
+        //Uri uri = new Uri("http://localhost:8080/blogs");
+        var content = new StringContent(jsonBlog);
+        content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        
+        HttpResponseMessage responseMessage = await _httpClient.PutAsync(".",content);
+        if (responseMessage.IsSuccessStatusCode)
+        {
+            string responseContent = await responseMessage.Content.ReadAsStringAsync();
+            BlogDto updatedBlog = JsonConvert.DeserializeObject<BlogDto>(responseContent);
+            return CreateResponse(Result.Ok(updatedBlog));
+        }
+
+        return BadRequest();
     }
 
     [HttpDelete("{id:int}")]
-    public ActionResult Delete(int id)
+    public async Task<ActionResult> Delete(int id)
     {
-        var result = _blogService.Delete(id);
-        return CreateResponse(result);
+        //Uri uri = new Uri($"http://localhost:8080/blogs/{id}");
+        HttpResponseMessage response = await _httpClient.DeleteAsync($"/{id}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            return Ok();
+        }
+        else
+        {
+            return BadRequest();
+        }
     }
 
     [HttpPost("rate")]
-    public ActionResult<BlogDto> AddRating([FromBody] BlogRatingDto blogRatingDto)
+    public async Task<ActionResult<BlogDto>> AddRating([FromBody] BlogRatingDto blogRatingDto)
     {
-        var result = _blogService.AddRating(blogRatingDto, User.PersonId());
-        return CreateResponse(result);
+        string jsonRating = JsonConvert.SerializeObject(blogRatingDto);
+        //Uri uri = new Uri("http://localhost:8080/blogs/rate");
+        
+        var content = new StringContent(jsonRating);
+        content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        HttpResponseMessage response = await _httpClient.PostAsync("/rate", content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            string responseContent = await response.Content.ReadAsStringAsync();
+            
+            BlogDto blog = JsonConvert.DeserializeObject<BlogDto>(responseContent);
+
+            return CreateResponse(Result.Ok(blog));
+        }
+        
+        return BadRequest();
+        
     }
 }

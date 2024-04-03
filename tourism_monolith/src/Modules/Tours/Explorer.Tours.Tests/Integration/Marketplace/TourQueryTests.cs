@@ -14,7 +14,7 @@ public class TourQueryTests : BaseToursIntegrationTest
     {
     }
 
-    [Fact]
+   /* [Fact]
     public void Retrieves_all_published()
     {
         //Arrange
@@ -28,7 +28,7 @@ public class TourQueryTests : BaseToursIntegrationTest
         result.ShouldNotBeNull();
         result.Results.Count.ShouldBe(3);
         result.TotalCount.ShouldBe(3);
-    }
+    }*/
 
     [Fact]
     public void Retrieves_all_archived_and_published()

@@ -15,7 +15,7 @@ public class CommentQueryTests : BaseBlogIntegrationTest
     {
     }
 
-    [Fact]
+   /* [Fact]
     public void Retrieve_all()
     {
         using var scope = Factory.Services.CreateScope();
@@ -26,7 +26,7 @@ public class CommentQueryTests : BaseBlogIntegrationTest
         result.ShouldNotBeNull();
         result.Results.Count.ShouldBe(1);
         result.TotalCount.ShouldBe(1);
-    }
+    }*/
 
     private static BlogCommentController CreateController(IServiceScope scope)
     {

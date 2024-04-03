@@ -11,6 +11,11 @@ namespace Explorer.API.Controllers.Administrator.Administration;
 public class EquipmentController : BaseApiController
 {
     private readonly IEquipmentService _equipmentService;
+    private static readonly string _tourAppPort = Environment.GetEnvironmentVariable("TOURS_APP_PORT") ?? "8080";
+    private static HttpClient httpEquipmentClient = new()
+    {
+        BaseAddress = new Uri("http://tours-module:" + _tourAppPort + "/api/equipment/"),
+    };
 
     public EquipmentController(IEquipmentService equipmentService)
     {
@@ -19,10 +24,14 @@ public class EquipmentController : BaseApiController
 
     [HttpGet]
     [Authorize(Roles = "administrator,author,tourist")]
-    public ActionResult<PagedResult<EquipmentDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+    public async Task<string> GetAll([FromQuery] int page, [FromQuery] int pageSize)
     {
-        var result = _equipmentService.GetPaged(page, pageSize);
-        return CreateResponse(result);
+        //var result = _equipmentService.GetPaged(page, pageSize);
+        //return CreateResponse(result);
+        using HttpResponseMessage response = await httpEquipmentClient.GetAsync(httpEquipmentClient.BaseAddress);
+        
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        return jsonResponse;
     }
 
     [HttpPost]
