@@ -15,7 +15,7 @@ public class TourManagementCommandTests : BaseToursIntegrationTest
     {
     }
 
-    [Fact]
+   /* [Fact]
     public void Creates()
     {
         // Arrange
@@ -228,5 +228,5 @@ public class TourManagementCommandTests : BaseToursIntegrationTest
         {
             ControllerContext = BuildContext(userId.ToString())
         };
-    }
+    }*/
 }

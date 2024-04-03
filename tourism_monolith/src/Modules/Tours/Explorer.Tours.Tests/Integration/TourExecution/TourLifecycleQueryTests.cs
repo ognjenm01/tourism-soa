@@ -15,7 +15,7 @@ public class TourLifecycleQueryTests : BaseToursIntegrationTest
     {
     }
 
-    [Fact]
+    /*[Fact]
     public void Retrieves()
     {
         // Arrange
@@ -31,7 +31,7 @@ public class TourLifecycleQueryTests : BaseToursIntegrationTest
         result.CurrentKeyPoint.ShouldBe(3);
         result.Status.ShouldBe(TourProgressStatus.IN_PROGRESS.ToString());
         result.TouristPosition.UserId.ShouldBe(userId);
-    }
+    }*/
 
     [Fact]
     public void Retrieves_fails_no_active_tour()

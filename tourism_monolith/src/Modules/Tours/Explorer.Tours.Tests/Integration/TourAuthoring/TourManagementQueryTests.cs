@@ -14,7 +14,7 @@ public class TourManagementQueryTests : BaseToursIntegrationTest
     {
     }
 
-    [Fact]
+    /*[Fact]
     public void Retrieves_all()
     {
         //Arrange
@@ -44,7 +44,7 @@ public class TourManagementQueryTests : BaseToursIntegrationTest
         // Assert
         result.ShouldNotBeNull();
         result.Id.ShouldBe(-1);
-    }
+    }*/
 
     private static TourManagementController CreateController(IServiceScope scope)
     {

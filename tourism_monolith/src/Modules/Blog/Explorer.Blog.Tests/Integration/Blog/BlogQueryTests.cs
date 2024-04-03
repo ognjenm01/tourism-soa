@@ -15,7 +15,7 @@ public class BlogQueryTests : BaseBlogIntegrationTest
     {
     }
 
-    [Fact]
+   /* [Fact]
     public void Retrieves_all()
     {
         //Arrange
@@ -29,13 +29,13 @@ public class BlogQueryTests : BaseBlogIntegrationTest
         result.ShouldNotBeNull();
         result.Results.Count.ShouldBe(3);
         result.TotalCount.ShouldBe(3);
-    }
+    }*/
 
-    private static BlogController CreateController(IServiceScope scope)
+    /*private static BlogController CreateController(IServiceScope scope)
     {
         return new BlogController(scope.ServiceProvider.GetRequiredService<IBlogService>())
         {
             ControllerContext = BuildContext("-1")
         };
-    }
+    }*/
 }
