@@ -1,12 +1,16 @@
 package infrastructure
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
+	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
@@ -23,6 +27,34 @@ func InitDb() (*mongo.Client, error) {
 	}
 
 	return client, nil
+}
+
+func Disconnect(client *mongo.Client, ctx context.Context) error {
+	// Disconnect from the MongoDB database
+	err := client.Disconnect(ctx)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Check database connection
+func Ping(cli *mongo.Client) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	// Check connection -> if no error, connection is established
+	err := cli.Ping(ctx, readpref.Primary())
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	// Print available databases
+	databases, err := cli.ListDatabaseNames(ctx, bson.M{})
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Println(databases)
 }
 
 func InitDb1() *gorm.DB {

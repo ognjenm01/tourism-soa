@@ -1,8 +1,10 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 	"module_blog.xws.com/handler"
@@ -46,13 +48,19 @@ func main() {
 	database1, err := infrastructure.InitDb()
 	database := infrastructure.InitDb1()
 
-	if database1 == nil {
-		log.Fatalln("tuki")
-	}
+	timeoutContext, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
 
 	if err != nil {
+		log.Fatalln("mongo ne valja")
+	}
+
+	if database == nil {
 		log.Fatalln("Hit the road jack")
 	}
+	defer infrastructure.Disconnect(database1, timeoutContext)
+
+	infrastructure.Ping(database1)
 
 	blogCommentRepository := &repo.BlogCommentRepository{DatabaseConnection: database}
 	blogCommentService := &service.BlogCommentService{BlogCommentRepository: blogCommentRepository}
