@@ -14,20 +14,22 @@ namespace Explorer.API.Controllers.Tourist.Commenting;
 [Route("api/blog/comments")]
 public class BlogCommentController : BaseApiController
 {
-    private readonly IBlogCommentService _blogCommentService;
+    private static readonly string _blogServicePort = Environment.GetEnvironmentVariable("BLOGS_APP_PORT") ?? "8080";
     private readonly HttpClient _httpClient;
 
-    public BlogCommentController(IBlogCommentService blogCommentService)
+    public BlogCommentController()
     {
-        _blogCommentService = blogCommentService;
-        _httpClient = new HttpClient();
+        _httpClient = new()
+        {
+            BaseAddress = new Uri($"http://blogs-module:" + _blogServicePort + "/blogcomments")
+        };
     }
 
     [HttpGet]
      public async Task<ActionResult<PagedResult<BlogCommentDto>>> GetAll([FromQuery] int page, [FromQuery] int pageSize, [FromQuery] long blogId)
     {
-        Uri uri = new Uri($"http://localhost:3333/api/blogcomments");
-        HttpResponseMessage response = await _httpClient.GetAsync(uri);
+        //Uri uri = new Uri($"http://localhost:3333/api/blogcomments");
+        HttpResponseMessage response = await _httpClient.GetAsync(".");
 
         if (response.IsSuccessStatusCode)
         {
@@ -45,8 +47,8 @@ public class BlogCommentController : BaseApiController
     [HttpGet("{id:int}")]
      public async Task<ActionResult<BlogCommentDto>> Get(int id)
     {
-        Uri uri = new Uri($"http://localhost:3333/api/blogcomments/{id}");
-        HttpResponseMessage response = await _httpClient.GetAsync(uri);
+        //Uri uri = new Uri($"http://localhost:3333/api/blogcomments/{id}");
+        HttpResponseMessage response = await _httpClient.GetAsync($"/{id}");
 
         if (response.IsSuccessStatusCode)
         {
@@ -64,11 +66,11 @@ public class BlogCommentController : BaseApiController
     {
         string jsonBlogComment = JsonConvert.SerializeObject(blogComment);
 
-        Uri uri = new Uri("http://localhost:3333/api/blogcomments");
+        //Uri uri = new Uri("http://localhost:3333/api/blogcomments");
 
         var content = new StringContent(jsonBlogComment);
         content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-        HttpResponseMessage response = await _httpClient.PostAsync(uri, content);
+        HttpResponseMessage response = await _httpClient.PostAsync(".", content);
 
         if (response.IsSuccessStatusCode)
         {
@@ -89,11 +91,11 @@ public class BlogCommentController : BaseApiController
     {
         string jsonBlogComment = JsonConvert.SerializeObject(blogComment);
         
-        Uri uri = new Uri("http://localhost:3333/api/blogcomments/{id}");
+        //Uri uri = new Uri("http://localhost:3333/api/blogcomments/{id}");
         var content = new StringContent(jsonBlogComment);
         content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
         
-        HttpResponseMessage responseMessage = await _httpClient.PutAsync(uri,content);
+        HttpResponseMessage responseMessage = await _httpClient.PutAsync(".", content);
         if (responseMessage.IsSuccessStatusCode)
         {
             string responseContent = await responseMessage.Content.ReadAsStringAsync();
@@ -107,8 +109,8 @@ public class BlogCommentController : BaseApiController
     [HttpDelete("{id:int}")]
      public async Task<ActionResult> Delete(int id)
     {
-        Uri uri = new Uri($"http://localhost:3333/api/blogcomments/{id}");
-        HttpResponseMessage response = await _httpClient.DeleteAsync(uri);
+        //Uri uri = new Uri($"http://localhost:3333/api/blogcomments/{id}");
+        HttpResponseMessage response = await _httpClient.DeleteAsync($"/{id}");
 
         if (response.IsSuccessStatusCode)
         {
