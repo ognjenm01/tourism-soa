@@ -2,6 +2,8 @@ package repo
 
 import (
 	"context"
+	"log"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -17,7 +19,7 @@ type BlogRepository struct {
 func (repo *BlogRepository) GetById(id string) (model.Blog, error) {
 	var blog model.Blog
 
-	collection := repo.DatabaseConnection.Database("explorer-v1").Collection("blogs")
+	collection := repo.DatabaseConnection.Database("mongoDemo").Collection("blogs")
 
 	// Define a filter for finding the blog by id
 	filter := bson.M{"_id": id}
@@ -37,11 +39,12 @@ func (repo *BlogRepository) GetById(id string) (model.Blog, error) {
 func (repo *BlogRepository) GetAll() ([]model.Blog, error) {
 	var blogs []model.Blog
 
-	collection := repo.DatabaseConnection.Database("explorer-v1").Collection("blogs") // Specify your database and collection name
+	collection := repo.DatabaseConnection.Database("mongoDemo").Collection("blogs") // Specify your database and collection name
 
 	// Perform the find operation
 	cursor, err := collection.Find(context.Background(), bson.M{})
 	if err != nil {
+		log.Fatalln(err)
 		return nil, err
 	}
 	defer cursor.Close(context.Background())
@@ -50,6 +53,7 @@ func (repo *BlogRepository) GetAll() ([]model.Blog, error) {
 	for cursor.Next(context.Background()) {
 		var blog model.Blog
 		if err := cursor.Decode(&blog); err != nil {
+			log.Fatalln(err)
 			return nil, err
 		}
 		blogs = append(blogs, blog)
@@ -63,11 +67,15 @@ func (repo *BlogRepository) GetAll() ([]model.Blog, error) {
 }
 
 func (repo *BlogRepository) Create(blog *model.Blog) error {
-	collection := repo.DatabaseConnection.Database("explorer-v1").Collection("blogs") // Specify your database and collection name
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	collection := repo.DatabaseConnection.Database("mongoDemo").Collection("blogs")
 
 	// Perform the insert operation
-	_, err := collection.InsertOne(context.Background(), blog)
+	_, err := collection.InsertOne(ctx, &blog)
 	if err != nil {
+		log.Fatalln(err)
 		return err
 	}
 
@@ -75,7 +83,7 @@ func (repo *BlogRepository) Create(blog *model.Blog) error {
 }
 
 func (repo *BlogRepository) Update(blog *model.Blog) error {
-	collection := repo.DatabaseConnection.Database("explorer-v1").Collection("blogs") // Specify your database and collection name
+	collection := repo.DatabaseConnection.Database("mongoDemo").Collection("blogs") // Specify your database and collection name
 
 	// Define the filter for finding the blog by its ID
 	filter := bson.M{"_id": blog.Id}
@@ -98,7 +106,7 @@ func (repo *BlogRepository) Update(blog *model.Blog) error {
 }
 
 func (repo *BlogRepository) Delete(id string) error {
-	collection := repo.DatabaseConnection.Database("explorer-v1").Collection("blogs") // Specify your database and collection name
+	collection := repo.DatabaseConnection.Database("mongoDemo").Collection("blogs") // Specify your database and collection name
 
 	// Define the filter for finding the blog by its ID
 	filter := bson.M{"_id": id}

@@ -11,6 +11,8 @@ import (
 	"module_blog.xws.com/service"
 )
 
+type KeyProduct struct{}
+
 type BlogHandler struct {
 	BlogService *service.BlogService
 }
@@ -41,6 +43,7 @@ func (handler *BlogHandler) GetAll(writer http.ResponseWriter, req *http.Request
 }
 
 func (handler *BlogHandler) Create(writer http.ResponseWriter, req *http.Request) {
+
 	blog := model.Blog{}
 	err := json.NewDecoder(req.Body).Decode(&blog)
 	if err != nil {

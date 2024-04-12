@@ -64,14 +64,10 @@ services:
     restart: always
     ports:
       - "${MONGO_DB_PORT}:${MONGO_DB_PORT}"
-  
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - "${MONGO_GUI_PORT}:${MONGO_GUI_PORT}"
     environment:
-      ME_CONFIG_MONGODB_URL: mongodb://mongo:27017/
+      MONOG_INITDB_ROOT_USERNAME: root
+      MONOG_INITDB_ROOT_PASSWORD: pass
+      MONGO_INITDB_DATABASE: mongoDemo
   
   blogs-module:
     build: 
@@ -93,6 +89,7 @@ services:
       BLOGS_SCHEMA: ${BLOGS_SCHEMA}
       BLOGS_APP_PORT: ${BLOGS_APP_PORT}
     depends_on:
+      - mongo
       - database
 
 

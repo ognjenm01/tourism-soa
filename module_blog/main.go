@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/gorilla/mux"
 	"module_blog.xws.com/handler"
@@ -15,7 +14,10 @@ import (
 func startServer(blogHandler *handler.BlogHandler, blogCommentHandler *handler.BlogCommentHandler, ratingHandler *handler.BlogRatingHandler) {
 	router := mux.NewRouter().StrictSlash(true)
 
-	router.HandleFunc("/blogs", blogHandler.Create).Methods("POST")
+	postRouter := router.Methods(http.MethodPost).Subrouter()
+	postRouter.HandleFunc("/blogs", blogHandler.Create)
+
+	//router.HandleFunc("/blogs", blogHandler.Create).Methods("POST")
 	router.HandleFunc("/blogs", blogHandler.GetAll).Methods("GET")
 	router.HandleFunc("/blogs/{id}", blogHandler.GetById).Methods("GET")
 	router.HandleFunc("/blogs", blogHandler.Update).Methods("PUT")
@@ -34,7 +36,8 @@ func startServer(blogHandler *handler.BlogHandler, blogCommentHandler *handler.B
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
 	println("Server starting")
 	//log.Fatal(http.ListenAndServe("localhost:3333", router))
-	port := ":" + os.Getenv("BLOGS_APP_PORT")
+	//port := ":" + os.Getenv("BLOGS_APP_PORT")
+	port := ":8080"
 	log.Fatal(http.ListenAndServe(port, router))
 }
 
