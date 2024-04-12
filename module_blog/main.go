@@ -45,10 +45,6 @@ func main() {
 		log.Fatalln("Hit the road jack")
 	}
 
-	blogRepo := &repo.BlogRepository{DatabaseConnection: database}
-	blogService := &service.BlogService{BlogRepo: blogRepo}
-	blogHandler := &handler.BlogHandler{BlogService: blogService}
-
 	blogCommentRepository := &repo.BlogCommentRepository{DatabaseConnection: database}
 	blogCommentService := &service.BlogCommentService{BlogCommentRepository: blogCommentRepository}
 	blogCommentHandler := &handler.BlogCommentHandler{BlogCommentService: blogCommentService}
@@ -56,6 +52,17 @@ func main() {
 	ratingRepo := &repo.BlogRatingRepository{DatabaseConnection: database}
 	ratingService := &service.BlogRatingService{BlogRatingRepo: ratingRepo}
 	ratingHandler := &handler.BlogRatingHandler{BlogRatingService: ratingService}
+
+	statusRepo := &repo.BlogStatusRepository{DatabaseConnection: database}
+	statusService := &service.BlogStatusService{BlogStatusRepo: statusRepo}
+
+	blogRepo := &repo.BlogRepository{DatabaseConnection: database}
+	blogService := &service.BlogService{
+		BlogRepo:          blogRepo,
+		BlogRatingService: ratingService,
+		BlogStatusService: statusService,
+	}
+	blogHandler := &handler.BlogHandler{BlogService: blogService}
 
 	startServer(blogHandler, blogCommentHandler, ratingHandler)
 }
