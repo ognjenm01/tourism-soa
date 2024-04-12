@@ -5,13 +5,26 @@ import (
 	"log"
 	"os"
 
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 	"module_blog.xws.com/model"
 )
 
-func InitDb() *gorm.DB {
+func InitDb() (*mongo.Client, error) {
+	dburi := os.Getenv("MONGO_DB_URI")
+
+	client, err := mongo.NewClient(options.Client().ApplyURI(dburi))
+	if err != nil {
+		return nil, err
+	}
+
+	return client, nil
+}
+
+func InitDb1() *gorm.DB {
 	connectionString := formConnectionString()
 	database, err := gorm.Open(postgres.Open(connectionString), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{

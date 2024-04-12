@@ -40,8 +40,14 @@ func startServer(blogHandler *handler.BlogHandler, blogCommentHandler *handler.B
 
 func main() {
 
-	database := infrastructure.InitDb()
-	if database == nil {
+	database1, err := infrastructure.InitDb()
+	database := infrastructure.InitDb1()
+
+	if database1 == nil {
+		log.Fatalln("tuki")
+	}
+
+	if err != nil {
 		log.Fatalln("Hit the road jack")
 	}
 
@@ -56,7 +62,7 @@ func main() {
 	statusRepo := &repo.BlogStatusRepository{DatabaseConnection: database}
 	statusService := &service.BlogStatusService{BlogStatusRepo: statusRepo}
 
-	blogRepo := &repo.BlogRepository{DatabaseConnection: database}
+	blogRepo := &repo.BlogRepository{DatabaseConnection: database1}
 	blogService := &service.BlogService{
 		BlogRepo:          blogRepo,
 		BlogRatingService: ratingService,

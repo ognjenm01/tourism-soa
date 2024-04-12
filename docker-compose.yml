@@ -58,6 +58,20 @@ services:
       POSTGRES_DB: explorer-v1
     volumes:
       - database-data:/var/lib/postgresql/data
+    
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "${MONGO_DB_PORT}:${MONGO_DB_PORT}"
+  
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - "${MONGO_GUI_PORT}:${MONGO_GUI_PORT}"
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://mongo:27017/
   
   blogs-module:
     build: 
