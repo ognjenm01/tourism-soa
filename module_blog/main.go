@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -38,8 +39,8 @@ func startServer(blogHandler *handler.BlogHandler, blogCommentHandler *handler.B
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
 	println("Server starting")
 	//log.Fatal(http.ListenAndServe("localhost:3333", router))
-	//port := ":" + os.Getenv("BLOGS_APP_PORT")
-	port := ":8080"
+	port := ":" + os.Getenv("BLOGS_APP_PORT")
+	//port := ":8080"
 	log.Fatal(http.ListenAndServe(port, router))
 }
 

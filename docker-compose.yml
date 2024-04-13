@@ -28,6 +28,7 @@ services:
       context: .
       target: final
     image: explorer
+    container_name: explorer
     restart: on-failure
     networks:
       - servers
@@ -59,8 +60,9 @@ services:
     volumes:
       - database-data:/var/lib/postgresql/data
     
-  mongo:
+  mongo-db:
     image: mongo
+    container_name: mongo-db
     restart: always
     ports:
       - "${MONGO_DB_PORT}:${MONGO_DB_PORT}"
@@ -68,6 +70,8 @@ services:
       MONOG_INITDB_ROOT_USERNAME: root
       MONOG_INITDB_ROOT_PASSWORD: pass
       MONGO_INITDB_DATABASE: mongoDemo
+    networks:
+      - servers
   
   blogs-module:
     build: 
@@ -89,7 +93,7 @@ services:
       BLOGS_SCHEMA: ${BLOGS_SCHEMA}
       BLOGS_APP_PORT: ${BLOGS_APP_PORT}
     depends_on:
-      - mongo
+      - mongo-db
       - database
 
 

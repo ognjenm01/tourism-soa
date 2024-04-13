@@ -19,9 +19,11 @@ import (
 
 func InitDb() (*mongo.Client, error) {
 	//dburi := os.Getenv("MONGO_DB_URI")
-	dburi := "mongodb://mongo:27017/"
+	//dburi := "mongodb://localhost:27017"
+	ctx := context.TODO()
 
-	client, err := mongo.NewClient(options.Client().ApplyURI(dburi))
+	clientOpts := options.Client().ApplyURI("mongodb://mongo-db:27017/")
+	client, err := mongo.Connect(ctx, clientOpts)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +90,7 @@ func formConnectionString() string {
 	dbname := os.Getenv("BLOGS_DB")
 
 	connectionString := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", username, password, host, port, dbname)*/
-	host := os.Getenv("TOURS_DB_HOST")
+	host := os.Getenv("BLOGS_DB_HOST")
 	if host == "" {
 		host = "localhost"
 	}
