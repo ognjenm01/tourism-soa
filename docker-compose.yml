@@ -67,11 +67,20 @@ services:
     ports:
       - "${MONGO_DB_PORT}:${MONGO_DB_PORT}"
     environment:
-      MONOG_INITDB_ROOT_USERNAME: root
-      MONOG_INITDB_ROOT_PASSWORD: pass
       MONGO_INITDB_DATABASE: mongoDemo
     networks:
       - servers
+
+  neo4j-db:
+    image: neo4j
+    container_name: neo4j-db
+    ports:
+    - "${NEO4J_PORT}:${NEO4J_PORT}"
+    - "${NEO4J_PORT_BOLT}:${NEO4J_PORT_BOLT}"
+    environment:
+      NEO4J_AUTH: none
+    networks:
+    - servers
   
   blogs-module:
     build: 
