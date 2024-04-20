@@ -19,7 +19,7 @@ public class ModuleFollowerApplication {
 		SpringApplication.run(ModuleFollowerApplication.class, args);
 	}
 
-	@Bean
+	/*@Bean
 	CommandLineRunner demo(PersonRepository personRepository) {
 		return args -> {
 
@@ -54,5 +54,5 @@ public class ModuleFollowerApplication {
 			System.out.println("The following people follow Craig...");
 			followers.stream().forEach(person -> System.out.println("\t" + person.getName()));
 		};
-	}
+	}*/
 }

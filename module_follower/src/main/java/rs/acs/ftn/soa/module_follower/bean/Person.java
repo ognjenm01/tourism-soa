@@ -1,6 +1,7 @@
 package rs.acs.ftn.soa.module_follower.bean;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -19,6 +20,7 @@ public class Person {
     private String email;
 
     @Relationship(type = "FOLLOWS")
+    @JsonIgnore
     public Set<Person> followers;
 
     public Person() {
@@ -77,6 +79,13 @@ public class Person {
 
     public void setFollowers(Set<Person> followers) {
         this.followers = followers;
+    }
+
+    public boolean alreadyFollows(Person person) {
+        if(followers == null) {
+            followers = new HashSet<>();
+        }
+        return followers.contains(person);
     }
 
     public void follow(Person person) {
