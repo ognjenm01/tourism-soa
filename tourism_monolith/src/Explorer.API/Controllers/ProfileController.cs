@@ -26,6 +26,13 @@ public class ProfileController : BaseApiController
         return CreateResponse(result);
     }
     
+    [HttpGet("all")]
+    public ActionResult<AccountRegistrationDto> GetAll()
+    {
+        var result = _profileService.GetAll();
+        return CreateResponse(result);
+    }
+    
     [HttpGet("zelimdaumrem/{userId:int}")]
     public ActionResult<AccountRegistrationDto> GetPersonDto(long userId)
     {

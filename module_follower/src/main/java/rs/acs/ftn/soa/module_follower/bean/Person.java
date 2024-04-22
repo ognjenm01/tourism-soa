@@ -85,7 +85,19 @@ public class Person {
         if(followers == null) {
             followers = new HashSet<>();
         }
-        return followers.contains(person);
+        return alreadyFollowsByID(person.getUserId());
+    }
+
+    public boolean alreadyFollowsByID(long userid) {
+        if(followers == null) {
+            followers = new HashSet<>();
+        }
+
+        for(Person person : followers)
+            if(person.getUserId() == userid)
+                return true;
+
+        return false;
     }
 
     public void follow(Person person) {
@@ -94,9 +106,16 @@ public class Person {
         followers.add(person);
     }
 
-    public void unfollow(Person person) {
+    public void unfollow(long id) {
         if(followers == null)
             followers = new HashSet<>();
-        followers.remove(person);
+        Person removal = null;
+        for(Person p : followers) {
+            if(p.getUserId() == id) {
+                removal = p;
+            }
+        }
+        if(removal != null)
+            followers.remove(removal);
     }
 }

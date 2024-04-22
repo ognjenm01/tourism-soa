@@ -51,6 +51,18 @@ public class FollowerService {
         }
     }
 
+    public ResponseEntity<List<Person>> findByUsers() {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        try {
+            List<Person> person = personRepository.findAll();
+            return new ResponseEntity<>(person, responseHeaders, HttpStatus.OK);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<List<Person>>(null, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     public ResponseEntity<Person> findByName(String name) {
         HttpHeaders responseHeaders = new HttpHeaders();
         try {
@@ -78,10 +90,77 @@ public class FollowerService {
         }
     }
 
+    public ResponseEntity<List<Person>> findFollowing(Long id) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        try {
+            List<Person> followers = personRepository.findFollowers(id);
+            if(followers== null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            else{
+                return new ResponseEntity<>(followers, responseHeaders, HttpStatus.OK);
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(null, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<List<Person>> findUnfollowed(Long id) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        try {
+            List<Person> followers = personRepository.findUnfollowed(id);
+            if(followers== null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            else{
+                return new ResponseEntity<>(followers, responseHeaders, HttpStatus.OK);
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(null, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<List<Person>> findFollowers(Long id) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        try {
+            Optional<Person> personOptional = personRepository.findByUserId(id);
+            if(personOptional.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            else{
+                Person person = personOptional.get();
+                return new ResponseEntity<>(person.getFollowers().stream().toList(), responseHeaders, HttpStatus.OK);
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(null, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<Boolean> checkIfFollowed(Long currentUserId, Long targetUserId) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        try {
+            Optional<Person> currentUserOpt = personRepository.findByUserId(currentUserId);
+            Optional<Person> targetUserOpt = personRepository.findByUserId(targetUserId);
+            if(currentUserOpt.isEmpty() || targetUserOpt.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            else{
+                Person currentUser = currentUserOpt.get();
+                Person targetUser = targetUserOpt.get();
+                if(currentUser.alreadyFollowsByID(targetUser.getUserId())){
+                    return new ResponseEntity<>(true, responseHeaders, HttpStatus.OK);
+                }
+                return new ResponseEntity<>(false, responseHeaders, HttpStatus.OK);
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(null, responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     public ResponseEntity<Person> createPerson(PersonDto persondto) {
         HttpHeaders responseHeaders = new HttpHeaders();
         try {
-            if(findByName(persondto.getName()).getBody() != null){
+            if(personRepository.findByUserId(persondto.getUserId()).isPresent()){
                 return new ResponseEntity<>(responseHeaders, HttpStatus.CONFLICT);
             }
             Person person = personMapperImpl.sourceToEntity(persondto);
@@ -128,7 +207,7 @@ public class FollowerService {
                 Person follower = optionalFollower.get();
                 if(!person.alreadyFollows(follower))
                     return new ResponseEntity<>(responseHeaders, HttpStatus.NOT_FOUND);
-                person.unfollow(follower);
+                person.unfollow(follower.getUserId());
                 personRepository.save(person);
                 return new ResponseEntity<>(person, responseHeaders, HttpStatus.OK);
             }
