@@ -63,7 +63,7 @@ func main() {
 
 	infrastructure.Ping(database1)
 
-	blogCommentRepository := &repo.BlogCommentRepository{DatabaseConnection: database}
+	blogCommentRepository := &repo.BlogCommentRepository{DatabaseConnection: database1}
 	blogCommentService := &service.BlogCommentService{BlogCommentRepository: blogCommentRepository}
 	blogCommentHandler := &handler.BlogCommentHandler{BlogCommentService: blogCommentService}
 
