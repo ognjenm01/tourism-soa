@@ -55,6 +55,11 @@ public class FollowerController {
         return followerService.checkIfFollowed(requestDto.getPersonId(), requestDto.getFollowerId());
     }
 
+    @PostMapping("/api/person/follow/debug")
+    public HttpEntity<Boolean> checkAlreadyFollowedDebug(@RequestBody FollowRequestDto requestDto){
+        return followerService.checkIfFollowed(requestDto.getPersonId(), requestDto.getFollowerId());
+    }
+
     @PostMapping("/api/person/unfollow")
     public HttpEntity<Person> unfollowPerson(@RequestBody FollowRequestDto requestDto) {
         return followerService.unfollow(requestDto);

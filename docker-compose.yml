@@ -22,6 +22,24 @@ services:
     depends_on:
       - database
 
+  followers-module:
+    build:
+      context: ./module_follower
+      dockerfile: Dockerfile
+    image: followersmodule
+    container_name: followers_module
+    restart: always
+    networks:
+      - servers
+    ports:
+      - "${FOLLOWERS_APP_PORT}:${FOLLOWERS_APP_PORT}"
+    environment:
+      NEO4J_PORT: ${NEO4J_PORT}
+      NEO4J_PORT_BOLT: ${NEO4J_PORT_BOLT}
+      NEO4J_DB_URI: ${NEO4J_DB_URI}
+    depends_on:
+      - database
+
   explorer:
     build:
       dockerfile: tourism_monolith/Dockerfile
