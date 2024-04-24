@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text.Json;
 
+
 namespace Explorer.API.Controllers.Tourist.Blog;
 
 [Authorize(Policy = "touristPolicy")]
@@ -66,8 +67,7 @@ public class BlogController : BaseApiController
         var result = _blogService.GetWithStatuses(page, pageSize);
         return CreateResponse(result.ToResult());
     }*/
-
-
+   
     [HttpGet("{id:int}")]
     public async Task<ActionResult<BlogDto>> Get(int id)
     {
