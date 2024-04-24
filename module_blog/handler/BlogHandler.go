@@ -11,6 +11,8 @@ import (
 	"module_blog.xws.com/service"
 )
 
+type KeyProduct struct{}
+
 type BlogHandler struct {
 	BlogService *service.BlogService
 }

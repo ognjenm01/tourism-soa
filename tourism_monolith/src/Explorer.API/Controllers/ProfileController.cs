@@ -1,4 +1,7 @@
-﻿using Explorer.BuildingBlocks.Core.UseCases;
+﻿using System.Text;
+using System.Text.Json;
+using Explorer.Blog.API.Dtos;
+using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Infrastructure.Authentication;
@@ -13,6 +16,11 @@ namespace Explorer.API.Controllers;
 public class ProfileController : BaseApiController
 {
     private readonly IProfileService _profileService;
+    private static readonly string _followerAppPort = Environment.GetEnvironmentVariable("FOLLOWERS_APP_PORT") ?? "4201";
+    private static HttpClient httpFollowerClient = new()
+    {
+        BaseAddress = new Uri("http://followers-module:" + _followerAppPort),
+    };
 
     public ProfileController(IProfileService profileService)
     {
@@ -23,6 +31,13 @@ public class ProfileController : BaseApiController
     public ActionResult<AccountRegistrationDto> GetStakeholderProfile(long userId)
     {
         var result = _profileService.GetProfile(userId);
+        return CreateResponse(result);
+    }
+    
+    [HttpGet("all")]
+    public ActionResult<AccountRegistrationDto> GetAll()
+    {
+        var result = _profileService.GetAll();
         return CreateResponse(result);
     }
     
@@ -42,24 +57,64 @@ public class ProfileController : BaseApiController
     }
 
     [HttpGet("not-followed")]
-    public ActionResult<PagedResult<PersonDto>> GetNonFollowedProfiles([FromQuery] int page, [FromQuery] int pageSize)
+    public async Task<ActionResult<PersonDto[]>> GetNonFollowedProfiles([FromQuery] int page, [FromQuery] int pageSize)
     {
-        var result = _profileService.GetUserNonFollowedProfiles(page, pageSize, User.PersonId());
-        return CreateResponse(result);
+        //var result = _profileService.GetUserNonFollowedProfiles(page, pageSize, User.PersonId());
+        //return CreateResponse(result);
+        //http://localhost:4201/api/person/unfollowed/${id}
+        long id = ClaimsPrincipalExtensions.PersonId(User);
+        using HttpResponseMessage response = await httpFollowerClient.GetAsync("/api/person/unfollowed/"+id);
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        if (response.IsSuccessStatusCode)
+            return CreateResponse(Result.Ok(jsonResponse));
+        else
+            return CreateResponse(Result.Fail(response.Content.ToString()));
     }
 
     [HttpGet("followers")]
-    public ActionResult<PagedResult<PersonDto>> GetFollowers()
+    public async Task<ActionResult<PersonDto[]>> GetFollowers()
     {
-        var result = _profileService.GetFollowers(User.PersonId());
-        return CreateResponse(result);
+        //var result = _profileService.GetFollowers(User.PersonId());
+        //return CreateResponse(result);
+        //http://localhost:4201/api/person/following/${id}
+        long id = ClaimsPrincipalExtensions.PersonId(User);
+        using HttpResponseMessage response = await httpFollowerClient.GetAsync("/api/person/following/"+id);
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        if (response.IsSuccessStatusCode)
+            return CreateResponse(Result.Ok(jsonResponse));
+        else
+            return CreateResponse(Result.Fail(response.Content.ToString()));
     }
 
     [HttpGet("following")]
-    public ActionResult<PagedResult<PersonDto>> GetFollowing()
+    public async Task<ActionResult<PersonDto[]>> GetFollowing()
     {
-        var result = _profileService.GetFollowing(User.PersonId());
-        return CreateResponse(result);
+        //var result = _profileService.GetFollowing(User.PersonId());
+        //return CreateResponse(result);
+        long id = ClaimsPrincipalExtensions.PersonId(User);
+        using HttpResponseMessage response = await httpFollowerClient.GetAsync("/api/person/followers/"+id);
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        if (response.IsSuccessStatusCode)
+            return CreateResponse(Result.Ok(jsonResponse));
+        else
+            return CreateResponse(Result.Fail(response.Content.ToString()));
+    }
+    
+    [HttpGet("suggestion")]
+    public async Task<ActionResult<PersonDto[]>> GetSuggestion()
+    {
+        //var result = _profileService.GetFollowing(User.PersonId());
+        //return CreateResponse(result);
+        long id = ClaimsPrincipalExtensions.PersonId(User);
+        using HttpResponseMessage response = await httpFollowerClient.GetAsync("/api/person/suggest/"+id);
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        if (response.IsSuccessStatusCode)
+            return CreateResponse(Result.Ok(jsonResponse));
+        else
+        {
+            Console.WriteLine(jsonResponse);
+            return CreateResponse(Result.Fail(response.Content.ToString()));
+        }
     }
 
     [HttpPut("{id:int}")]
@@ -71,13 +126,27 @@ public class ProfileController : BaseApiController
         return CreateResponse(result);
     }
 
-    [HttpPut("follow")]
-    public ActionResult<PagedResult<PersonDto>> Follow([FromBody] long followedId)
+    [HttpPost("follow")]
+    public async Task<ActionResult<PagedResult<PersonDto>>> Follow([FromBody] FollowRequestDto request)
     {
         try
         {
-            var result = _profileService.Follow(User.PersonId(), followedId);
-            return CreateResponse(result);
+            //var result = _profileService.Follow(User.PersonId(), followedId);
+            //return CreateResponse(result);
+            using StringContent jsonContent = new(
+                JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+            using HttpResponseMessage response = await httpFollowerClient.PostAsync("/api/person/follow",  jsonContent);
+            
+            var jsonResponse = response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return CreateResponse(Result.Ok(jsonResponse));
+            else
+            {
+                //Console.WriteLine(response.Content.);
+                Console.WriteLine(jsonResponse);
+                Console.WriteLine(response.Content.ToString());
+                return CreateResponse(Result.Fail(response.Content.ToString()));
+            }
         }
         catch (ArgumentException e)
         {
@@ -85,13 +154,25 @@ public class ProfileController : BaseApiController
         }
     }
 
-    [HttpPut("unfollow")]
-    public ActionResult<PagedResult<PersonDto>> Unfollow([FromBody] long unfollowedId)
+    [HttpPost("unfollow")]
+    public async Task<ActionResult<PagedResult<PersonDto>>> Unfollow([FromBody] FollowRequestDto request)
     {
         try
         {
-            var result = _profileService.Unfollow(User.PersonId(), unfollowedId);
-            return CreateResponse(result);
+            //var result = _profileService.Unfollow(User.PersonId(), unfollowedId);
+            //return CreateResponse(result);
+            using StringContent jsonContent = new(
+                JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+            using HttpResponseMessage response = await httpFollowerClient.PostAsync("/api/person/unfollow",  jsonContent);
+            
+            var jsonResponse = response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return CreateResponse(Result.Ok(jsonResponse));
+            else
+            {
+                Console.WriteLine(jsonResponse);
+                return CreateResponse(Result.Fail(response.Content.ToString()));
+            }
         }
         catch (ArgumentException e)
         {

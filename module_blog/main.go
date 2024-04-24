@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gorilla/mux"
 	"module_blog.xws.com/handler"
@@ -15,7 +17,10 @@ import (
 func startServer(blogHandler *handler.BlogHandler, blogCommentHandler *handler.BlogCommentHandler, ratingHandler *handler.BlogRatingHandler) {
 	router := mux.NewRouter().StrictSlash(true)
 
-	router.HandleFunc("/blogs", blogHandler.Create).Methods("POST")
+	postRouter := router.Methods(http.MethodPost).Subrouter()
+	postRouter.HandleFunc("/blogs", blogHandler.Create)
+
+	//router.HandleFunc("/blogs", blogHandler.Create).Methods("POST")
 	router.HandleFunc("/blogs", blogHandler.GetAll).Methods("GET")
 	router.HandleFunc("/blogs/{id}", blogHandler.GetById).Methods("GET")
 	router.HandleFunc("/blogs", blogHandler.Update).Methods("PUT")
@@ -35,27 +40,47 @@ func startServer(blogHandler *handler.BlogHandler, blogCommentHandler *handler.B
 	println("Server starting")
 	//log.Fatal(http.ListenAndServe("localhost:3333", router))
 	port := ":" + os.Getenv("BLOGS_APP_PORT")
+	//port := ":8080"
 	log.Fatal(http.ListenAndServe(port, router))
 }
 
 func main() {
 
-	database := infrastructure.InitDb()
+	database1, err := infrastructure.InitDb()
+	database := infrastructure.InitDb1()
+
+	timeoutContext, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	if err != nil {
+		log.Fatalln("mongo ne valja")
+	}
+
 	if database == nil {
 		log.Fatalln("Hit the road jack")
 	}
+	defer infrastructure.Disconnect(database1, timeoutContext)
 
-	blogRepo := &repo.BlogRepository{DatabaseConnection: database}
-	blogService := &service.BlogService{BlogRepo: blogRepo}
-	blogHandler := &handler.BlogHandler{BlogService: blogService}
+	infrastructure.Ping(database1)
 
-	blogCommentRepository := &repo.BlogCommentRepository{DatabaseConnection: database}
+	blogCommentRepository := &repo.BlogCommentRepository{DatabaseConnection: database1}
 	blogCommentService := &service.BlogCommentService{BlogCommentRepository: blogCommentRepository}
 	blogCommentHandler := &handler.BlogCommentHandler{BlogCommentService: blogCommentService}
 
 	ratingRepo := &repo.BlogRatingRepository{DatabaseConnection: database}
 	ratingService := &service.BlogRatingService{BlogRatingRepo: ratingRepo}
 	ratingHandler := &handler.BlogRatingHandler{BlogRatingService: ratingService}
+
+	statusRepo := &repo.BlogStatusRepository{DatabaseConnection: database}
+	statusService := &service.BlogStatusService{BlogStatusRepo: statusRepo}
+
+	blogRepo := &repo.BlogRepository{DatabaseConnection: database1}
+	blogService := &service.BlogService{
+		BlogRepo:          blogRepo,
+		BlogRatingService: ratingService,
+		BlogStatusService: statusService,
+	}
+	blogHandler := &handler.BlogHandler{BlogService: blogService}
 
 	startServer(blogHandler, blogCommentHandler, ratingHandler)
 }

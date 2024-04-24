@@ -20,6 +20,16 @@ public class ProfileService : CrudService<PersonDto, Person>, IProfileService, I
         _mapper = mapper;
     }
 
+    public Result<List<PersonDto>> GetAll()
+    {
+        List<PersonDto> people = new();
+        foreach (Person person in _personRepository.GetPaged(0, 0).Results)
+        {
+            people.Add(_mapper.Map<PersonDto>(person));
+        }
+        return people;
+    }
+
     public Result<List<PersonDto>> GetMany(List<int> peopleIds)
     {
         List<PersonDto> people = new();
