@@ -28,11 +28,11 @@ public class CommentQueryTests : BaseBlogIntegrationTest
         result.TotalCount.ShouldBe(1);
     }*/
 
-    private static BlogCommentController CreateController(IServiceScope scope)
+    /*private static BlogCommentController CreateController(IServiceScope scope)
     {
         return new BlogCommentController(scope.ServiceProvider.GetRequiredService<IBlogCommentService>())
         {
             ControllerContext = BuildContext("-1")
         };
-    }
+    }*/
 }

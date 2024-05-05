@@ -3,6 +3,7 @@ package repo
 import (
 	"context"
 	"log"
+	"strconv"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -22,7 +23,11 @@ func (repo *BlogRepository) GetById(id string) (model.Blog, error) {
 	collection := repo.DatabaseConnection.Database("mongoDemo").Collection("blogs")
 
 	// Define a filter for finding the blog by id
-	filter := bson.M{"_id": id}
+	kita, err2 := strconv.Atoi(id)
+	if err2 != nil {
+		log.Fatalln("prema meni bezdusaaaaaaan")
+	}
+	filter := bson.M{"kita": kita}
 
 	// Perform the find operation
 	err := collection.FindOne(context.Background(), filter).Decode(&blog)
@@ -86,7 +91,7 @@ func (repo *BlogRepository) Update(blog *model.Blog) error {
 	collection := repo.DatabaseConnection.Database("mongoDemo").Collection("blogs") // Specify your database and collection name
 
 	// Define the filter for finding the blog by its ID
-	filter := bson.M{"_id": blog.Id}
+	filter := bson.M{"_id": blog.Kita}
 
 	// Define the update operation
 	update := bson.M{
@@ -108,10 +113,12 @@ func (repo *BlogRepository) Update(blog *model.Blog) error {
 func (repo *BlogRepository) Delete(id string) error {
 	collection := repo.DatabaseConnection.Database("mongoDemo").Collection("blogs") // Specify your database and collection name
 
-	// Define the filter for finding the blog by its ID
-	filter := bson.M{"_id": id}
+	kita, err2 := strconv.Atoi(id)
+	if err2 != nil {
+		log.Fatalln("prema meni bezdusaaaaaaan")
+	}
+	filter := bson.M{"kita": kita}
 
-	// Perform the delete operation
 	_, err := collection.DeleteOne(context.Background(), filter)
 	if err != nil {
 		return err

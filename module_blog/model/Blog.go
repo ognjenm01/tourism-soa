@@ -13,15 +13,15 @@ const (
 )
 
 type Blog struct {
-	Id           int          `bson:"_id" json:"id" gorm:"primaryKey,unique"`
+	Kita         int          `bson:"kita" json:"kita" gorm:"primaryKey,unique"`
 	CreatorId    int          `bson:"creatorId" json:"creatorId"`
 	Title        string       `bson:"title" json:"title"`
 	Description  string       `bson:"description" json:"description"`
 	SystemStatus SystemStatus `bson:"systemStatus" json:"systemStatus"`
 	ImageLinks   string       `bson:"imageLinks" json:"imageLinks"`
 	CreationDate time.Time    `bson:"creationDate" json:"creationDate"`
-	BlogStatuses []BlogStatus `bson:"blogStatuses" json:"blogStatuses" gorm:"foreignKey:BlogId;references:Id"`
-	BlogRatings  []BlogRating `bson:"blogRatings" json:"blogRatings" gorm:"foreignKey:BlogId;references:Id"`
+	BlogStatuses []BlogStatus `bson:"blogStatuses" json:"blogStatuses" gorm:"foreignKey:BlogId;references:Kita"`
+	BlogRatings  []BlogRating `bson:"blogRatings" json:"blogRatings" gorm:"foreignKey:BlogId;references:Kita"`
 }
 
 func (b *Blog) AddRating(blogRating *BlogRating) {
