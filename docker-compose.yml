@@ -22,6 +22,24 @@ services:
     depends_on:
       - database
 
+  followers-module:
+    build:
+      context: ./module_follower
+      dockerfile: Dockerfile
+    image: followersmodule
+    container_name: followers_module
+    restart: always
+    networks:
+      - servers
+    ports:
+      - "${FOLLOWERS_APP_PORT}:${FOLLOWERS_APP_PORT}"
+    environment:
+      NEO4J_PORT: ${NEO4J_PORT}
+      NEO4J_PORT_BOLT: ${NEO4J_PORT_BOLT}
+      NEO4J_DB_URI: ${NEO4J_DB_URI}
+    depends_on:
+      - database
+
   explorer:
     build:
       dockerfile: tourism_monolith/Dockerfile
@@ -67,11 +85,20 @@ services:
     ports:
       - "${MONGO_DB_PORT}:${MONGO_DB_PORT}"
     environment:
-      MONOG_INITDB_ROOT_USERNAME: root
-      MONOG_INITDB_ROOT_PASSWORD: pass
       MONGO_INITDB_DATABASE: mongoDemo
     networks:
       - servers
+
+  neo4j-db:
+    image: neo4j
+    container_name: neo4j-db
+    ports:
+    - "${NEO4J_PORT}:${NEO4J_PORT}"
+    - "${NEO4J_PORT_BOLT}:${NEO4J_PORT_BOLT}"
+    environment:
+      NEO4J_AUTH: none
+    networks:
+    - servers
   
   blogs-module:
     build: 

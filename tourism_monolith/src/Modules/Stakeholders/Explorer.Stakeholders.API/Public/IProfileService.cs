@@ -9,6 +9,7 @@ public interface IProfileService
     Result<AccountRegistrationDto> GetProfile(long userId);
     Result<PersonDto> GetPersonDto(long userId);
     Result<PagedResult<PersonDto>> GetFollowers(long userId);
+    Result<List<PersonDto>> GetAll();
     Result<PagedResult<PersonDto>> GetFollowing(long userId);
     Result<PagedResult<PersonDto>> GetUserNonFollowedProfiles(int page, int pageSize, long userId);
     Result<PersonDto> UpdateProfile(PersonDto updatedPerson);

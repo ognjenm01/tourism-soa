@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Headers;
+using System.Text;
 using Explorer.Blog.API.Dtos;
-using Explorer.Blog.API.Public.Blog;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Infrastructure.Authentication;
@@ -15,14 +15,21 @@ namespace Explorer.API.Controllers.Tourist.Blog;
 [Route("api/blog")]
 public class BlogController : BaseApiController
 {
-    private static readonly string _blogServicePort = Environment.GetEnvironmentVariable("BLOGS_APP_PORT") ?? "8080";
+    private static readonly string _blogServicePort = Environment.GetEnvironmentVariable("BLOGS_APP_PORT") ?? "49155";
     private readonly HttpClient _httpClient;
-
+    private readonly HttpClient _followerHttpClient;
     public BlogController()
     {
         _httpClient = new()
+        {   
+            BaseAddress = new Uri("http://localhost:" + _blogServicePort + "/blogs")
+            
+            //BaseAddress = new Uri("http://blogs-module:" + _blogServicePort + "api/blogs")
+        };
+
+        _followerHttpClient = new()
         {
-            BaseAddress = new Uri("http://blogs-module:" + _blogServicePort + "api/blogs")
+            BaseAddress = new Uri("http://localhost:4201/api/")
         };
     }
 
@@ -45,24 +52,29 @@ public class BlogController : BaseApiController
         return BadRequest();
     }
 
-   /* [HttpGet("status")]
-    public ActionResult<PagedResult<BlogDto>> GetWithStatuses([FromQuery] int page, [FromQuery] int pageSize)
-    {
-        var result = _blogService.GetWithStatuses(page, pageSize);
-        return CreateResponse(result.ToResult());
-    }*/
-
     [HttpGet("{id:int}")]
     public async Task<ActionResult<BlogDto>> Get(int id)
     {
         //Uri uri = new Uri($"http://localhost:8080/blogs/{id}");
         HttpResponseMessage response = await _httpClient.GetAsync($"/{id}");
 
+        //Ognjen debug
+       // HttpResponseMessage response = await _httpClient.GetAsync($"blogs/{id}");
+
         if (response.IsSuccessStatusCode)
         {
             string responseContent = await response.Content.ReadAsStringAsync();
             BlogDto blog = JsonConvert.DeserializeObject<BlogDto>(responseContent);
-            return CreateResponse(Result.Ok(blog));
+            
+            //TODO Prebaci ovo u go kasnije
+            FollowRequestDto req = new FollowRequestDto(ClaimsPrincipalExtensions.PersonId(User),blog.CreatorId);
+            using StringContent jsonContent = new(
+                System.Text.Json.JsonSerializer.Serialize(req), Encoding.UTF8, "application/json");
+            HttpResponseMessage followerResponse = await _followerHttpClient.PostAsJsonAsync("person/follow/debug", req);
+            if(followerResponse.IsSuccessStatusCode)
+                return CreateResponse(Result.Ok(blog));
+            else
+                return CreateResponse(Result.Fail("Not following that user!"));
         }
 
         return BadRequest();

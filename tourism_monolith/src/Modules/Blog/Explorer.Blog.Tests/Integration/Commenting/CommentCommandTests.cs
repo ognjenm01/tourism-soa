@@ -149,7 +149,9 @@ public class CommentCommandTests : BaseBlogIntegrationTest
 
     private static BlogCommentController CreateController(IServiceScope scope)
     {
-        return new BlogCommentController(scope.ServiceProvider.GetRequiredService<IBlogCommentService>())
+        //FIXME
+        //return new BlogCommentController(scope.ServiceProvider.GetRequiredService<IBlogCommentService>())
+        return new BlogCommentController()
         {
             ControllerContext = BuildContext("-1")
         };

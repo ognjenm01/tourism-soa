@@ -43,7 +43,6 @@ func (handler *BlogHandler) GetAll(writer http.ResponseWriter, req *http.Request
 }
 
 func (handler *BlogHandler) Create(writer http.ResponseWriter, req *http.Request) {
-
 	blog := model.Blog{}
 	err := json.NewDecoder(req.Body).Decode(&blog)
 	if err != nil {
