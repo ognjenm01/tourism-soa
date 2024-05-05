@@ -1,8 +1,11 @@
 package service
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"log"
+	"net/http"
 	"strconv"
 
 	"module_blog.xws.com/model"
@@ -13,6 +16,55 @@ type BlogService struct {
 	BlogRepo          *repo.BlogRepository
 	BlogRatingService *BlogRatingService
 	BlogStatusService *BlogStatusService
+}
+
+func (service *BlogService) GetByPeopleUFollow(id string) (*[]model.Blog, error) {
+	followerIds, err := service.GetFollowerIDs(id)
+
+	if err != nil {
+		return nil, err
+	}
+	blogs, err1 := service.BlogRepo.GetByPeopleUFollow(*followerIds)
+
+	if err1 != nil {
+		return nil, err1
+	}
+
+	return &blogs, nil
+}
+
+func (service *BlogService) GetFollowerIDs(id string) (*[]int, error) {
+	var people []model.Person
+	var ids []int
+
+	resp, err := http.Get(fmt.Sprintf("http://localhost:6666/api/person/followers/%s", id))
+
+	if err != nil {
+		fmt.Println("Error:", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+
+	if err != nil {
+		log.Fatalln("nema")
+		return nil, err
+	}
+
+	if err := json.Unmarshal(body, &people); err != nil {
+		fmt.Println("Error parsing JSON:", err)
+		return nil, err
+	}
+
+	log.Fatalln(len(people))
+
+	for _, p := range people {
+		ids = append(ids, p.UserId)
+	}
+
+	return &ids, nil
+
 }
 
 func (service *BlogService) GetById(id string) (*model.Blog, error) {

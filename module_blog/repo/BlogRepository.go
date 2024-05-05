@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"strconv"
 	"time"
@@ -9,12 +10,41 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 
-	//"gorm.io/gorm"
 	"module_blog.xws.com/model"
 )
 
 type BlogRepository struct {
 	DatabaseConnection *mongo.Client
+}
+
+func (repo *BlogRepository) GetByPeopleUFollow(followerIds []int) ([]model.Blog, error) {
+	var blogs []model.Blog
+
+	collection := repo.DatabaseConnection.Database("mongoDemo").Collection("blogs")
+	filter := bson.M{"creatorId": bson.M{"$in": followerIds}}
+
+	cursor, err := collection.Find(context.Background(), filter)
+	if err != nil {
+		log.Fatalln("Error finding documents:", err)
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var blog model.Blog
+		if err := cursor.Decode(&blog); err != nil {
+			fmt.Println("Error decoding document:", err)
+			continue
+		}
+		blogs = append(blogs, blog)
+	}
+
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return blogs, nil
+
 }
 
 func (repo *BlogRepository) GetById(id string) (model.Blog, error) {
@@ -46,7 +76,6 @@ func (repo *BlogRepository) GetAll() ([]model.Blog, error) {
 
 	collection := repo.DatabaseConnection.Database("mongoDemo").Collection("blogs") // Specify your database and collection name
 
-	// Perform the find operation
 	cursor, err := collection.Find(context.Background(), bson.M{})
 	if err != nil {
 		log.Fatalln(err)
@@ -54,7 +83,6 @@ func (repo *BlogRepository) GetAll() ([]model.Blog, error) {
 	}
 	defer cursor.Close(context.Background())
 
-	// Iterate over the cursor and decode each document into a blog object
 	for cursor.Next(context.Background()) {
 		var blog model.Blog
 		if err := cursor.Decode(&blog); err != nil {
