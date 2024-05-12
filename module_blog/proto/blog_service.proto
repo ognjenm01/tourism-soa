@@ -9,7 +9,7 @@ import "google/protobuf/timestamp.proto";
 service BlogService{
     rpc GetById(Id) returns (BlogResponse){} 
     rpc GetAll(Id) returns (MultiBlogResponse){}
-    rpc Create(Empty) returns (EmptyResponse){}
+    rpc Create(Blog) returns (EmptyResponse){}
     rpc Delete(Id) returns (EmptyResponse){}
 }
 
@@ -57,5 +57,5 @@ message BlogResponse{
 }
 
 message MultiBlogResponse{
-    repeated Blog blog = 1;
+    repeated Blog blogs = 1;
 }

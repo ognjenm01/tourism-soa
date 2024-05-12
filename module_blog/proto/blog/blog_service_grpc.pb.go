@@ -31,7 +31,7 @@ const (
 type BlogServiceClient interface {
 	GetById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*BlogResponse, error)
 	GetAll(ctx context.Context, in *Id, opts ...grpc.CallOption) (*MultiBlogResponse, error)
-	Create(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*EmptyResponse, error)
+	Create(ctx context.Context, in *Blog, opts ...grpc.CallOption) (*EmptyResponse, error)
 	Delete(ctx context.Context, in *Id, opts ...grpc.CallOption) (*EmptyResponse, error)
 }
 
@@ -61,7 +61,7 @@ func (c *blogServiceClient) GetAll(ctx context.Context, in *Id, opts ...grpc.Cal
 	return out, nil
 }
 
-func (c *blogServiceClient) Create(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*EmptyResponse, error) {
+func (c *blogServiceClient) Create(ctx context.Context, in *Blog, opts ...grpc.CallOption) (*EmptyResponse, error) {
 	out := new(EmptyResponse)
 	err := c.cc.Invoke(ctx, BlogService_Create_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -85,7 +85,7 @@ func (c *blogServiceClient) Delete(ctx context.Context, in *Id, opts ...grpc.Cal
 type BlogServiceServer interface {
 	GetById(context.Context, *Id) (*BlogResponse, error)
 	GetAll(context.Context, *Id) (*MultiBlogResponse, error)
-	Create(context.Context, *Empty) (*EmptyResponse, error)
+	Create(context.Context, *Blog) (*EmptyResponse, error)
 	Delete(context.Context, *Id) (*EmptyResponse, error)
 	mustEmbedUnimplementedBlogServiceServer()
 }
@@ -100,7 +100,7 @@ func (UnimplementedBlogServiceServer) GetById(context.Context, *Id) (*BlogRespon
 func (UnimplementedBlogServiceServer) GetAll(context.Context, *Id) (*MultiBlogResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAll not implemented")
 }
-func (UnimplementedBlogServiceServer) Create(context.Context, *Empty) (*EmptyResponse, error) {
+func (UnimplementedBlogServiceServer) Create(context.Context, *Blog) (*EmptyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
 func (UnimplementedBlogServiceServer) Delete(context.Context, *Id) (*EmptyResponse, error) {
@@ -156,7 +156,7 @@ func _BlogService_GetAll_Handler(srv interface{}, ctx context.Context, dec func(
 }
 
 func _BlogService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Empty)
+	in := new(Blog)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -168,7 +168,7 @@ func _BlogService_Create_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: BlogService_Create_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BlogServiceServer).Create(ctx, req.(*Empty))
+		return srv.(BlogServiceServer).Create(ctx, req.(*Blog))
 	}
 	return interceptor(ctx, in, info, handler)
 }

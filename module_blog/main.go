@@ -2,14 +2,21 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/gorilla/mux"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 	"module_blog.xws.com/handler"
 	"module_blog.xws.com/infrastructure"
+	"module_blog.xws.com/proto/blog"
 	"module_blog.xws.com/repo"
 	"module_blog.xws.com/service"
 )
@@ -17,14 +24,14 @@ import (
 func startServer(blogHandler *handler.BlogHandler, blogCommentHandler *handler.BlogCommentHandler, ratingHandler *handler.BlogRatingHandler) {
 	router := mux.NewRouter().StrictSlash(true)
 
-	postRouter := router.Methods(http.MethodPost).Subrouter()
-	postRouter.HandleFunc("/blogs", blogHandler.Create)
+	//postRouter := router.Methods(http.MethodPost).Subrouter()
+	//postRouter.HandleFunc("/blogs", blogHandler.Create)
 
 	//router.HandleFunc("/blogs", blogHandler.Create).Methods("POST")
-	router.HandleFunc("/blogs", blogHandler.GetAll).Methods("GET")
-	router.HandleFunc("/blogs/{id}", blogHandler.GetById).Methods("GET")
+	router.HandleFunc("/blogs/{id}", blogHandler.GetAll).Methods("GET")
+	//router.HandleFunc("/blogs/{id}", blogHandler.GetById).Methods("GET")
 	router.HandleFunc("/blogs", blogHandler.Update).Methods("PUT")
-	router.HandleFunc("/blogs/{id}", blogHandler.Delete).Methods("DELETE")
+	//router.HandleFunc("/blogs/{id}", blogHandler.Delete).Methods("DELETE")
 	router.HandleFunc("/blogs/rate", blogHandler.AddRating).Methods("POST")
 
 	router.HandleFunc("/api/blogcomments", blogCommentHandler.CreateComment).Methods("POST")
@@ -82,5 +89,38 @@ func main() {
 	}
 	blogHandler := &handler.BlogHandler{BlogService: blogService}
 
-	startServer(blogHandler, blogCommentHandler, ratingHandler)
+	lis, err := net.Listen("tcp", ":8096")
+	fmt.Println("Running gRPC on port 8096")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	defer func(listener net.Listener) {
+		err := listener.Close()
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}(lis)
+
+	grpcServer := grpc.NewServer()
+	reflection.Register(grpcServer)
+	fmt.Println("Registered gRPC server")
+
+	blog.RegisterBlogServiceServer(grpcServer, blogHandler)
+
+	go func() {
+		if err := grpcServer.Serve(lis); err != nil {
+			log.Fatalln(err)
+		}
+	}()
+	fmt.Println("Serving gRPC")
+
+	stopCh := make(chan os.Signal)
+	signal.Notify(stopCh, syscall.SIGTERM)
+
+	<-stopCh
+
+	grpcServer.Stop()
+
+	//startServer(blogHandler, blogCommentHandler, ratingHandler)
 }
