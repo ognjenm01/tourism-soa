@@ -36,7 +36,8 @@ public class BlogController : BaseApiController
     public async Task<ActionResult<PagedResult<BlogDto>>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
     {
         //Uri uri = new Uri($"http://localhost:8080/blogs");
-        HttpResponseMessage response = await _httpClient.GetAsync(".");
+        int id = ClaimsPrincipalExtensions.PersonId(User);
+        HttpResponseMessage response = await _httpClient.GetAsync($"/{id}");
 
         if (response.IsSuccessStatusCode)
         {
@@ -56,9 +57,6 @@ public class BlogController : BaseApiController
     {
         //Uri uri = new Uri($"http://localhost:8080/blogs/{id}");
         HttpResponseMessage response = await _httpClient.GetAsync($"/{id}");
-
-        //Ognjen debug
-       // HttpResponseMessage response = await _httpClient.GetAsync($"blogs/{id}");
 
         if (response.IsSuccessStatusCode)
         {

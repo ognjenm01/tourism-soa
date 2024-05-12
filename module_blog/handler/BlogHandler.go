@@ -8,12 +8,14 @@ import (
 
 	"github.com/gorilla/mux"
 	"module_blog.xws.com/model"
+	"module_blog.xws.com/proto/blog"
 	"module_blog.xws.com/service"
 )
 
 type KeyProduct struct{}
 
 type BlogHandler struct {
+	blog.UnimplementedBlogServiceServer
 	BlogService *service.BlogService
 }
 
@@ -29,8 +31,75 @@ func (handler *BlogHandler) GetById(writer http.ResponseWriter, req *http.Reques
 	json.NewEncoder(writer).Encode(blog)
 }
 
+/*func convertSystemStatus(status model.SystemStatus) blog.Blog_SystemStatus {
+	switch status {
+	case model.DRAFT:
+		return blog.Blog_DRAFT
+	case model.PUBLISHED:
+		return blog.Blog_PUBLISHED
+	case model.CLOSED:
+		return blog.Blog_CLOSED
+	default:
+		return blog.Blog_DRAFT
+	}
+}
+
+func (handler *BlogHandler) GetById(ctx context.Context, request *blog.Id) (*blog.BlogResponse, error) {
+	id := strconv.FormatInt(request.Id, 10)
+	result, err := handler.BlogService.GetById(id)
+	if err != nil {
+		log.Fatalln(err)
+		return nil, err
+	}
+
+	protoResult := &blog.Blog{
+		Kita:         int64(result.Kita),
+		CreatorId:    int64(result.CreatorId),
+		Title:        result.Title,
+		Description:  result.Description,
+		SystemStatus: convertSystemStatus(result.SystemStatus),
+		ImageLinks:   result.ImageLinks,
+		CreationDate: timestamppb.New(result.CreationDate),
+		BlogStatuses: make([]*blog.BlogStatus, len(result.BlogStatuses)),
+		BlogRatings:  make([]*blog.BlogRating, len(result.BlogRatings)),
+	}
+
+	for i, status := range result.BlogStatuses {
+		protoBlogStatus := &blog.BlogStatus{
+			Id:     int32(status.Id),
+			BlogId: int32(status.BlogId),
+			Name:   status.Name,
+		}
+		protoResult.BlogStatuses[i] = protoBlogStatus
+	}
+
+	for j, rating := range result.BlogRatings {
+		protoBlogRating := &blog.BlogRating{
+			Id:     int32(rating.Id),
+			BlogId: int32(rating.BlogId),
+			UserId: int32(rating.UserId),
+			Rating: rating.Rating,
+			//creationTime: rating.CreationTime,
+		}
+		protoResult.BlogRatings[j] = protoBlogRating
+	}
+
+	return &blog.BlogResponse{Blog: protoResult}, nil
+}*/
+
+/*func (handler *BlogHandler) GetAll(ctx context.Context, req *blog.Id) (*blog.MultiBlogResponse, error) {
+	id := strconv.FormatInt(req.Id, 10)
+	result, err := handler.BlogService.GetByPeopleUFollow(id)
+	if err != nil {
+		log.Fatalln(err)
+		return nil, err
+	}
+
+}*/
+
 func (handler *BlogHandler) GetAll(writer http.ResponseWriter, req *http.Request) {
-	blogs, error := handler.BlogService.GetAll()
+	id := mux.Vars(req)["id"]
+	blogs, error := handler.BlogService.GetByPeopleUFollow(id)
 	writer.Header().Set("Content-Type", "application/json")
 
 	if error != nil {

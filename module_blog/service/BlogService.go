@@ -76,7 +76,7 @@ func (service *BlogService) GetById(id string) (*model.Blog, error) {
 
 }
 
-func (service *BlogService) GetAll() (*[]model.Blog, error) {
+/*func (service *BlogService) GetAll() (*[]model.Blog, error) {
 	blogs, error := service.BlogRepo.GetAll()
 
 	if error != nil {
@@ -85,7 +85,7 @@ func (service *BlogService) GetAll() (*[]model.Blog, error) {
 	}
 
 	return &blogs, nil
-}
+}*/
 
 func (service *BlogService) Create(blog *model.Blog) error {
 	result := service.BlogRepo.Create(blog)
