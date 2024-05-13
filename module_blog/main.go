@@ -21,18 +21,11 @@ import (
 	"module_blog.xws.com/service"
 )
 
-func startServer(blogHandler *handler.BlogHandler, blogCommentHandler *handler.BlogCommentHandler, ratingHandler *handler.BlogRatingHandler) {
+func startServer(blogCommentHandler *handler.BlogCommentHandler, ratingHandler *handler.BlogRatingHandler) {
 	router := mux.NewRouter().StrictSlash(true)
 
 	//postRouter := router.Methods(http.MethodPost).Subrouter()
 	//postRouter.HandleFunc("/blogs", blogHandler.Create)
-
-	//router.HandleFunc("/blogs", blogHandler.Create).Methods("POST")
-	router.HandleFunc("/blogs/{id}", blogHandler.GetAll).Methods("GET")
-	//router.HandleFunc("/blogs/{id}", blogHandler.GetById).Methods("GET")
-	router.HandleFunc("/blogs", blogHandler.Update).Methods("PUT")
-	//router.HandleFunc("/blogs/{id}", blogHandler.Delete).Methods("DELETE")
-	router.HandleFunc("/blogs/rate", blogHandler.AddRating).Methods("POST")
 
 	router.HandleFunc("/api/blogcomments", blogCommentHandler.CreateComment).Methods("POST")
 	router.HandleFunc("/api/blogcomments", blogCommentHandler.GetAllComments).Methods("GET")
@@ -46,9 +39,9 @@ func startServer(blogHandler *handler.BlogHandler, blogCommentHandler *handler.B
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
 	println("Server starting")
 	//log.Fatal(http.ListenAndServe("localhost:3333", router))
-	port := ":" + os.Getenv("BLOGS_APP_PORT")
+	//port := ":" + os.Getenv("BLOGS_APP_PORT")
 	//port := ":8080"
-	log.Fatal(http.ListenAndServe(port, router))
+	//log.Fatal(http.ListenAndServe(port, router))
 }
 
 func main() {
@@ -89,8 +82,9 @@ func main() {
 	}
 	blogHandler := &handler.BlogHandler{BlogService: blogService}
 
-	lis, err := net.Listen("tcp", ":8096")
-	fmt.Println("Running gRPC on port 8096")
+	port := ":" + os.Getenv("BLOGS_APP_PORT")
+	lis, err := net.Listen("tcp", port)
+
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -120,7 +114,6 @@ func main() {
 
 	<-stopCh
 
+	startServer(blogCommentHandler, ratingHandler)
 	grpcServer.Stop()
-
-	//startServer(blogHandler, blogCommentHandler, ratingHandler)
 }

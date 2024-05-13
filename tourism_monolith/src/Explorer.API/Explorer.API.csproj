@@ -30,6 +30,5 @@
     <ProjectReference Include="..\Modules\Payments\Explorer.Payments.API\Explorer.Payments.API.csproj"/>
     <ProjectReference Include="..\Modules\Payments\Explorer.Payments.Infrastructure\Explorer.Payments.Infrastructure.csproj"/>
   </ItemGroup>
-
-
+    
 </Project>

@@ -22,6 +22,7 @@ const (
 	BlogService_GetById_FullMethodName = "/blog.BlogService/GetById"
 	BlogService_GetAll_FullMethodName  = "/blog.BlogService/GetAll"
 	BlogService_Create_FullMethodName  = "/blog.BlogService/Create"
+	BlogService_Update_FullMethodName  = "/blog.BlogService/Update"
 	BlogService_Delete_FullMethodName  = "/blog.BlogService/Delete"
 )
 
@@ -30,8 +31,9 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BlogServiceClient interface {
 	GetById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*BlogResponse, error)
-	GetAll(ctx context.Context, in *Id, opts ...grpc.CallOption) (*MultiBlogResponse, error)
+	GetAll(ctx context.Context, in *NumArray, opts ...grpc.CallOption) (*MultiBlogResponse, error)
 	Create(ctx context.Context, in *Blog, opts ...grpc.CallOption) (*EmptyResponse, error)
+	Update(ctx context.Context, in *Blog, opts ...grpc.CallOption) (*BlogResponse, error)
 	Delete(ctx context.Context, in *Id, opts ...grpc.CallOption) (*EmptyResponse, error)
 }
 
@@ -52,7 +54,7 @@ func (c *blogServiceClient) GetById(ctx context.Context, in *Id, opts ...grpc.Ca
 	return out, nil
 }
 
-func (c *blogServiceClient) GetAll(ctx context.Context, in *Id, opts ...grpc.CallOption) (*MultiBlogResponse, error) {
+func (c *blogServiceClient) GetAll(ctx context.Context, in *NumArray, opts ...grpc.CallOption) (*MultiBlogResponse, error) {
 	out := new(MultiBlogResponse)
 	err := c.cc.Invoke(ctx, BlogService_GetAll_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -64,6 +66,15 @@ func (c *blogServiceClient) GetAll(ctx context.Context, in *Id, opts ...grpc.Cal
 func (c *blogServiceClient) Create(ctx context.Context, in *Blog, opts ...grpc.CallOption) (*EmptyResponse, error) {
 	out := new(EmptyResponse)
 	err := c.cc.Invoke(ctx, BlogService_Create_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *blogServiceClient) Update(ctx context.Context, in *Blog, opts ...grpc.CallOption) (*BlogResponse, error) {
+	out := new(BlogResponse)
+	err := c.cc.Invoke(ctx, BlogService_Update_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -84,8 +95,9 @@ func (c *blogServiceClient) Delete(ctx context.Context, in *Id, opts ...grpc.Cal
 // for forward compatibility
 type BlogServiceServer interface {
 	GetById(context.Context, *Id) (*BlogResponse, error)
-	GetAll(context.Context, *Id) (*MultiBlogResponse, error)
+	GetAll(context.Context, *NumArray) (*MultiBlogResponse, error)
 	Create(context.Context, *Blog) (*EmptyResponse, error)
+	Update(context.Context, *Blog) (*BlogResponse, error)
 	Delete(context.Context, *Id) (*EmptyResponse, error)
 	mustEmbedUnimplementedBlogServiceServer()
 }
@@ -97,11 +109,14 @@ type UnimplementedBlogServiceServer struct {
 func (UnimplementedBlogServiceServer) GetById(context.Context, *Id) (*BlogResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetById not implemented")
 }
-func (UnimplementedBlogServiceServer) GetAll(context.Context, *Id) (*MultiBlogResponse, error) {
+func (UnimplementedBlogServiceServer) GetAll(context.Context, *NumArray) (*MultiBlogResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAll not implemented")
 }
 func (UnimplementedBlogServiceServer) Create(context.Context, *Blog) (*EmptyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedBlogServiceServer) Update(context.Context, *Blog) (*BlogResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedBlogServiceServer) Delete(context.Context, *Id) (*EmptyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
@@ -138,7 +153,7 @@ func _BlogService_GetById_Handler(srv interface{}, ctx context.Context, dec func
 }
 
 func _BlogService_GetAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Id)
+	in := new(NumArray)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -150,7 +165,7 @@ func _BlogService_GetAll_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: BlogService_GetAll_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BlogServiceServer).GetAll(ctx, req.(*Id))
+		return srv.(BlogServiceServer).GetAll(ctx, req.(*NumArray))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -169,6 +184,24 @@ func _BlogService_Create_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BlogServiceServer).Create(ctx, req.(*Blog))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BlogService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Blog)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BlogServiceServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BlogService_Update_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BlogServiceServer).Update(ctx, req.(*Blog))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -209,6 +242,10 @@ var BlogService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Create",
 			Handler:    _BlogService_Create_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _BlogService_Update_Handler,
 		},
 		{
 			MethodName: "Delete",

@@ -2,10 +2,12 @@
 using System.Text;
 using Explorer.Blog.API.Dtos;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json;
 
 namespace Explorer.API.Controllers.Tourist.Blog;
@@ -35,18 +37,41 @@ public class BlogController : BaseApiController
     [HttpGet]
     public async Task<ActionResult<PagedResult<BlogDto>>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
     {
-        //Uri uri = new Uri($"http://localhost:8080/blogs");
         int id = ClaimsPrincipalExtensions.PersonId(User);
-        HttpResponseMessage response = await _httpClient.GetAsync($"/{id}");
+        HttpResponseMessage responseMessage = await _followerHttpClient.GetAsync($"person/followers/{id}");
 
-        if (response.IsSuccessStatusCode)
+        if (responseMessage.IsSuccessStatusCode)
         {
-            string responseContent = await response.Content.ReadAsStringAsync();
-            List<BlogDto> blogs = JsonConvert.DeserializeObject<List<BlogDto>>(responseContent);
-            
-            var pagedResult = new PagedResult<BlogDto>(blogs, totalCount: blogs.Count);
+            string responseContent = await responseMessage.Content.ReadAsStringAsync();
+            List<Person> people = JsonConvert.DeserializeObject<List<Person>>(responseContent);
+            List<long> ids = new List<long>();
+            List<int> idsInt = new List<int>();
+            foreach (var p in people)
+            {
+                if (!ids.Contains(p.Id))
+                {
+                    ids.Add(p.Id);
+                }
+            }
 
-            return CreateResponse(Result.Ok(pagedResult));
+            foreach (var i in ids)
+            {
+                idsInt.Add(Int32.Parse(i.ToString()));
+            }
+
+            string jsonList = Newtonsoft.Json.JsonConvert.SerializeObject(idsInt);
+
+            HttpResponseMessage response = await _httpClient.GetAsync($"/{id}");
+            
+            if (response.IsSuccessStatusCode)
+            {
+             string responseContent1 = await response.Content.ReadAsStringAsync();
+             List<BlogDto> blogs = JsonConvert.DeserializeObject<List<BlogDto>>(responseContent1);
+
+             var pagedResult = new PagedResult<BlogDto>(blogs, totalCount: blogs.Count);
+
+             return CreateResponse(Result.Ok(pagedResult));
+             }
         }
 
         return BadRequest();

@@ -9,6 +9,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"module_blog.xws.com/model"
 )
@@ -115,10 +116,9 @@ func (repo *BlogRepository) Create(blog *model.Blog) error {
 	return nil
 }
 
-func (repo *BlogRepository) Update(blog *model.Blog) error {
+func (repo *BlogRepository) Update(blog *model.Blog) (*model.Blog, error) {
 	collection := repo.DatabaseConnection.Database("mongoDemo").Collection("blogs") // Specify your database and collection name
 
-	// Define the filter for finding the blog by its ID
 	filter := bson.M{"_id": blog.Kita}
 
 	// Define the update operation
@@ -130,12 +130,21 @@ func (repo *BlogRepository) Update(blog *model.Blog) error {
 	}
 
 	// Perform the update operation
-	_, err := collection.UpdateOne(context.Background(), filter, update)
-	if err != nil {
-		return err
+	options := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	result := collection.FindOneAndUpdate(context.Background(), filter, update, options)
+
+	if result.Err() != nil {
+		log.Fatalln(result.Err().Error())
+		return nil, result.Err()
 	}
 
-	return nil
+	var updatedBlog model.Blog
+
+	if err := result.Decode(&updatedBlog); err != nil {
+		return nil, err
+	}
+
+	return &updatedBlog, nil
 }
 
 func (repo *BlogRepository) Delete(id string) error {
