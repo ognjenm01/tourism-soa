@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -78,8 +79,8 @@ func main() {
 	}
 	blogHandler := &handler.BlogHandler{BlogService: blogService}
 
-	//port := ":" + os.Getenv("BLOGS_APP_PORT")
-	port := ":49155"
+	port := ":" + os.Getenv("BLOGS_APP_PORT")
+	//port := ":49155"
 	lis, err := net.Listen("tcp", port)
 
 	if err != nil {

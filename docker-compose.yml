@@ -123,6 +123,21 @@ services:
       - mongo-db
       - database
 
+  api-gateway:
+    build: 
+      context: ./
+      dockerfile: api_gateway/Dockerfile
+    image: api_gateway
+    container_name: api-gateway
+    restart: always
+    networks:
+      - servers
+    ports:
+      - "${API_GATEWAY_PORT}:${API_GATEWAY_PORT}"
+    depends_on:
+      - mongo-db
+      - database
+
 volumes:
   database-data:
     name: server-database
