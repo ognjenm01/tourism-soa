@@ -2,8 +2,6 @@ package service
 
 import (
 	"fmt"
-	"log"
-	"strconv"
 
 	"module_blog.xws.com/model"
 	"module_blog.xws.com/repo"
@@ -74,7 +72,7 @@ func (service *BlogService) Delete(id string) error {
 	return nil
 }
 
-func (service *BlogService) updateStatuses(blog model.Blog, status *model.BlogStatus) {
+/*func (service *BlogService) updateStatuses(blog model.Blog, status *model.BlogStatus) {
 	exists := false
 
 	for _, s := range blog.BlogStatuses {
@@ -138,4 +136,4 @@ func (service *BlogService) AddRating(rating *model.BlogRating) error {
 	service.determineStatus(rating, blog)
 
 	return nil
-}
+}*/

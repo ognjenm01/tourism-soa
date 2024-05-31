@@ -71,8 +71,8 @@ message Blog{
     SystemStatus systemStatus = 5;
     string imageLinks = 6;
     google.protobuf.Timestamp creationDate = 7;
-    repeated BlogStatus blogStatuses = 8;
-    repeated BlogRating blogRatings = 9;
+    //repeated BlogStatus blogStatuses = 8;
+    //repeated BlogRating blogRatings = 9;
 }
 
 message EmptyResponse{}

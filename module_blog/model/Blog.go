@@ -20,11 +20,11 @@ type Blog struct {
 	SystemStatus SystemStatus `bson:"systemStatus" json:"systemStatus"`
 	ImageLinks   string       `bson:"imageLinks" json:"imageLinks"`
 	CreationDate time.Time    `bson:"creationDate" json:"creationDate"`
-	BlogStatuses []BlogStatus `bson:"blogStatuses" json:"blogStatuses" gorm:"foreignKey:BlogId;references:Kita"`
-	BlogRatings  []BlogRating `bson:"blogRatings" json:"blogRatings" gorm:"foreignKey:BlogId;references:Kita"`
+	//BlogStatuses []BlogStatus `bson:"blogStatuses" json:"blogStatuses" gorm:"foreignKey:BlogId;references:Kita"`
+	//BlogRatings  []BlogRating `bson:"blogRatings" json:"blogRatings" gorm:"foreignKey:BlogId;references:Kita"`
 }
 
-func (b *Blog) AddRating(blogRating *BlogRating) {
+/*func (b *Blog) AddRating(blogRating *BlogRating) {
 	if b.BlogRatings == nil {
 		b.BlogRatings = make([]BlogRating, 0)
 	}
@@ -42,4 +42,4 @@ func (b *Blog) AddRating(blogRating *BlogRating) {
 	} else {
 		b.BlogRatings = append(b.BlogRatings, *blogRating)
 	}
-}
+}*/

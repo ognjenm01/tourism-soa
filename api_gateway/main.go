@@ -15,6 +15,9 @@ import (
 )
 
 func main() {
+
+	log.Println("aplication started")
+
 	conn1, err := grpc.DialContext(
 		context.Background(),
 		"0.0.0.0:8095",
@@ -49,7 +52,7 @@ func main() {
 	gwServer := &http.Server{Addr: ":44333", Handler: gwmux}
 
 	go func() {
-		log.Println("Starting HTTP server on port 8099")
+		log.Println("Starting HTTP server on port 44333")
 		if err := gwServer.ListenAndServe(); err != nil {
 			log.Fatalln(err)
 		}

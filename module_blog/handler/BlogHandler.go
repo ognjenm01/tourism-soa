@@ -12,8 +12,6 @@ import (
 	"module_blog.xws.com/service"
 )
 
-type KeyProduct struct{}
-
 type BlogHandler struct {
 	blog.UnimplementedBlogServiceServer
 	BlogService *service.BlogService
@@ -48,11 +46,11 @@ func (handler *BlogHandler) GetById(ctx context.Context, request *blog.Id) (*blo
 		SystemStatus: convertSystemStatus(result.SystemStatus),
 		ImageLinks:   result.ImageLinks,
 		CreationDate: timestamppb.New(result.CreationDate),
-		BlogStatuses: make([]*blog.BlogStatus, len(result.BlogStatuses)),
-		BlogRatings:  make([]*blog.BlogRating, len(result.BlogRatings)),
+		//BlogStatuses: make([]*blog.BlogStatus, len(result.BlogStatuses)),
+		//BlogRatings:  make([]*blog.BlogRating, len(result.BlogRatings)),
 	}
 
-	for i, status := range result.BlogStatuses {
+	/*for i, status := range result.BlogStatuses {
 		protoBlogStatus := &blog.BlogStatus{
 			Id:     int32(status.Id),
 			BlogId: int32(status.BlogId),
@@ -70,7 +68,7 @@ func (handler *BlogHandler) GetById(ctx context.Context, request *blog.Id) (*blo
 			CreationTime: timestamppb.New(rating.CreationTime),
 		}
 		protoResult.BlogRatings[j] = protoBlogRating
-	}
+	}*/
 
 	return &blog.BlogResponse{Blog: protoResult}, nil
 }
@@ -98,18 +96,18 @@ func (handler *BlogHandler) GetAll(ctx context.Context, req *blog.NumArray) (*bl
 			SystemStatus: convertSystemStatus(b.SystemStatus),
 			ImageLinks:   b.ImageLinks,
 			CreationDate: timestamppb.New(b.CreationDate),
-			BlogStatuses: make([]*blog.BlogStatus, len(b.BlogStatuses)),
-			BlogRatings:  make([]*blog.BlogRating, len(b.BlogRatings)),
+			//BlogStatuses: make([]*blog.BlogStatus, len(b.BlogStatuses)),
+			//BlogRatings:  make([]*blog.BlogRating, len(b.BlogRatings)),
 		}
 
-		for i, status := range b.BlogStatuses {
+		/*for i, status := range b.BlogStatuses {
 			protoBlogStatus := &blog.BlogStatus{
 				Id:     int32(status.Id),
 				BlogId: int32(status.BlogId),
 				Name:   status.Name,
 			}
 			protoResult.BlogStatuses[i] = protoBlogStatus
-		}
+		}*/
 
 		protoMessages = append(protoMessages, protoResult)
 	}
@@ -128,7 +126,7 @@ func MapGrpcBlogToModelBlog(grpcBlog *blog.Blog) *model.Blog {
 		CreationDate: time.Unix(grpcBlog.CreationDate.Seconds, int64(grpcBlog.CreationDate.Nanos)),
 	}
 
-	for _, grpcStatus := range grpcBlog.BlogStatuses {
+	/*for _, grpcStatus := range grpcBlog.BlogStatuses {
 		modelStatus := model.BlogStatus{
 			Id:     int(grpcStatus.Id),
 			BlogId: int(grpcStatus.BlogId),
@@ -146,7 +144,7 @@ func MapGrpcBlogToModelBlog(grpcBlog *blog.Blog) *model.Blog {
 			CreationTime: time.Unix(grpcRating.CreationTime.Seconds, int64(grpcRating.CreationTime.Nanos)),
 		}
 		modelBlog.BlogRatings = append(modelBlog.BlogRatings, modelRating)
-	}
+	}*/
 
 	return modelBlog
 }
@@ -193,20 +191,20 @@ func (handler *BlogHandler) Update(ctx context.Context, request *blog.Blog) (*bl
 		SystemStatus: convertSystemStatus(result.SystemStatus),
 		ImageLinks:   result.ImageLinks,
 		CreationDate: timestamppb.New(result.CreationDate),
-		BlogStatuses: make([]*blog.BlogStatus, len(result.BlogStatuses)),
-		BlogRatings:  make([]*blog.BlogRating, len(result.BlogRatings)),
+		//BlogStatuses: make([]*blog.BlogStatus, len(result.BlogStatuses)),
+		//BlogRatings:  make([]*blog.BlogRating, len(result.BlogRatings)),
 	}
 
-	for i, status := range result.BlogStatuses {
+	/*for i, status := range result.BlogStatuses {
 		protoBlogStatus := &blog.BlogStatus{
 			Id:     int32(status.Id),
 			BlogId: int32(status.BlogId),
 			Name:   status.Name,
 		}
 		protoResult.BlogStatuses[i] = protoBlogStatus
-	}
+	}*/
 
-	for j, rating := range result.BlogRatings {
+	/*for j, rating := range result.BlogRatings {
 		protoBlogRating := &blog.BlogRating{
 			Id:           int32(rating.Id),
 			BlogId:       int32(rating.BlogId),
@@ -215,7 +213,7 @@ func (handler *BlogHandler) Update(ctx context.Context, request *blog.Blog) (*bl
 			CreationTime: timestamppb.New(rating.CreationTime),
 		}
 		protoResult.BlogRatings[j] = protoBlogRating
-	}
+	}*/
 
 	return &blog.BlogResponse{Blog: protoResult}, nil
 }
