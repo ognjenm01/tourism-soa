@@ -3,13 +3,11 @@ package main
 import (
 	"context"
 	"log"
-	"net"
 	"net/http"
 
 	"api_gateway.xws.com/proto/blog"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 type Server struct {
@@ -21,7 +19,7 @@ func NewServer() (*Server, error) {
 }
 
 func main() {
-	lis, err := net.Listen("tcp", ":5001")
+	/*lis, err := net.Listen("tcp", ":5001")
 	if err != nil {
 		log.Fatalln("Failed to listen:", err)
 	}
@@ -106,4 +104,20 @@ func main() {
 	if err = gwServer.Close(); err != nil {
 		log.Fatalln(err)
 	}*/
+	ctx := context.Background()
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	mux := runtime.NewServeMux()
+	opts := []grpc.DialOption{grpc.WithInsecure()}
+
+	err := blog.RegisterBlogServiceHandlerFromEndpoint(ctx, mux, "localhost:49155", opts)
+	if err != nil {
+		log.Fatalf("Failed to start HTTP gateway: %v", err)
+	}
+
+	log.Println("HTTP gateway is running on port 5002")
+	if err := http.ListenAndServe(":5002", mux); err != nil {
+		log.Fatalf("Failed to serve: %v", err)
+	}
 }

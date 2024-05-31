@@ -8,7 +8,7 @@ import "google/protobuf/timestamp.proto";
 
 service BlogService{
     rpc GetById(Id) returns (BlogResponse){} 
-    rpc GetAll(NumArray) returns (MultiBlogResponse){}
+    rpc GetAll(Empty) returns (MultiBlogResponse){}
     rpc Create(Blog) returns (EmptyResponse){}
     rpc Update(Blog) returns (BlogResponse){}
     rpc Delete(Id) returns (EmptyResponse){}

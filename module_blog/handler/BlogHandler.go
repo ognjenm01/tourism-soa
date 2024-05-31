@@ -73,13 +73,9 @@ func (handler *BlogHandler) GetById(ctx context.Context, request *blog.Id) (*blo
 	return &blog.BlogResponse{Blog: protoResult}, nil
 }
 
-func (handler *BlogHandler) GetAll(ctx context.Context, req *blog.NumArray) (*blog.MultiBlogResponse, error) {
-	ids := req.GetIds()
-	var idSlice []int
-	for _, i := range ids {
-		idSlice = append(idSlice, int(i))
-	}
-	result, err := handler.BlogService.GetByPeopleUFollow(&idSlice)
+func (handler *BlogHandler) GetAll(ctx context.Context, req *blog.Empty) (*blog.MultiBlogResponse, error) {
+	//id := strconv.FormatInt(req.Id, 10)
+	result, err := handler.BlogService.GetByPeopleUFollow()
 	if err != nil {
 		log.Fatalln(err)
 		return nil, err

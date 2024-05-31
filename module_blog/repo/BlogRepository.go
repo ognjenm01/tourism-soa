@@ -18,20 +18,21 @@ type BlogRepository struct {
 	DatabaseConnection *mongo.Client
 }
 
-func (repo *BlogRepository) GetByPeopleUFollow(followerIds []int) ([]model.Blog, error) {
+func (repo *BlogRepository) GetByPeopleUFollow() ([]model.Blog, error) {
 	var blogs []model.Blog
 
 	collection := repo.DatabaseConnection.Database("mongoDemo").Collection("blogs")
-	filter := bson.M{"creatorId": bson.M{"$in": followerIds}}
+	ctx := context.Background()
 
-	cursor, err := collection.Find(context.Background(), filter)
+	// Find all documents in the collection
+	cursor, err := collection.Find(ctx, bson.M{})
 	if err != nil {
-		log.Fatalln("Error finding documents:", err)
+		log.Println("Error finding documents:", err)
 		return nil, err
 	}
-	defer cursor.Close(context.Background())
+	defer cursor.Close(ctx)
 
-	for cursor.Next(context.Background()) {
+	for cursor.Next(ctx) {
 		var blog model.Blog
 		if err := cursor.Decode(&blog); err != nil {
 			fmt.Println("Error decoding document:", err)
@@ -45,7 +46,6 @@ func (repo *BlogRepository) GetByPeopleUFollow(followerIds []int) ([]model.Blog,
 	}
 
 	return blogs, nil
-
 }
 
 func (repo *BlogRepository) GetById(id string) (model.Blog, error) {

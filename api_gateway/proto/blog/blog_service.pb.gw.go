@@ -84,25 +84,8 @@ func local_request_BlogService_GetById_0(ctx context.Context, marshaler runtime.
 }
 
 func request_BlogService_GetAll_0(ctx context.Context, marshaler runtime.Marshaler, client BlogServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq FollowerList
+	var protoReq Empty
 	var metadata runtime.ServerMetadata
-
-	var (
-		val string
-		ok  bool
-		err error
-		_   = err
-	)
-
-	val, ok = pathParams["id"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
-	}
-
-	protoReq.Id, err = runtime.Int32Slice(val, ",")
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
-	}
 
 	msg, err := client.GetAll(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
@@ -110,25 +93,8 @@ func request_BlogService_GetAll_0(ctx context.Context, marshaler runtime.Marshal
 }
 
 func local_request_BlogService_GetAll_0(ctx context.Context, marshaler runtime.Marshaler, server BlogServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq FollowerList
+	var protoReq Empty
 	var metadata runtime.ServerMetadata
-
-	var (
-		val string
-		ok  bool
-		err error
-		_   = err
-	)
-
-	val, ok = pathParams["id"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
-	}
-
-	protoReq.Id, err = runtime.Int32Slice(val, ",")
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
-	}
 
 	msg, err := server.GetAll(ctx, &protoReq)
 	return msg, metadata, err
@@ -252,7 +218,7 @@ func RegisterBlogServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/blog.BlogService/GetAll", runtime.WithHTTPPathPattern("/blogs/all/{id}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/blog.BlogService/GetAll", runtime.WithHTTPPathPattern("/blogs/all"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -388,7 +354,7 @@ func RegisterBlogServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/blog.BlogService/GetAll", runtime.WithHTTPPathPattern("/blogs/all/{id}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/blog.BlogService/GetAll", runtime.WithHTTPPathPattern("/blogs/all"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -454,7 +420,7 @@ func RegisterBlogServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 var (
 	pattern_BlogService_GetById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"blogs", "id"}, ""))
 
-	pattern_BlogService_GetAll_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"blogs", "all", "id"}, ""))
+	pattern_BlogService_GetAll_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"blogs", "all"}, ""))
 
 	pattern_BlogService_Create_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"blogs"}, ""))
 

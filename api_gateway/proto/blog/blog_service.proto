@@ -13,9 +13,9 @@ service BlogService{
             get:"/blogs/{id}"
         };
     } 
-    rpc GetAll(FollowerList) returns (MultiBlogResponse){
+    rpc GetAll(Empty) returns (MultiBlogResponse){
         option (google.api.http) ={
-            get:"/blogs/all/{id}"
+            get:"/blogs/all"
         };
     }
 

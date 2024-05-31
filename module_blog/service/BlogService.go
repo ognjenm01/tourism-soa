@@ -13,10 +13,8 @@ type BlogService struct {
 	BlogStatusService *BlogStatusService
 }
 
-func (service *BlogService) GetByPeopleUFollow(id *[]int) (*[]model.Blog, error) {
-	followerIds := id
-
-	blogs, err1 := service.BlogRepo.GetByPeopleUFollow(*followerIds)
+func (service *BlogService) GetByPeopleUFollow() (*[]model.Blog, error) {
+	blogs, err1 := service.BlogRepo.GetByPeopleUFollow()
 
 	if err1 != nil {
 		return nil, err1

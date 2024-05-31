@@ -22,7 +22,7 @@ func InitDb() (*mongo.Client, error) {
 	//dburi := "mongodb://localhost:27017"
 	ctx := context.TODO()
 
-	clientOpts := options.Client().ApplyURI("mongodb://mongo-db:27017/")
+	clientOpts := options.Client().ApplyURI("mongodb://localhost:27017/")
 	client, err := mongo.Connect(ctx, clientOpts)
 	if err != nil {
 		return nil, err

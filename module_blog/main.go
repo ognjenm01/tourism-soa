@@ -5,9 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"os"
-	"os/signal"
-	"syscall"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -62,13 +59,13 @@ func main() {
 
 	infrastructure.Ping(database1)
 
-	blogCommentRepository := &repo.BlogCommentRepository{DatabaseConnection: database1}
-	blogCommentService := &service.BlogCommentService{BlogCommentRepository: blogCommentRepository}
-	blogCommentHandler := &handler.BlogCommentHandler{BlogCommentService: blogCommentService}
+	//blogCommentRepository := &repo.BlogCommentRepository{DatabaseConnection: database1}
+	//blogCommentService := &service.BlogCommentService{BlogCommentRepository: blogCommentRepository}
+	//blogCommentHandler := &handler.BlogCommentHandler{BlogCommentService: blogCommentService}
 
 	ratingRepo := &repo.BlogRatingRepository{DatabaseConnection: database}
 	ratingService := &service.BlogRatingService{BlogRatingRepo: ratingRepo}
-	ratingHandler := &handler.BlogRatingHandler{BlogRatingService: ratingService}
+	//ratingHandler := &handler.BlogRatingHandler{BlogRatingService: ratingService}
 
 	statusRepo := &repo.BlogStatusRepository{DatabaseConnection: database}
 	statusService := &service.BlogStatusService{BlogStatusRepo: statusRepo}
@@ -81,7 +78,8 @@ func main() {
 	}
 	blogHandler := &handler.BlogHandler{BlogService: blogService}
 
-	port := ":" + os.Getenv("BLOGS_APP_PORT")
+	//port := ":" + os.Getenv("BLOGS_APP_PORT")
+	port := ":49155"
 	lis, err := net.Listen("tcp", port)
 
 	if err != nil {
@@ -99,6 +97,8 @@ func main() {
 	reflection.Register(grpcServer)
 	fmt.Println("Registered gRPC server")
 
+	fmt.Println("Listening at:" + port)
+
 	blog.RegisterBlogServiceServer(grpcServer, blogHandler)
 
 	go func() {
@@ -107,12 +107,13 @@ func main() {
 		}
 	}()
 	fmt.Println("Serving gRPC")
+	grpcServer.Serve(lis)
 
-	stopCh := make(chan os.Signal)
+	/*stopCh := make(chan os.Signal)
 	signal.Notify(stopCh, syscall.SIGTERM)
 
-	<-stopCh
+	<-stopCh*/
 
-	startServer(blogCommentHandler, ratingHandler)
-	grpcServer.Stop()
+	//startServer(blogCommentHandler, ratingHandler)
+	//grpcServer.Stop()
 }
