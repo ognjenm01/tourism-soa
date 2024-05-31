@@ -3,10 +3,8 @@ package main
 import (
 	"context"
 	"log"
+	"net"
 	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
 
 	"api_gateway.xws.com/proto/blog"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -14,22 +12,65 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+type Server struct {
+	blog.UnimplementedBlogServiceServer
+}
+
+func NewServer() (*Server, error) {
+	return &Server{}, nil
+}
+
 func main() {
+	lis, err := net.Listen("tcp", ":5001")
+	if err != nil {
+		log.Fatalln("Failed to listen:", err)
+	}
 
 	log.Println("aplication started")
 
-	conn1, err := grpc.DialContext(
+	// Create a gRPC server object
+	s := grpc.NewServer()
+
+	service, err := NewServer()
+	if err != nil {
+		log.Fatal(err.Error())
+		return
+	}
+
+	blog.RegisterBlogServiceServer(s, service)
+	log.Println("Serving gRPC on 0.0.0.0:5001")
+
+	go func() {
+		log.Fatalln(s.Serve(lis))
+	}()
+
+	conn, err := grpc.DialContext(
 		context.Background(),
-		"0.0.0.0:8095",
+		"0.0.0.0:5001",
 		grpc.WithBlock(),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	defer conn1.Close()
+	//defer conn.Close()
 
-	conn2, err := grpc.DialContext(
+	gwmux := runtime.NewServeMux()
+	// Register Greeter
+	err = blog.RegisterBlogServiceHandler(context.Background(), gwmux, conn)
+	if err != nil {
+		log.Fatalln("Failed to register gateway:", err)
+	}
+
+	gwServer := &http.Server{
+		Addr:    ":5002",
+		Handler: gwmux,
+	}
+
+	log.Println("Serving gRPC-Gateway on http://0.0.0.0:5002")
+	log.Fatalln(gwServer.ListenAndServe())
+
+	/*conn2, err := grpc.DialContext(
 		context.Background(),
 		"0.0.0.0:8096",
 		grpc.WithBlock(),
@@ -49,10 +90,10 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	gwServer := &http.Server{Addr: ":44333", Handler: gwmux}
+	gwServer := &http.Server{Addr: ":5001", Handler: gwmux}
 
 	go func() {
-		log.Println("Starting HTTP server on port 44333")
+		log.Println("Starting HTTP server on port 5001")
 		if err := gwServer.ListenAndServe(); err != nil {
 			log.Fatalln(err)
 		}
@@ -64,5 +105,5 @@ func main() {
 
 	if err = gwServer.Close(); err != nil {
 		log.Fatalln(err)
-	}
+	}*/
 }
