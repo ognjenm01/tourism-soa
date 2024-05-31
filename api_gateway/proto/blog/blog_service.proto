@@ -6,7 +6,6 @@ option go_package = "api_gateway/proto/blog";
 
 import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
-//import "google/api/http.proto";
 
 service BlogService{
     rpc GetById(Id) returns (BlogResponse){
@@ -14,7 +13,7 @@ service BlogService{
             get:"/blogs/{id}"
         };
     } 
-    rpc GetAll(NumArray) returns (MultiBlogResponse){
+    rpc GetAll(FollowerList) returns (MultiBlogResponse){
         option (google.api.http) ={
             get:"/blogs/all/{id}"
         };
@@ -27,6 +26,7 @@ service BlogService{
         };
     }
     rpc Update(Blog) returns (BlogResponse){}
+    
     rpc Delete(Id) returns (EmptyResponse){
         option (google.api.http) ={
             delete:"/blogs/{id}"
@@ -38,8 +38,8 @@ message Id{
     int64 id = 1;
 }
 
-message NumArray{
-    repeated int32 ids = 1;
+message FollowerList{
+    repeated int32 id = 1;
 }
 
 message Empty{}

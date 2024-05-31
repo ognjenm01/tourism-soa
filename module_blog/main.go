@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -36,8 +35,8 @@ func startServer(blogCommentHandler *handler.BlogCommentHandler, ratingHandler *
 
 	router.HandleFunc("/ratings/{id}", ratingHandler.GetByBlog).Methods("GET")
 
-	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
-	println("Server starting")
+	//router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
+	//println("Server starting")
 	//log.Fatal(http.ListenAndServe("localhost:3333", router))
 	//port := ":" + os.Getenv("BLOGS_APP_PORT")
 	//port := ":8080"

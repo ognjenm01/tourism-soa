@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"api_gateway.xws.com/proto/blog"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -38,7 +39,14 @@ func main() {
 
 	gwmux := runtime.NewServeMux()
 
-	gwServer := &http.Server{Addr: ":8099", Handler: gwmux}
+	client1 := blog.NewBlogServiceClient(conn1)
+	err = blog.RegisterBlogServiceHandlerClient(context.Background(), gwmux, client1)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	gwServer := &http.Server{Addr: ":44333", Handler: gwmux}
 
 	go func() {
 		log.Println("Starting HTTP server on port 8099")

@@ -1,5 +1,16 @@
 version: "3.7"
 services:
+  api-gateway:
+    build:
+      context: ./
+      dockerfile: api_gateway/Dockerfile
+    image: apigateway
+    container_name: api_gateway
+    restart: always
+    networks:
+      -servers:
+    ports:
+      - 
   tours-module:
     build:
       context: ./
