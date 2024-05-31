@@ -1,16 +1,5 @@
 version: "3.7"
 services:
-  api-gateway:
-    build:
-      context: ./
-      dockerfile: api_gateway/Dockerfile
-    image: apigateway
-    container_name: api_gateway
-    restart: always
-    networks:
-      -servers:
-    ports:
-      - 
   tours-module:
     build:
       context: ./
@@ -134,6 +123,31 @@ services:
       - mongo-db
       - database
 
+  grpc-gateway:
+    build: .
+    ports:
+      - "44333:44333"  # Expose port 44333 for the gRPC gateway
+    depends_on:
+      - grpc-service1
+      - grpc-service2
+    networks:
+      - grpc-network
+        
+  grpc-service1:
+    image: your_grpc_service1_image  # Replace with the actual image name for your first gRPC service
+    ports:
+      - "8095:8095"
+    networks:
+      - servers
+      - grpc-network
+
+  grpc-service2:
+    image: your_grpc_service2_image  # Replace with the actual image name for your second gRPC service
+    ports:
+      - "8096:8096"
+    networks:
+      - servers
+      - grpc-network
 
 volumes:
   database-data:
@@ -142,4 +156,6 @@ volumes:
 networks:
   servers:
     name: servers
+    driver: bridge
+  grpc-network:
     driver: bridge

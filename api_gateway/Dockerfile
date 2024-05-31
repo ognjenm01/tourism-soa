@@ -29,4 +29,4 @@ COPY --from=builder /app/main .
 EXPOSE 8000
 
 # Command to run the executable
-CMD ["./api-gateway"]
+CMD ["./main"]
