@@ -142,7 +142,7 @@ func (t *TransportType) UnmarshalJSON(bytes []byte) error {
 	return err
 }
 
-func string2TourProgressStatus(status string) TourProgressStatus {
+/*func string2TourProgressStatus(status string) TourProgressStatus {
 	switch status {
 	case "IN_PROGRESS":
 		return 0
@@ -180,4 +180,4 @@ func (tp *TourProgressStatus) UnmarshalJSON(bytes []byte) error {
 	}
 	*tp = string2TourProgressStatus(status)
 	return err
-}
+}*/

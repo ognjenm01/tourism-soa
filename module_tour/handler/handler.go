@@ -414,7 +414,7 @@ func (handler *TourHandler) DeleteTourEquipment(writer http.ResponseWriter, req 
 
 //---------------------------------------------------------------------------------------- TOUR PROGRESS CRUD
 
-func (handler *TourHandler) CreateTourProgress(writer http.ResponseWriter, req *http.Request) {
+/*func (handler *TourHandler) CreateTourProgress(writer http.ResponseWriter, req *http.Request) {
 	var tourProgress model.TourProgress
 
 	error := json.NewDecoder(req.Body).Decode(&tourProgress)
@@ -488,7 +488,7 @@ func (handler *TourHandler) DeleteTourProgress(writer http.ResponseWriter, req *
 	}
 
 	writer.WriteHeader(http.StatusOK)
-}
+}*/
 
 //---------------------------------------------------------------------------------------- TOURIST POSITION CRUD
 

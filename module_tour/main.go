@@ -1,15 +1,20 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"tour/handler"
 	"tour/infrastructure"
+	"tour/proto/tour"
 	"tour/repo"
 	"tour/service"
 
 	"github.com/rs/cors"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 func startServer(handler *handler.TourHandler) {
@@ -42,7 +47,7 @@ func main() {
 
 	log.Println("[DB] - Successfully connected to database")
 
-	tourRepository := &repo.TourRepository{DatabaseConnection: database}
+	/*tourRepository := &repo.TourRepository{DatabaseConnection: database}
 	tourService := &service.TourService{TourRepository: tourRepository}
 
 	keypointRepository := &repo.KeypointRepository{DatabaseConnection: database}
@@ -57,11 +62,6 @@ func main() {
 	tourEquipmentRepository := &repo.TourEquipmentRepository{DatabaseConnection: database}
 	tourEquipmentService := &service.TourEquipmentService{TourEquipmentRepository: tourEquipmentRepository}
 
-	tourProgressRepository := &repo.TourProgressRepository{DatabaseConnection: database}
-	tourProgressService := &service.TourProgressService{TourProgressRepository: tourProgressRepository}
-
-	touristPositionRepository := &repo.TouristPositionRepository{DatabaseConnection: database}
-	touristPositionService := &service.TouristPositionService{TouristPositionRepository: touristPositionRepository}
 
 	handler := &handler.TourHandler{
 		TourService:            tourService,
@@ -71,7 +71,46 @@ func main() {
 		TourEquipmentService:   tourEquipmentService,
 		TourProgressService:    tourProgressService,
 		TouristPositionService: touristPositionService,
+	}*/
+
+	tourProgressRepository := &repo.TourProgressRepository{DatabaseConnection: database}
+	tourProgressService := &service.TourProgressService{TourProgressRepository: tourProgressRepository}
+	tourProgressHandler := &handler.TourProgressHandler{TourProgressService: tourProgressService}
+
+	touristPositionRepository := &repo.TouristPositionRepository{DatabaseConnection: database}
+	touristPositionService := &service.TouristPositionService{TouristPositionRepository: touristPositionRepository}
+	touristPositionHandler := &handler.TouristPositionHandler{TouristPositionService: touristPositionService}
+
+	port := ":" + os.Getenv("TOURS_APP_PORT")
+	lis, err := net.Listen("tcp", port)
+
+	if err != nil {
+		log.Fatalln(err)
 	}
 
-	startServer(handler)
+	defer func(listener net.Listener) {
+		err := listener.Close()
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}(lis)
+
+	grpcServer := grpc.NewServer()
+	reflection.Register(grpcServer)
+	fmt.Println("Registered gRPC server")
+
+	fmt.Println("Listening at:" + port)
+
+	tour.RegisterTourProgressServiceServer(grpcServer, tourProgressHandler)
+	tour.RegisterTouristPositionServiceServer(grpcServer, touristPositionHandler)
+
+	go func() {
+		if err := grpcServer.Serve(lis); err != nil {
+			log.Fatalln(err)
+		}
+	}()
+	fmt.Println("Serving gRPC")
+	grpcServer.Serve(lis)
+
+	//startServer(handler)
 }
