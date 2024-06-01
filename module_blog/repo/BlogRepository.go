@@ -119,7 +119,7 @@ func (repo *BlogRepository) Create(blog *model.Blog) error {
 func (repo *BlogRepository) Update(blog *model.Blog) (*model.Blog, error) {
 	collection := repo.DatabaseConnection.Database("mongoDemo").Collection("blogs") // Specify your database and collection name
 
-	filter := bson.M{"_id": blog.Kita}
+	filter := bson.M{"kita": blog.Kita}
 
 	// Define the update operation
 	update := bson.M{

@@ -25,7 +25,12 @@ service BlogService{
             body:"*"
         };
     }
-    rpc Update(Blog) returns (BlogResponse){}
+    rpc Update(Blog) returns (BlogResponse){
+        option (google.api.http) = {
+            put:"/blogs"
+            body:"*"
+        };
+    }
     
     rpc Delete(Id) returns (EmptyResponse){
         option (google.api.http) ={
