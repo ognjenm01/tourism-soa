@@ -30,7 +30,7 @@ service KeypointService{
 
 service TourService {
     rpc CreateTour(Tour) returns (EmptyResponse){}
-    rpc GetTourById(Id) returns (EmptyResponse){}
+    rpc GetTourById(Id) returns (TourResponse){}
     rpc GetTourByStatus(Status) returns(MultiTourResponse){}
     rpc GetTourByAuthor(Id) returns(MultiTourResponse){}
     rpc UpdateTour(Tour) returns(EmptyResponse){}

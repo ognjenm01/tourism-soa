@@ -635,7 +635,7 @@ var KeypointService_ServiceDesc = grpc.ServiceDesc{
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TourServiceClient interface {
 	CreateTour(ctx context.Context, in *Tour, opts ...grpc.CallOption) (*EmptyResponse, error)
-	GetTourById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*EmptyResponse, error)
+	GetTourById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*TourResponse, error)
 	GetTourByStatus(ctx context.Context, in *Status, opts ...grpc.CallOption) (*MultiTourResponse, error)
 	GetTourByAuthor(ctx context.Context, in *Id, opts ...grpc.CallOption) (*MultiTourResponse, error)
 	UpdateTour(ctx context.Context, in *Tour, opts ...grpc.CallOption) (*EmptyResponse, error)
@@ -659,8 +659,8 @@ func (c *tourServiceClient) CreateTour(ctx context.Context, in *Tour, opts ...gr
 	return out, nil
 }
 
-func (c *tourServiceClient) GetTourById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*EmptyResponse, error) {
-	out := new(EmptyResponse)
+func (c *tourServiceClient) GetTourById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*TourResponse, error) {
+	out := new(TourResponse)
 	err := c.cc.Invoke(ctx, "/tour.TourService/GetTourById", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -709,7 +709,7 @@ func (c *tourServiceClient) GetAllTours(ctx context.Context, in *EmptyResponse, 
 // for forward compatibility
 type TourServiceServer interface {
 	CreateTour(context.Context, *Tour) (*EmptyResponse, error)
-	GetTourById(context.Context, *Id) (*EmptyResponse, error)
+	GetTourById(context.Context, *Id) (*TourResponse, error)
 	GetTourByStatus(context.Context, *Status) (*MultiTourResponse, error)
 	GetTourByAuthor(context.Context, *Id) (*MultiTourResponse, error)
 	UpdateTour(context.Context, *Tour) (*EmptyResponse, error)
@@ -723,7 +723,7 @@ type UnimplementedTourServiceServer struct {
 func (UnimplementedTourServiceServer) CreateTour(context.Context, *Tour) (*EmptyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTour not implemented")
 }
-func (UnimplementedTourServiceServer) GetTourById(context.Context, *Id) (*EmptyResponse, error) {
+func (UnimplementedTourServiceServer) GetTourById(context.Context, *Id) (*TourResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTourById not implemented")
 }
 func (UnimplementedTourServiceServer) GetTourByStatus(context.Context, *Status) (*MultiTourResponse, error) {

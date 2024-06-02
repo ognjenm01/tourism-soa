@@ -13,8 +13,7 @@ import (
 )
 
 type NewTourHandler struct {
-	//fixme
-	tour.UnimplementedTourProgressServiceServer
+	tour.UnimplementedTourServiceServer
 	TourService *service.TourService
 }
 
@@ -110,7 +109,7 @@ func mapModelTourToGrpc(modelTour *model.Tour) *tour.Tour {
 	return grpcTour
 }
 
-func (handler *TourHandler) CreateTour(ctx context.Context, to *tour.Tour) (*tour.EmptyResponse, error) {
+func (handler *NewTourHandler) CreateTour(ctx context.Context, to *tour.Tour) (*tour.EmptyResponse, error) {
 	t := MapGrpcTourToModel(to)
 	err := handler.TourService.CreateTour(t)
 	if err != nil {
@@ -120,7 +119,7 @@ func (handler *TourHandler) CreateTour(ctx context.Context, to *tour.Tour) (*tou
 	return &tour.EmptyResponse{}, nil
 }
 
-func (handler *TourHandler) GetTourById(ctx context.Context, req *tour.Id) (*tour.TourResponse, error) {
+func (handler *NewTourHandler) GetTourById(ctx context.Context, req *tour.Id) (*tour.TourResponse, error) {
 	id := strconv.FormatInt(req.Id, 10)
 	tourOld, err := handler.TourService.GetTourById(id)
 	if err != nil {
@@ -131,7 +130,7 @@ func (handler *TourHandler) GetTourById(ctx context.Context, req *tour.Id) (*tou
 	return &tour.TourResponse{Tour: tt}, nil
 }
 
-func (handler *TourHandler) GetToursByStatus(ctx context.Context, req []*tour.Status) (*tour.MultiTourResponse, error) {
+func (handler *NewTourHandler) GetToursByStatus(ctx context.Context, req []*tour.Status) (*tour.MultiTourResponse, error) {
 	var statuses []int
 	for _, st := range req {
 		statuses = append(statuses, int(st.Status))
@@ -149,7 +148,7 @@ func (handler *TourHandler) GetToursByStatus(ctx context.Context, req []*tour.St
 	return &tour.MultiTourResponse{Tours: finalTt}, nil
 }
 
-func (handler *TourHandler) GetTourByAuthor(ctx context.Context, req *tour.Id) (*tour.MultiTourResponse, error) {
+func (handler *NewTourHandler) GetTourByAuthor(ctx context.Context, req *tour.Id) (*tour.MultiTourResponse, error) {
 	id := strconv.FormatInt(req.Id, 10)
 	tours, err := handler.TourService.GetToursByAuthor(id)
 	if err != nil {
@@ -162,7 +161,7 @@ func (handler *TourHandler) GetTourByAuthor(ctx context.Context, req *tour.Id) (
 	return &tour.MultiTourResponse{Tours: tt}, nil
 }
 
-func (handler *TourHandler) UpdateTour(ctx context.Context, req *tour.Tour) (*tour.EmptyResponse, error) {
+func (handler *NewTourHandler) UpdateTour(ctx context.Context, req *tour.Tour) (*tour.EmptyResponse, error) {
 	id := strconv.FormatInt(req.Id, 10)
 	ID, err := strconv.Atoi(id)
 
@@ -180,7 +179,7 @@ func (handler *TourHandler) UpdateTour(ctx context.Context, req *tour.Tour) (*to
 	return &tour.EmptyResponse{}, nil
 }
 
-func (handler *TourHandler) GetAllTours(ctx context.Context, req *tour.EmptyResponse) (*tour.MultiTourResponse, error) {
+func (handler *NewTourHandler) GetAllTours(ctx context.Context, req *tour.EmptyResponse) (*tour.MultiTourResponse, error) {
 	tours, err := handler.TourService.GetAll()
 	if err != nil {
 		return nil, err
