@@ -437,3 +437,195 @@ var TouristPositionService_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "proto/tour_service.proto",
 }
+
+// KeypointServiceClient is the client API for KeypointService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type KeypointServiceClient interface {
+	CreateKeypoint(ctx context.Context, in *Keypoint, opts ...grpc.CallOption) (*EmptyResponse, error)
+	GetKeypointsByTourId(ctx context.Context, in *Id, opts ...grpc.CallOption) (*MultiKeypointResponse, error)
+	UpdateKeypoint(ctx context.Context, in *Keypoint, opts ...grpc.CallOption) (*EmptyResponse, error)
+	DeleteKeypoint(ctx context.Context, in *Id, opts ...grpc.CallOption) (*EmptyResponse, error)
+}
+
+type keypointServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewKeypointServiceClient(cc grpc.ClientConnInterface) KeypointServiceClient {
+	return &keypointServiceClient{cc}
+}
+
+func (c *keypointServiceClient) CreateKeypoint(ctx context.Context, in *Keypoint, opts ...grpc.CallOption) (*EmptyResponse, error) {
+	out := new(EmptyResponse)
+	err := c.cc.Invoke(ctx, "/tour.KeypointService/CreateKeypoint", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keypointServiceClient) GetKeypointsByTourId(ctx context.Context, in *Id, opts ...grpc.CallOption) (*MultiKeypointResponse, error) {
+	out := new(MultiKeypointResponse)
+	err := c.cc.Invoke(ctx, "/tour.KeypointService/GetKeypointsByTourId", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keypointServiceClient) UpdateKeypoint(ctx context.Context, in *Keypoint, opts ...grpc.CallOption) (*EmptyResponse, error) {
+	out := new(EmptyResponse)
+	err := c.cc.Invoke(ctx, "/tour.KeypointService/UpdateKeypoint", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keypointServiceClient) DeleteKeypoint(ctx context.Context, in *Id, opts ...grpc.CallOption) (*EmptyResponse, error) {
+	out := new(EmptyResponse)
+	err := c.cc.Invoke(ctx, "/tour.KeypointService/DeleteKeypoint", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// KeypointServiceServer is the server API for KeypointService service.
+// All implementations should embed UnimplementedKeypointServiceServer
+// for forward compatibility
+type KeypointServiceServer interface {
+	CreateKeypoint(context.Context, *Keypoint) (*EmptyResponse, error)
+	GetKeypointsByTourId(context.Context, *Id) (*MultiKeypointResponse, error)
+	UpdateKeypoint(context.Context, *Keypoint) (*EmptyResponse, error)
+	DeleteKeypoint(context.Context, *Id) (*EmptyResponse, error)
+}
+
+// UnimplementedKeypointServiceServer should be embedded to have forward compatible implementations.
+type UnimplementedKeypointServiceServer struct {
+}
+
+func (UnimplementedKeypointServiceServer) CreateKeypoint(context.Context, *Keypoint) (*EmptyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateKeypoint not implemented")
+}
+func (UnimplementedKeypointServiceServer) GetKeypointsByTourId(context.Context, *Id) (*MultiKeypointResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetKeypointsByTourId not implemented")
+}
+func (UnimplementedKeypointServiceServer) UpdateKeypoint(context.Context, *Keypoint) (*EmptyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateKeypoint not implemented")
+}
+func (UnimplementedKeypointServiceServer) DeleteKeypoint(context.Context, *Id) (*EmptyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteKeypoint not implemented")
+}
+
+// UnsafeKeypointServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to KeypointServiceServer will
+// result in compilation errors.
+type UnsafeKeypointServiceServer interface {
+	mustEmbedUnimplementedKeypointServiceServer()
+}
+
+func RegisterKeypointServiceServer(s grpc.ServiceRegistrar, srv KeypointServiceServer) {
+	s.RegisterService(&KeypointService_ServiceDesc, srv)
+}
+
+func _KeypointService_CreateKeypoint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Keypoint)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeypointServiceServer).CreateKeypoint(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tour.KeypointService/CreateKeypoint",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeypointServiceServer).CreateKeypoint(ctx, req.(*Keypoint))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KeypointService_GetKeypointsByTourId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeypointServiceServer).GetKeypointsByTourId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tour.KeypointService/GetKeypointsByTourId",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeypointServiceServer).GetKeypointsByTourId(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KeypointService_UpdateKeypoint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Keypoint)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeypointServiceServer).UpdateKeypoint(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tour.KeypointService/UpdateKeypoint",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeypointServiceServer).UpdateKeypoint(ctx, req.(*Keypoint))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KeypointService_DeleteKeypoint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeypointServiceServer).DeleteKeypoint(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tour.KeypointService/DeleteKeypoint",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeypointServiceServer).DeleteKeypoint(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// KeypointService_ServiceDesc is the grpc.ServiceDesc for KeypointService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var KeypointService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "tour.KeypointService",
+	HandlerType: (*KeypointServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreateKeypoint",
+			Handler:    _KeypointService_CreateKeypoint_Handler,
+		},
+		{
+			MethodName: "GetKeypointsByTourId",
+			Handler:    _KeypointService_GetKeypointsByTourId_Handler,
+		},
+		{
+			MethodName: "UpdateKeypoint",
+			Handler:    _KeypointService_UpdateKeypoint_Handler,
+		},
+		{
+			MethodName: "DeleteKeypoint",
+			Handler:    _KeypointService_DeleteKeypoint_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/tour_service.proto",
+}

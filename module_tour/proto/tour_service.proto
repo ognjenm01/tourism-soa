@@ -21,6 +21,13 @@ service TouristPositionService{
     rpc UpdateTouristPosition(TouristPosition) returns(EmptyResponse){}
 }
 
+service KeypointService{
+    rpc CreateKeypoint(Keypoint) returns (EmptyResponse){}
+    rpc GetKeypointsByTourId(Id) returns (MultiKeypointResponse){}
+    rpc UpdateKeypoint(Keypoint) returns (EmptyResponse){}
+    rpc DeleteKeypoint(Id) returns (EmptyResponse){}
+}
+
 message Empty{}
 
 message Id{
@@ -59,4 +66,20 @@ message TouristPosition{
 
 message TouristPositionResponse{
     TouristPosition position = 1;
+}
+
+message Keypoint{
+    int64 id = 1;
+    int64 tourId = 2;
+    string name = 3;
+    float latitude = 4;
+    float longitude = 5;
+    string description = 6;
+    uint64 position = 7;
+    string image = 8;
+    string secret = 9;
+}
+
+message MultiKeypointResponse{
+    repeated Keypoint keypoint = 1;
 }

@@ -62,6 +62,33 @@ service TouristPositionService{
     }
 }
 
+service KeypointService{
+    rpc CreateKeypoint(Keypoint) returns (EmptyResponse){
+        option (google.api.http) ={
+            post:"/api/keypoints"
+            body:"*"
+        };
+    }
+    rpc GetKeypointsByTourId(Id) returns (MultiKeypointResponse){
+        option (google.api.http) ={
+            get:"/api/keypoints/tour/{id}"
+        };
+    }
+    rpc UpdateKeypoint(Keypoint) returns (EmptyResponse){
+        option (google.api.http) ={
+            put:"/api/keypoints"
+            body:"*"
+        };
+    }
+    rpc DeleteKeypoint(Id) returns (EmptyResponse){
+        option (google.api.http) ={
+            delete:"/api/keypoints/{id}"
+        };
+    }
+}
+
+
+
 message Id{
     int64 id = 1;
 }
@@ -100,4 +127,20 @@ message TouristPosition{
 
 message TouristPositionResponse{
     TouristPosition position = 1;
+}
+
+message Keypoint{
+    int64 id = 1;
+    int64 tourId = 2;
+    string name = 3;
+    float latitude = 4;
+    float longitude = 5;
+    string description = 6;
+    uint64 position = 7;
+    string image = 8;
+    string secret = 9;
+}
+
+message MultiKeypointResponse{
+    repeated Keypoint keypoint = 1;
 }

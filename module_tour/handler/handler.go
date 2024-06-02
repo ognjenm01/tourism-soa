@@ -128,7 +128,7 @@ func (handler *TourHandler) GetAllTours(writer http.ResponseWriter, req *http.Re
 
 //------------------------------------------------------------------------------------------- KEYPOINT CRUD
 
-func (handler *TourHandler) CreateKeypoint(writer http.ResponseWriter, req *http.Request) {
+/*func (handler *TourHandler) CreateKeypoint(writer http.ResponseWriter, req *http.Request) {
 	var keypoint model.Keypoint
 	error := json.NewDecoder(req.Body).Decode(&keypoint)
 	if error != nil {
@@ -188,7 +188,7 @@ func (handler *TourHandler) GetKeypointsByTourId(writer http.ResponseWriter, req
 	writer.WriteHeader(http.StatusOK)
 	writer.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(writer).Encode(keypoints)
-}
+}*/
 
 //---------------------------------------------------------------------------------------- TOUR REVIEW CRUD
 
