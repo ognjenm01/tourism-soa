@@ -22,8 +22,8 @@ func (service *TourProgressService) CreateTourProgress(tourProgress *model.TourP
 func (service *TourProgressService) GetAllTourProgress() (*[]model.TourProgress, error) {
 	tourProgress, error := service.TourProgressRepository.GetAll()
 	if error != nil {
-		//log.Fatalf("[DB] - No tour progress in db!\n")
-		return nil, error
+		log.Fatalf("[DB] - No tour progress in db!\n")
+		return &[]model.TourProgress{}, error
 	}
 	return &tourProgress, nil
 }

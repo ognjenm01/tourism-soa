@@ -492,7 +492,7 @@ func (handler *TourHandler) DeleteTourProgress(writer http.ResponseWriter, req *
 
 //---------------------------------------------------------------------------------------- TOURIST POSITION CRUD
 
-func (handler *TourHandler) CreateTouristPosition(writer http.ResponseWriter, req *http.Request) {
+/*func (handler *TourHandler) CreateTouristPosition(writer http.ResponseWriter, req *http.Request) {
 	var touristPosition model.TouristPosition
 
 	error := json.NewDecoder(req.Body).Decode(&touristPosition)
@@ -559,4 +559,4 @@ func (handler *TourHandler) UpdateTouristPosition(writer http.ResponseWriter, re
 
 	writer.WriteHeader(http.StatusCreated)
 	writer.Header().Set("Content-Type", "application/json")
-}
+}*/

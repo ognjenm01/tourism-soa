@@ -21,7 +21,8 @@ func (repo *TourProgressRepository) Create(tourProgress *model.TourProgress) err
 
 func (repo *TourProgressRepository) GetAll() ([]model.TourProgress, error) {
 	tourProgress := []model.TourProgress{}
-	result := repo.DatabaseConnection.Preload("TouristPosition").Find(&tourProgress)
+	//result := repo.DatabaseConnection.Preload("TouristPosition").Find(&tourProgress)
+	result := repo.DatabaseConnection.Find(&tourProgress)
 	if result != nil {
 		return tourProgress, result.Error
 	}

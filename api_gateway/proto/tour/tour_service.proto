@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+package tour;
+
+option go_package = "api_gateway/proto/tour";
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+service TourProgressService{
+    rpc CreateTourProgress(TourProgress) returns (EmptyResponse){
+        option (google.api.http) ={
+            post:"/api/tourprogress"
+            body:"*"
+        };
+    }
+    rpc GetAllTourProgress(Empty) returns (MultiTourProgressResponse){
+        option (google.api.http) ={
+            get:"/api/tourprogress"
+        };
+    }
+    rpc GetTourProgressById(Id) returns (TourProgressResponse){
+        option (google.api.http) ={
+            get:"/api/tourprogress/{id}"
+        };
+    }
+    rpc UpdateTourProgress(TourProgress) returns (EmptyResponse){
+        option (google.api.http) ={
+            put:"/api/tourprogress/{id}"
+            body:"*"
+        };
+    }
+    rpc DeleteTourProgress(Id) returns (EmptyResponse){
+        option (google.api.http) ={
+            delete:"/api/tourprogress/{id}"
+        };
+    }
+}
+
+service TouristPositionService{
+    rpc CreateTouristPosition(TouristPosition) returns(EmptyResponse){
+        option (google.api.http) ={
+            post:"/api/touristposition"
+            body:"*"
+        };
+    }
+    rpc GetTouristPositionById(Id) returns(TouristPositionResponse){
+        option (google.api.http) ={
+            get:"/api/touristposition/{id}"
+        };
+    }
+    rpc GetTouristPositionByUser(Id) returns(TouristPositionResponse){
+        option (google.api.http) ={
+            get:"/api/touristposition/byuser/{id}"
+        };
+    }
+    rpc UpdateTouristPosition(TouristPosition) returns(EmptyResponse){
+        option (google.api.http) ={
+            put:"/api/touristposition/{id}"
+            body:"*"
+        };
+    }
+}
+
+message Id{
+    int64 id = 1;
+}
+
+message Empty{}
+
+message EmptyResponse{}
+
+message TourProgress{
+    int64 id = 1;
+    int64 touristPositionId = 2;
+    int64 tourId = 3;
+    int64 status = 4;
+    google.protobuf.Timestamp startTime = 5;
+    google.protobuf.Timestamp lastActivity = 6;
+    int64 currentKeypoint = 7;
+    bool isInProgress = 8;
+}
+
+message TourProgressResponse{
+    TourProgress tourProgress = 1;
+}
+
+message MultiTourProgressResponse{
+    repeated TourProgress tourProgress = 1;
+}
+
+message TouristPosition{
+    int64 id = 1;
+    TourProgress tourProgress = 2;
+    int64 userId = 3;
+    float latitude = 4;
+    float longitude = 5;
+    google.protobuf.Timestamp updatedAt = 6;
+}
+
+message TouristPositionResponse{
+    TouristPosition position = 1;
+}

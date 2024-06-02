@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"api_gateway.xws.com/proto/blog"
+	"api_gateway.xws.com/proto/tour"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 )
@@ -26,11 +27,20 @@ func main() {
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 
-	err := blog.RegisterBlogServiceHandlerFromEndpoint(ctx, mux, "blogs-module:49155", opts)
-	if err != nil {
-		log.Fatalf("Failed to start HTTP gateway: %v", err)
+	err1 := blog.RegisterBlogServiceHandlerFromEndpoint(ctx, mux, "blogs-module:49155", opts)
+	err2 := tour.RegisterTourProgressServiceHandlerFromEndpoint(ctx, mux, "tours-module:7777", opts)
+	err3 := tour.RegisterTouristPositionServiceHandlerFromEndpoint(ctx, mux, "tours-module:7777", opts)
+
+	if err1 != nil {
+		log.Fatalf("Failed to start HTTP gateway: %v", err1)
+	}
+	if err2 != nil {
+		log.Fatalf("Failed to start HTTP gateway: %v", err2)
 	}
 
+	if err3 != nil {
+		log.Fatalf("Failed to start HTTP gateway: %v", err3)
+	}
 	log.Println("HTTP gateway is running on port 5002")
 	if err := http.ListenAndServe(":5002", mux); err != nil {
 		log.Fatalf("Failed to serve: %v", err)

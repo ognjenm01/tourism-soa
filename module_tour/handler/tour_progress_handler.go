@@ -63,12 +63,12 @@ func (handler *TourProgressHandler) CreateTourProgress(ctx context.Context, requ
 func (handler *TourProgressHandler) GetAllTourProgress(ctx context.Context, request *tour.Empty) (*tour.MultiTourProgressResponse, error) {
 	result, err := handler.TourProgressService.GetAllTourProgress()
 
+	var protoMessages []*tour.TourProgress
+
 	if err != nil {
 		log.Fatalln(err)
-		return nil, err
+		return &tour.MultiTourProgressResponse{TourProgress: protoMessages}, err
 	}
-
-	var protoMessages []*tour.TourProgress
 
 	for _, t := range *result {
 		grpcProgress := &tour.TourProgress{

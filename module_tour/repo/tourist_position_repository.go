@@ -22,6 +22,7 @@ func (repo *TouristPositionRepository) Create(touristPosition *model.TouristPosi
 func (repo *TouristPositionRepository) GetAll() ([]model.TouristPosition, error) {
 	touristPositions := []model.TouristPosition{}
 
+	//result := repo.DatabaseConnection.Preload("TourProgress").Find(&touristPositions)
 	result := repo.DatabaseConnection.Find(&touristPositions)
 
 	if result != nil {

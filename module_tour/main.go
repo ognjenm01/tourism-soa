@@ -112,5 +112,6 @@ func main() {
 	fmt.Println("Serving gRPC")
 	grpcServer.Serve(lis)
 
+	select {} //nzm
 	//startServer(handler)
 }
