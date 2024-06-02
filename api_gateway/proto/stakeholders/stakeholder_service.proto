@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+package stakeholder;
+
+option go_package = "module_stakeholders/proto/stakeholders";
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+service PersonService{
+    rpc CreatePerson(Person) returns (EmptyResponse){}
+    rpc GetAllPeople(Empty) returns (MultiPersonResponse){}
+    rpc GetPersonById(Id) returns (PersonResponse){}
+    //rpc UpdateTourProgress(TourProgress) returns (EmptyResponse){}
+    //rpc DeleteTourProgress(Id) returns (EmptyResponse){}
+}
+
+service UserService{
+    rpc CreateUser(User) returns(EmptyResponse){}
+    rpc GetUserById(Id) returns(UserResponse){}
+    rpc GetAllUsers(Empty) returns (MultiUserResponse){}
+    rpc GetUserByUsername(Username) returns(UserResponse){}
+    //rpc GetTouristPositionByUser(Id) returns(TouristPositionResponse){}
+    //rpc UpdateTouristPosition(TouristPosition) returns(EmptyResponse){}
+}
+
+service AccessTokenService{
+    rpc RegisterUser(Register) returns(EmptyResponse){
+        option (google.api.http) ={
+            post:"/api/register"
+            body:"*"
+        };
+    }
+    rpc LoginUser(Login) returns(AccessToken){
+        option (google.api.http) ={
+            post:"/api/login"
+            body:"*"
+        };
+    }
+}
+
+
+message AccessToken{
+    int64 Id = 1;
+    string Accesstoken = 2;
+}
+
+message Login{
+    string Username = 1;
+    string Password = 2;
+}
+
+message Register{
+    string Username = 1;
+    string Password = 2;
+    string Name = 3;
+    string Surname = 4;
+    string Email = 5;
+    string ProfileImage = 6;
+    string Biography = 7;
+    string Quote = 8;
+}
+
+message Empty{}
+
+message Id{
+    int64 id = 1;
+}
+
+message Username{
+    string username = 1;
+}
+
+message Person{
+    int64 id = 1;
+    int64 UserId = 2;
+    string Name = 3;
+    string Surname = 4;
+    string Email = 5;
+    string ProfileImage = 6;
+    string Biography = 7;
+    string Quote = 8;
+}
+
+message EmptyResponse{}
+
+message PersonResponse{
+    Person person = 1;
+}
+
+message MultiPersonResponse{
+    repeated Person persons = 1;
+}
+
+message User{
+    int64 id = 1;
+    string username = 2;
+    string password = 3;
+    int64 role = 4;
+    float longitude = 5;
+    bool isactive = 6;
+    bool isblocked = 7;
+    bool isenabled = 8;
+}
+
+message UserResponse{
+    User user = 1;
+}
+
+message MultiUserResponse{
+    repeated User users = 1;
+}
