@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package stakeholder;
+
+option go_package = "module_stakeholders/proto/stakeholders";
+
+
+service PersonService{
+    rpc CreatePerson(Person) returns (EmptyResponse){}
+    rpc GetAllPeople(Empty) returns (MultiPersonResponse){}
+    rpc GetPersonById(Id) returns (PersonResponse){}
+    //rpc UpdateTourProgress(TourProgress) returns (EmptyResponse){}
+    //rpc DeleteTourProgress(Id) returns (EmptyResponse){}
+}
+
+service UserService{
+    rpc CreateUser(User) returns(EmptyResponse){}
+    rpc GetUserById(Id) returns(UserResponse){}
+    rpc GetAllUsers(Empty) returns (MultiUserResponse){}
+    //rpc GetTouristPositionByUser(Id) returns(TouristPositionResponse){}
+    //rpc UpdateTouristPosition(TouristPosition) returns(EmptyResponse){}
+}
+
+message Empty{}
+
+message Id{
+    int64 id = 1;
+}
+
+message Person{
+    int64 id = 1;
+    int64 UserId = 2;
+    string Name = 3;
+    string Surname = 4;
+    string Email = 5;
+    string ProfileImage = 6;
+    string Biography = 7;
+    string Quote = 8;
+}
+
+message EmptyResponse{}
+
+message PersonResponse{
+    Person person = 1;
+}
+
+message MultiPersonResponse{
+    repeated Person persons = 1;
+}
+
+/*
+
+type User struct {
+	ID        int      `json:"id" gorm:"primaryKey,unique"`
+	Username  string   `json:"username"`
+	Password  string   `json:"password"`
+	Role      UserRole `json:"role"`
+	IsActive  bool     `json:"isactive"`
+	IsBlocked bool     `json:"isblocked"`
+	IsEnabled bool     `json:"isenabled"`
+}
+
+*/
+
+message User{
+    int64 id = 1;
+    string username = 2;
+    string password = 3;
+    int64 role = 4;
+    float longitude = 5;
+    bool isactive = 6;
+    bool isblocked = 7;
+    bool isenabled = 8;
+}
+
+message UserResponse{
+    User user = 1;
+}
+
+message MultiUserResponse{
+    repeated Person persons = 1;
+}
