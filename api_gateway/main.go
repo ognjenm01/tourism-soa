@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"api_gateway.xws.com/proto/blog"
+	"api_gateway.xws.com/proto/stakeholders"
 	"api_gateway.xws.com/proto/tour"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
@@ -30,6 +31,7 @@ func main() {
 	err1 := blog.RegisterBlogServiceHandlerFromEndpoint(ctx, mux, "blogs-module:49155", opts)
 	err2 := tour.RegisterTourProgressServiceHandlerFromEndpoint(ctx, mux, "tours-module:7777", opts)
 	err3 := tour.RegisterTouristPositionServiceHandlerFromEndpoint(ctx, mux, "tours-module:7777", opts)
+	err4 := stakeholders.RegisterAccessTokenServiceHandlerFromEndpoint(ctx, mux, "stakeholders-module:4119", opts)
 
 	if err1 != nil {
 		log.Fatalf("Failed to start HTTP gateway: %v", err1)
@@ -39,6 +41,10 @@ func main() {
 	}
 
 	if err3 != nil {
+		log.Fatalf("Failed to start HTTP gateway: %v", err3)
+	}
+
+	if err4 != nil {
 		log.Fatalf("Failed to start HTTP gateway: %v", err3)
 	}
 	log.Println("HTTP gateway is running on port 5002")

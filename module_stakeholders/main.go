@@ -37,7 +37,7 @@ func main() {
 	accessTokenHandler := &handler.AccessTokenHandler{AccessTokenService: accessTokenService}
 
 	//port := ":" + os.Getenv("ENV_HERE")
-	port := ":" + os.Getenv("STAKEHOLDERS_PORT")
+	port := ":" + os.Getenv("STAKEHOLDERS_APP_PORT")
 	if port == ":" {
 		port = ":4119"
 	}

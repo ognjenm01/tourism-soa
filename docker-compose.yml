@@ -22,6 +22,28 @@ services:
     depends_on:
       - database
 
+  stakeholders-module:
+    build:
+      context: ./
+      dockerfile: module_stakeholders/Dockerfile
+    image: stakeholdersmodule
+    container_name: stakeholders_module
+    restart: always
+    networks:
+      - servers
+    ports:
+      - "${STAKEHOLDERS_APP_PORT}:${STAKEHOLDERS_APP_PORT}"
+    environment:
+      STAKEHOLDERS_DB_HOST: ${STAKEHOLDERS_DB_HOST}
+      STAKEHOLDERS_DB_USERNAME: ${STAKEHOLDERS_DB_USERNAME}
+      STAKEHOLDERS_DB_PASSWORD: ${STAKEHOLDERS_DB_PASSWORD}
+      STAKEHOLDERS_DB: ${STAKEHOLDERS_DB}
+      STAKEHOLDERS_DB_PORT: ${STAKEHOLDERS_DB_PORT}
+      STAKEHOLDERS_SCHEMA: ${STAKEHOLDERS_SCHEMA}
+      STAKEHOLDERS_APP_PORT: ${STAKEHOLDERS_APP_PORT}
+    depends_on:
+      - database
+
   followers-module:
     build:
       context: ./module_follower

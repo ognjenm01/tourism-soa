@@ -89,7 +89,7 @@ func (service *AccessTokenService) LoginUser(user *model.Login) (*model.AccessTo
 		return nil, err
 	}
 
-	if usr.Password != user.Password {
+	if usr.Password != user.Password || user.Password == "" {
 		return nil, nil
 	}
 
