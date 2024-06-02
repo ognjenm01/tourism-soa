@@ -29,6 +29,15 @@ func (service *UserService) GetUserById(id string) (*model.User, error) {
 	return &user, nil
 }
 
+func (service *UserService) GetUserByUsername(username string) (*model.User, error) {
+	user, error := service.UserRepository.GetUserByUsername(username)
+	if error != nil {
+		log.Printf("[DB] - %s", error)
+		return nil, error
+	}
+	return &user, nil
+}
+
 func (service *UserService) CreateUser(user *model.User) error {
 	error := service.UserRepository.CreateUser(user)
 	if error != nil {

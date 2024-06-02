@@ -17,6 +17,7 @@ service UserService{
     rpc CreateUser(User) returns(EmptyResponse){}
     rpc GetUserById(Id) returns(UserResponse){}
     rpc GetAllUsers(Empty) returns (MultiUserResponse){}
+    rpc GetUserByUsername(Username) returns(UserResponse){}
     //rpc GetTouristPositionByUser(Id) returns(TouristPositionResponse){}
     //rpc UpdateTouristPosition(TouristPosition) returns(EmptyResponse){}
 }
@@ -25,6 +26,10 @@ message Empty{}
 
 message Id{
     int64 id = 1;
+}
+
+message Username{
+    string username = 1;
 }
 
 message Person{
@@ -78,5 +83,5 @@ message UserResponse{
 }
 
 message MultiUserResponse{
-    repeated Person persons = 1;
+    repeated User users = 1;
 }

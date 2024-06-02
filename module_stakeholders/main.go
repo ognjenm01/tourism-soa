@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 
 	"stakeholder/handler"
 	"stakeholder/infrastructure"
@@ -28,8 +29,15 @@ func main() {
 	personService := &service.PersonService{PersonRepository: personRepository}
 	personHandler := &handler.PersonHandler{PersonService: personService}
 
+	userRepository := &repo.UserRepository{DatabaseConnection: database}
+	userService := &service.UserService{UserRepository: userRepository}
+	userHandler := &handler.UserHandler{UserService: userService}
+
 	//port := ":" + os.Getenv("ENV_HERE")
-	port := ":4119"
+	port := ":" + os.Getenv("STAKEHOLDERS_PORT")
+	if port == ":" {
+		port = ":4119"
+	}
 	lis, err := net.Listen("tcp", port)
 
 	if err != nil {
@@ -50,6 +58,7 @@ func main() {
 	fmt.Println("Listening at:" + port)
 
 	stakeholders.RegisterPersonServiceServer(grpcServer, personHandler)
+	stakeholders.RegisterUserServiceServer(grpcServer, userHandler)
 
 	go func() {
 		if err := grpcServer.Serve(lis); err != nil {

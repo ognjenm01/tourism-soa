@@ -48,6 +48,15 @@ func (repo *UserRepository) CreateUser(user *model.User) error {
 	return nil
 }
 
+func (repo *UserRepository) GetUserByUsername(username string) (model.User, error) {
+	user := model.User{}
+	result := repo.DatabaseConnection.First(&user, "username = ?", username)
+	if result.Error != nil {
+		return user, nil
+	}
+	return user, result.Error
+}
+
 //Stvarno nemam snage sad
 /*
 func (repo *UserRepository) Update(id int, user *model.User) error {
