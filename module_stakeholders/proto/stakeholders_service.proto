@@ -22,6 +22,33 @@ service UserService{
     //rpc UpdateTouristPosition(TouristPosition) returns(EmptyResponse){}
 }
 
+service AccessTokenService{
+    rpc RegisterUser(Register) returns(EmptyResponse){}
+    rpc LoginUser(Login) returns(AccessToken){}
+}
+
+
+message AccessToken{
+    int64 Id = 1;
+    string Accesstoken = 2;
+}
+
+message Login{
+    string Username = 1;
+    string Password = 2;
+}
+
+message Register{
+    string Username = 1;
+    string Password = 2;
+    string Name = 3;
+    string Surname = 4;
+    string Email = 5;
+    string ProfileImage = 6;
+    string Biography = 7;
+    string Quote = 8;
+}
+
 message Empty{}
 
 message Id{

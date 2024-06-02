@@ -33,6 +33,9 @@ func main() {
 	userService := &service.UserService{UserRepository: userRepository}
 	userHandler := &handler.UserHandler{UserService: userService}
 
+	accessTokenService := &service.AccessTokenService{UserService: userService, PersonService: personService}
+	accessTokenHandler := &handler.AccessTokenHandler{AccessTokenService: accessTokenService}
+
 	//port := ":" + os.Getenv("ENV_HERE")
 	port := ":" + os.Getenv("STAKEHOLDERS_PORT")
 	if port == ":" {
@@ -59,6 +62,7 @@ func main() {
 
 	stakeholders.RegisterPersonServiceServer(grpcServer, personHandler)
 	stakeholders.RegisterUserServiceServer(grpcServer, userHandler)
+	stakeholders.RegisterAccessTokenServiceServer(grpcServer, accessTokenHandler)
 
 	go func() {
 		if err := grpcServer.Serve(lis); err != nil {

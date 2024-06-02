@@ -365,3 +365,123 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "proto/stakeholders_service.proto",
 }
+
+// AccessTokenServiceClient is the client API for AccessTokenService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type AccessTokenServiceClient interface {
+	RegisterUser(ctx context.Context, in *Register, opts ...grpc.CallOption) (*EmptyResponse, error)
+	LoginUser(ctx context.Context, in *Login, opts ...grpc.CallOption) (*AccessToken, error)
+}
+
+type accessTokenServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewAccessTokenServiceClient(cc grpc.ClientConnInterface) AccessTokenServiceClient {
+	return &accessTokenServiceClient{cc}
+}
+
+func (c *accessTokenServiceClient) RegisterUser(ctx context.Context, in *Register, opts ...grpc.CallOption) (*EmptyResponse, error) {
+	out := new(EmptyResponse)
+	err := c.cc.Invoke(ctx, "/stakeholder.AccessTokenService/RegisterUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accessTokenServiceClient) LoginUser(ctx context.Context, in *Login, opts ...grpc.CallOption) (*AccessToken, error) {
+	out := new(AccessToken)
+	err := c.cc.Invoke(ctx, "/stakeholder.AccessTokenService/LoginUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// AccessTokenServiceServer is the server API for AccessTokenService service.
+// All implementations should embed UnimplementedAccessTokenServiceServer
+// for forward compatibility
+type AccessTokenServiceServer interface {
+	RegisterUser(context.Context, *Register) (*EmptyResponse, error)
+	LoginUser(context.Context, *Login) (*AccessToken, error)
+}
+
+// UnimplementedAccessTokenServiceServer should be embedded to have forward compatible implementations.
+type UnimplementedAccessTokenServiceServer struct {
+}
+
+func (UnimplementedAccessTokenServiceServer) RegisterUser(context.Context, *Register) (*EmptyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisterUser not implemented")
+}
+func (UnimplementedAccessTokenServiceServer) LoginUser(context.Context, *Login) (*AccessToken, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoginUser not implemented")
+}
+
+// UnsafeAccessTokenServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to AccessTokenServiceServer will
+// result in compilation errors.
+type UnsafeAccessTokenServiceServer interface {
+	mustEmbedUnimplementedAccessTokenServiceServer()
+}
+
+func RegisterAccessTokenServiceServer(s grpc.ServiceRegistrar, srv AccessTokenServiceServer) {
+	s.RegisterService(&AccessTokenService_ServiceDesc, srv)
+}
+
+func _AccessTokenService_RegisterUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Register)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccessTokenServiceServer).RegisterUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/stakeholder.AccessTokenService/RegisterUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccessTokenServiceServer).RegisterUser(ctx, req.(*Register))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AccessTokenService_LoginUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Login)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccessTokenServiceServer).LoginUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/stakeholder.AccessTokenService/LoginUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccessTokenServiceServer).LoginUser(ctx, req.(*Login))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// AccessTokenService_ServiceDesc is the grpc.ServiceDesc for AccessTokenService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var AccessTokenService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "stakeholder.AccessTokenService",
+	HandlerType: (*AccessTokenServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "RegisterUser",
+			Handler:    _AccessTokenService_RegisterUser_Handler,
+		},
+		{
+			MethodName: "LoginUser",
+			Handler:    _AccessTokenService_LoginUser_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/stakeholders_service.proto",
+}
