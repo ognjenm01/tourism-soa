@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 	"tour/model"
 	"tour/service"
 
@@ -25,7 +24,7 @@ type TourHandler struct {
 
 // ------------------------------------------------------------------------------------------- TOUR CRUD
 
-func (handler *TourHandler) CreateTour(writer http.ResponseWriter, req *http.Request) {
+/*func (handler *TourHandler) CreateTour(writer http.ResponseWriter, req *http.Request) {
 	var tour model.Tour
 	error := json.NewDecoder(req.Body).Decode(&tour)
 	if error != nil {
@@ -57,7 +56,7 @@ func (handler *TourHandler) GetTourById(writer http.ResponseWriter, req *http.Re
 }
 
 func (handler *TourHandler) GetToursByStatus(writer http.ResponseWriter, req *http.Request) {
-	var statuses []model.TourStatus
+	var statuses []int
 	error := json.NewDecoder(req.Body).Decode(&statuses)
 	if error != nil {
 		writer.WriteHeader(http.StatusBadRequest)
@@ -124,7 +123,7 @@ func (handler *TourHandler) GetAllTours(writer http.ResponseWriter, req *http.Re
 		writer.WriteHeader(http.StatusOK)
 		json.NewEncoder(writer).Encode(tours)
 	}
-}
+}*/
 
 //------------------------------------------------------------------------------------------- KEYPOINT CRUD
 

@@ -14,9 +14,9 @@ type Tour struct {
 	Name             string         `json:"name"`
 	Description      string         `json:"description"`
 	Price            float64        `json:"price"`
-	Difficulty       TourDifficulty `json:"difficulty"`
-	TransportType    TransportType  `json:"transportType"`
-	Status           TourStatus     `json:"status"`
+	Difficulty       int            `json:"difficulty"`
+	TransportType    int            `json:"transportType"`
+	Status           int            `json:"status"`
 	Tags             []TourTag      `json:"tags" gorm:"foreignKey:TourID;references:ID"`
 	Keypoints        []Keypoint     `json:"keypoints" gorm:"foreignKey:TourID;references:ID"`
 	Duration         int            `json:"duration"`
@@ -25,7 +25,7 @@ type Tour struct {
 	TourProgress     []TourProgress `json:"tourprogress" gorm:"foreignKey:TourId;references:ID"`
 }
 
-func (t *Tour) ContainsStatus(statuses []TourStatus) bool {
+func (t *Tour) ContainsStatus(statuses []int) bool {
 	for _, status := range statuses {
 		if t.Status == status {
 			return true

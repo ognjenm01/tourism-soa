@@ -28,6 +28,15 @@ service KeypointService{
     rpc DeleteKeypoint(Id) returns (EmptyResponse){}
 }
 
+service TourService {
+    rpc CreateTour(Tour) returns (EmptyResponse){}
+    rpc GetTourById(Id) returns (EmptyResponse){}
+    rpc GetTourByStatus(Status) returns(MultiTourResponse){}
+    rpc GetTourByAuthor(Id) returns(MultiTourResponse){}
+    rpc UpdateTour(Tour) returns(EmptyResponse){}
+    rpc GetAllTours(EmptyResponse) returns(MultiTourResponse){}
+}
+
 message Empty{}
 
 message Id{
@@ -82,4 +91,39 @@ message Keypoint{
 
 message MultiKeypointResponse{
     repeated Keypoint keypoint = 1;
+}
+
+message TourTag {
+    int64 id = 1;
+    int64 tourid = 2;
+    string tag = 3;
+}
+
+message Tour {
+    int64 id = 1;
+    int64 userid = 2;
+    string name = 3;
+    string description = 4;
+    float price = 5;
+    int64 difficulty = 6;
+    int64 transporttype = 7;
+    int64 status = 8;
+    repeated TourTag tags = 9;
+    repeated Keypoint keypoints = 10;
+    int64 duration = 11;
+    float distance = 12;
+    google.protobuf.Timestamp statusupdatetime = 13;
+    repeated TourProgress tourprogress = 14;
+}
+
+message TourResponse {
+    Tour tour = 1;
+}
+
+message Status {
+    int64 status = 1;
+}
+
+message MultiTourResponse {
+    repeated Tour tours = 1;
 }
