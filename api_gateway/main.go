@@ -30,6 +30,7 @@ func main() {
 	err1 := blog.RegisterBlogServiceHandlerFromEndpoint(ctx, mux, "blogs-module:49155", opts)
 	err2 := tour.RegisterTourProgressServiceHandlerFromEndpoint(ctx, mux, "tours-module:7777", opts)
 	err3 := tour.RegisterTouristPositionServiceHandlerFromEndpoint(ctx, mux, "tours-module:7777", opts)
+	err4 := tour.RegisterKeypointServiceHandlerFromEndpoint(ctx, mux, "tours-module:7777", opts)
 
 	if err1 != nil {
 		log.Fatalf("Failed to start HTTP gateway: %v", err1)
@@ -41,6 +42,11 @@ func main() {
 	if err3 != nil {
 		log.Fatalf("Failed to start HTTP gateway: %v", err3)
 	}
+
+	if err4 != nil {
+		log.Fatalf("Failed to start HTTP gateway: %v", err4)
+	}
+
 	log.Println("HTTP gateway is running on port 5002")
 	if err := http.ListenAndServe(":5002", mux); err != nil {
 		log.Fatalf("Failed to serve: %v", err)

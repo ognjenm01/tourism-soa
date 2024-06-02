@@ -50,9 +50,6 @@ func main() {
 	/*tourRepository := &repo.TourRepository{DatabaseConnection: database}
 	tourService := &service.TourService{TourRepository: tourRepository}
 
-	keypointRepository := &repo.KeypointRepository{DatabaseConnection: database}
-	keypointService := &service.KeypointService{KeypointRepository: keypointRepository}
-
 	tourReviewRepository := &repo.TourReviewRepository{DatabaseConnection: database}
 	tourReviewService := &service.TourReviewService{TourReviewRepository: tourReviewRepository}
 
@@ -81,6 +78,10 @@ func main() {
 	touristPositionService := &service.TouristPositionService{TouristPositionRepository: touristPositionRepository}
 	touristPositionHandler := &handler.TouristPositionHandler{TouristPositionService: touristPositionService}
 
+	keypointRepository := &repo.KeypointRepository{DatabaseConnection: database}
+	keypointService := &service.KeypointService{KeypointRepository: keypointRepository}
+	keypointHandler := &handler.KeypointHandler{KeypointService: keypointService}
+
 	port := ":" + os.Getenv("TOURS_APP_PORT")
 	lis, err := net.Listen("tcp", port)
 
@@ -103,6 +104,7 @@ func main() {
 
 	tour.RegisterTourProgressServiceServer(grpcServer, tourProgressHandler)
 	tour.RegisterTouristPositionServiceServer(grpcServer, touristPositionHandler)
+	tour.RegisterKeypointServiceServer(grpcServer, keypointHandler)
 
 	go func() {
 		if err := grpcServer.Serve(lis); err != nil {
