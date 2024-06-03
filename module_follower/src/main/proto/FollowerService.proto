@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package follower;
+
+option java_package = "follower";
+option java_multiple_files = true;
+
+service FollowerService{
+  rpc Create(Person) returns(EmptyResponse){}
+  rpc GetPerson(Id) returns(PersonResponse){}
+  //follow
+  //unfollow
+  //getfollower
+  //getfollowing
+}
+
+message Id{
+  int64 id = 1;
+}
+
+message Empty{}
+
+message Person{
+  int64 id = 1;
+  int64 userId = 2;
+  string name = 3;
+  string surname = 4;
+  string email = 5;
+  repeated Person people = 6;
+}
+
+message EmptyResponse{}
+
+message PersonResponse{
+  Person person = 1;
+}
+
+message MultiPersonResponse{
+  repeated Person people = 1;
+}
