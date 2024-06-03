@@ -2,12 +2,9 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"tour/model"
 	"tour/service"
-
-	"crypto/tls"
 
 	"github.com/gorilla/mux"
 )
@@ -190,7 +187,7 @@ func (handler *TourHandler) GetKeypointsByTourId(writer http.ResponseWriter, req
 }*/
 
 //---------------------------------------------------------------------------------------- TOUR REVIEW CRUD
-
+/*
 func (handler *TourHandler) CreateReview(writer http.ResponseWriter, req *http.Request) {
 	var tourReview model.TourReview
 	error := json.NewDecoder(req.Body).Decode(&tourReview)
@@ -279,7 +276,7 @@ func (handler *TourHandler) UpdateReview(writer http.ResponseWriter, req *http.R
 
 	writer.WriteHeader(http.StatusCreated)
 	writer.Header().Set("Content-Type", "application/json")
-}
+}*/
 
 //---------------------------------------------------------------------------------------- EQUIPMENT CRUD
 

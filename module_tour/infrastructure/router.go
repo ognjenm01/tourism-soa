@@ -18,9 +18,9 @@ func InitRouter(handler *handler.TourHandler) *mux.Router {
 	router.HandleFunc("/api/tours", handler.GetAllTours).Methods("GET")
 	*/
 	// REVIEWS
-	router.HandleFunc("/api/tourreview", handler.CreateReview).Methods("POST")
+	/*router.HandleFunc("/api/tourreview", handler.CreateReview).Methods("POST")
 	router.HandleFunc("/api/tourreview", handler.GetAllReviews).Methods("GET")
-	router.HandleFunc("/api/tourreview/{id}", handler.GetReviewById).Methods("GET")
+	router.HandleFunc("/api/tourreview/{id}", handler.GetReviewById).Methods("GET")*/
 
 	// KEYPOINTS
 	/*router.HandleFunc("/api/keypoints", handler.CreateKeypoint).Methods("POST")

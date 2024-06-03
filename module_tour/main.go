@@ -90,6 +90,10 @@ func main() {
 	tourEquipmentService := &service.TourEquipmentService{TourEquipmentRepository: tourEquipmentRepository}
 	tourEquipmentHandler := &handler.TourEquipmentHandler{TourEquipmentService: tourEquipmentService}
 
+	tourReviewRepository := &repo.TourReviewRepository{DatabaseConnection: database}
+	tourReviewService := &service.TourReviewService{TourReviewRepository: tourReviewRepository}
+	tourReviewHandler := &handler.TourReviewHandler{TourReviewService: tourReviewService}
+
 	port := ":" + os.Getenv("TOURS_APP_PORT")
 	lis, err := net.Listen("tcp", port)
 
@@ -115,6 +119,7 @@ func main() {
 	tour.RegisterKeypointServiceServer(grpcServer, keypointHandler)
 	tour.RegisterTourServiceServer(grpcServer, tourHandler)
 	tour.RegisterTourEquipmentServiceServer(grpcServer, tourEquipmentHandler)
+	tour.RegisterTourReviewServiceServer(grpcServer, tourReviewHandler)
 
 	go func() {
 		if err := grpcServer.Serve(lis); err != nil {

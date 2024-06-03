@@ -1049,3 +1049,195 @@ var TourEquipmentService_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "proto/tour_service.proto",
 }
+
+// TourReviewServiceClient is the client API for TourReviewService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type TourReviewServiceClient interface {
+	CreateReview(ctx context.Context, in *TourReview, opts ...grpc.CallOption) (*EmptyResponse, error)
+	GetAllReviews(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*MultiTourReviewResponse, error)
+	GetReviewById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*TourReviewResponse, error)
+	UpdateReview(ctx context.Context, in *TourReview, opts ...grpc.CallOption) (*EmptyResponse, error)
+}
+
+type tourReviewServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewTourReviewServiceClient(cc grpc.ClientConnInterface) TourReviewServiceClient {
+	return &tourReviewServiceClient{cc}
+}
+
+func (c *tourReviewServiceClient) CreateReview(ctx context.Context, in *TourReview, opts ...grpc.CallOption) (*EmptyResponse, error) {
+	out := new(EmptyResponse)
+	err := c.cc.Invoke(ctx, "/tour.TourReviewService/CreateReview", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tourReviewServiceClient) GetAllReviews(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*MultiTourReviewResponse, error) {
+	out := new(MultiTourReviewResponse)
+	err := c.cc.Invoke(ctx, "/tour.TourReviewService/GetAllReviews", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tourReviewServiceClient) GetReviewById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*TourReviewResponse, error) {
+	out := new(TourReviewResponse)
+	err := c.cc.Invoke(ctx, "/tour.TourReviewService/GetReviewById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tourReviewServiceClient) UpdateReview(ctx context.Context, in *TourReview, opts ...grpc.CallOption) (*EmptyResponse, error) {
+	out := new(EmptyResponse)
+	err := c.cc.Invoke(ctx, "/tour.TourReviewService/UpdateReview", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// TourReviewServiceServer is the server API for TourReviewService service.
+// All implementations should embed UnimplementedTourReviewServiceServer
+// for forward compatibility
+type TourReviewServiceServer interface {
+	CreateReview(context.Context, *TourReview) (*EmptyResponse, error)
+	GetAllReviews(context.Context, *Empty) (*MultiTourReviewResponse, error)
+	GetReviewById(context.Context, *Id) (*TourReviewResponse, error)
+	UpdateReview(context.Context, *TourReview) (*EmptyResponse, error)
+}
+
+// UnimplementedTourReviewServiceServer should be embedded to have forward compatible implementations.
+type UnimplementedTourReviewServiceServer struct {
+}
+
+func (UnimplementedTourReviewServiceServer) CreateReview(context.Context, *TourReview) (*EmptyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateReview not implemented")
+}
+func (UnimplementedTourReviewServiceServer) GetAllReviews(context.Context, *Empty) (*MultiTourReviewResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllReviews not implemented")
+}
+func (UnimplementedTourReviewServiceServer) GetReviewById(context.Context, *Id) (*TourReviewResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetReviewById not implemented")
+}
+func (UnimplementedTourReviewServiceServer) UpdateReview(context.Context, *TourReview) (*EmptyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateReview not implemented")
+}
+
+// UnsafeTourReviewServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to TourReviewServiceServer will
+// result in compilation errors.
+type UnsafeTourReviewServiceServer interface {
+	mustEmbedUnimplementedTourReviewServiceServer()
+}
+
+func RegisterTourReviewServiceServer(s grpc.ServiceRegistrar, srv TourReviewServiceServer) {
+	s.RegisterService(&TourReviewService_ServiceDesc, srv)
+}
+
+func _TourReviewService_CreateReview_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TourReview)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TourReviewServiceServer).CreateReview(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tour.TourReviewService/CreateReview",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TourReviewServiceServer).CreateReview(ctx, req.(*TourReview))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TourReviewService_GetAllReviews_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TourReviewServiceServer).GetAllReviews(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tour.TourReviewService/GetAllReviews",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TourReviewServiceServer).GetAllReviews(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TourReviewService_GetReviewById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TourReviewServiceServer).GetReviewById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tour.TourReviewService/GetReviewById",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TourReviewServiceServer).GetReviewById(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TourReviewService_UpdateReview_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TourReview)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TourReviewServiceServer).UpdateReview(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tour.TourReviewService/UpdateReview",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TourReviewServiceServer).UpdateReview(ctx, req.(*TourReview))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// TourReviewService_ServiceDesc is the grpc.ServiceDesc for TourReviewService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var TourReviewService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "tour.TourReviewService",
+	HandlerType: (*TourReviewServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreateReview",
+			Handler:    _TourReviewService_CreateReview_Handler,
+		},
+		{
+			MethodName: "GetAllReviews",
+			Handler:    _TourReviewService_GetAllReviews_Handler,
+		},
+		{
+			MethodName: "GetReviewById",
+			Handler:    _TourReviewService_GetReviewById_Handler,
+		},
+		{
+			MethodName: "UpdateReview",
+			Handler:    _TourReviewService_UpdateReview_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/tour_service.proto",
+}

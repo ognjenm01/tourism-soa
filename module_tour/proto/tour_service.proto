@@ -43,6 +43,13 @@ service TourEquipmentService {
     rpc DeleteTourEquipment(TourEquipment) returns (EmptyResponse){}
 }
 
+service TourReviewService {
+    rpc CreateReview(TourReview) returns (EmptyResponse){}
+    rpc GetAllReviews(Empty) returns (MultiTourReviewResponse){}
+    rpc GetReviewById(Id) returns (TourReviewResponse){}
+    rpc UpdateReview(TourReview) returns(EmptyResponse){}
+}
+
 message Empty{}
 
 message Id{
@@ -142,4 +149,35 @@ message TourEquipment {
 
 message MultiTourEquipmentResponse {
     repeated TourEquipment tourequipment = 1;
+}
+
+message ImageLink {
+    int64 id = 1;
+    int64 tourreviewid = 2;
+    string link = 3;
+}
+
+message UserInfo {
+    string firstname = 1;
+    string lastname = 2;
+}
+
+message TourReview {
+    int64 id = 1;
+    int64 rating = 2;
+    string comment = 3;
+    google.protobuf.Timestamp visitdate = 4;
+    google.protobuf.Timestamp ratingdate = 5;
+    repeated ImageLink imagelinks = 6;
+    int64 userid = 7;
+    UserInfo userinfo = 8;
+    int64 tourid = 9;
+}
+
+message TourReviewResponse {
+    TourReview tourreview = 1;
+}
+
+message MultiTourReviewResponse {
+    repeated TourReview tourreviews = 1;
 }
