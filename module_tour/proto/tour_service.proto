@@ -37,6 +37,12 @@ service TourService {
     rpc GetAllTours(EmptyResponse) returns(MultiTourResponse){}
 }
 
+service TourEquipmentService {
+    rpc CreateTourEquipment(TourEquipment) returns (EmptyResponse){}
+    rpc GetAllTourEquipment(Empty) returns (MultiTourEquipmentResponse){}
+    rpc DeleteTourEquipment(TourEquipment) returns (EmptyResponse){}
+}
+
 message Empty{}
 
 message Id{
@@ -126,4 +132,14 @@ message Status {
 
 message MultiTourResponse {
     repeated Tour tours = 1;
+}
+
+message TourEquipment {
+    int64 id = 1;
+    int64 tourid = 2;
+    int64 equipmentid = 3;
+}
+
+message MultiTourEquipmentResponse {
+    repeated TourEquipment tourequipment = 1;
 }

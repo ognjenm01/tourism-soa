@@ -362,7 +362,7 @@ func (handler *TourHandler) UpdateEquipment(writer http.ResponseWriter, req *htt
 
 //---------------------------------------------------------------------------------------- TOUR EQUIPMENT CRUD
 
-func (handler *TourHandler) CreateTourEquipment(writer http.ResponseWriter, req *http.Request) {
+/*func (handler *TourHandler) CreateTourEquipment(writer http.ResponseWriter, req *http.Request) {
 	var tourEquipment model.TourEquipment
 
 	error := json.NewDecoder(req.Body).Decode(&tourEquipment)
@@ -409,7 +409,7 @@ func (handler *TourHandler) DeleteTourEquipment(writer http.ResponseWriter, req 
 	} else {
 		writer.WriteHeader(http.StatusOK)
 	}
-}
+}*/
 
 //---------------------------------------------------------------------------------------- TOUR PROGRESS CRUD
 
