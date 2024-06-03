@@ -21,7 +21,7 @@ func (service *TourService) GetTourById(id string) (*model.Tour, error) {
 	return &tour, nil
 }
 
-func (service *TourService) GetToursByStatus(statuses []model.TourStatus) (*[]model.Tour, error) {
+func (service *TourService) GetToursByStatus(statuses []int) (*[]model.Tour, error) {
 	tours, error := service.TourRepository.GetAll()
 	var filteredTours []model.Tour
 	if error == nil {
