@@ -1421,6 +1421,163 @@ func (x *MultiTourReviewResponse) GetTourreviews() []*TourReview {
 	return nil
 }
 
+type Equipment struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id          int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name        string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+}
+
+func (x *Equipment) Reset() {
+	*x = Equipment{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_tour_service_proto_msgTypes[22]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Equipment) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Equipment) ProtoMessage() {}
+
+func (x *Equipment) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_tour_service_proto_msgTypes[22]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Equipment.ProtoReflect.Descriptor instead.
+func (*Equipment) Descriptor() ([]byte, []int) {
+	return file_proto_tour_service_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *Equipment) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Equipment) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Equipment) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+type EquipmentResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Equipment *Equipment `protobuf:"bytes,1,opt,name=equipment,proto3" json:"equipment,omitempty"`
+}
+
+func (x *EquipmentResponse) Reset() {
+	*x = EquipmentResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_tour_service_proto_msgTypes[23]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *EquipmentResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EquipmentResponse) ProtoMessage() {}
+
+func (x *EquipmentResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_tour_service_proto_msgTypes[23]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EquipmentResponse.ProtoReflect.Descriptor instead.
+func (*EquipmentResponse) Descriptor() ([]byte, []int) {
+	return file_proto_tour_service_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *EquipmentResponse) GetEquipment() *Equipment {
+	if x != nil {
+		return x.Equipment
+	}
+	return nil
+}
+
+type MultiEquipmentResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Equipment []*Equipment `protobuf:"bytes,1,rep,name=equipment,proto3" json:"equipment,omitempty"`
+}
+
+func (x *MultiEquipmentResponse) Reset() {
+	*x = MultiEquipmentResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_tour_service_proto_msgTypes[24]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MultiEquipmentResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MultiEquipmentResponse) ProtoMessage() {}
+
+func (x *MultiEquipmentResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_tour_service_proto_msgTypes[24]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MultiEquipmentResponse.ProtoReflect.Descriptor instead.
+func (*MultiEquipmentResponse) Descriptor() ([]byte, []int) {
+	return file_proto_tour_service_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *MultiEquipmentResponse) GetEquipment() []*Equipment {
+	if x != nil {
+		return x.Equipment
+	}
+	return nil
+}
+
 var File_proto_tour_service_proto protoreflect.FileDescriptor
 
 var file_proto_tour_service_proto_rawDesc = []byte{
@@ -1595,7 +1752,21 @@ var file_proto_tour_service_proto_rawDesc = []byte{
 	0x32, 0x0a, 0x0b, 0x74, 0x6f, 0x75, 0x72, 0x72, 0x65, 0x76, 0x69, 0x65, 0x77, 0x73, 0x18, 0x01,
 	0x20, 0x03, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x74, 0x6f, 0x75, 0x72, 0x2e, 0x54, 0x6f, 0x75, 0x72,
 	0x52, 0x65, 0x76, 0x69, 0x65, 0x77, 0x52, 0x0b, 0x74, 0x6f, 0x75, 0x72, 0x72, 0x65, 0x76, 0x69,
-	0x65, 0x77, 0x73, 0x32, 0xd3, 0x02, 0x0a, 0x13, 0x54, 0x6f, 0x75, 0x72, 0x50, 0x72, 0x6f, 0x67,
+	0x65, 0x77, 0x73, 0x22, 0x51, 0x0a, 0x09, 0x45, 0x71, 0x75, 0x69, 0x70, 0x6d, 0x65, 0x6e, 0x74,
+	0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x02, 0x69, 0x64,
+	0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
+	0x6e, 0x61, 0x6d, 0x65, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74,
+	0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72,
+	0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x42, 0x0a, 0x11, 0x45, 0x71, 0x75, 0x69, 0x70, 0x6d,
+	0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2d, 0x0a, 0x09, 0x65,
+	0x71, 0x75, 0x69, 0x70, 0x6d, 0x65, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f,
+	0x2e, 0x74, 0x6f, 0x75, 0x72, 0x2e, 0x45, 0x71, 0x75, 0x69, 0x70, 0x6d, 0x65, 0x6e, 0x74, 0x52,
+	0x09, 0x65, 0x71, 0x75, 0x69, 0x70, 0x6d, 0x65, 0x6e, 0x74, 0x22, 0x47, 0x0a, 0x16, 0x4d, 0x75,
+	0x6c, 0x74, 0x69, 0x45, 0x71, 0x75, 0x69, 0x70, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2d, 0x0a, 0x09, 0x65, 0x71, 0x75, 0x69, 0x70, 0x6d, 0x65, 0x6e,
+	0x74, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x74, 0x6f, 0x75, 0x72, 0x2e, 0x45,
+	0x71, 0x75, 0x69, 0x70, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x09, 0x65, 0x71, 0x75, 0x69, 0x70, 0x6d,
+	0x65, 0x6e, 0x74, 0x32, 0xd3, 0x02, 0x0a, 0x13, 0x54, 0x6f, 0x75, 0x72, 0x50, 0x72, 0x6f, 0x67,
 	0x72, 0x65, 0x73, 0x73, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x3f, 0x0a, 0x12, 0x43,
 	0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x6f, 0x75, 0x72, 0x50, 0x72, 0x6f, 0x67, 0x72, 0x65, 0x73,
 	0x73, 0x12, 0x12, 0x2e, 0x74, 0x6f, 0x75, 0x72, 0x2e, 0x54, 0x6f, 0x75, 0x72, 0x50, 0x72, 0x6f,
@@ -1703,9 +1874,29 @@ var file_proto_tour_service_proto_rawDesc = []byte{
 	0x74, 0x65, 0x52, 0x65, 0x76, 0x69, 0x65, 0x77, 0x12, 0x10, 0x2e, 0x74, 0x6f, 0x75, 0x72, 0x2e,
 	0x54, 0x6f, 0x75, 0x72, 0x52, 0x65, 0x76, 0x69, 0x65, 0x77, 0x1a, 0x13, 0x2e, 0x74, 0x6f, 0x75,
 	0x72, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
-	0x00, 0x42, 0x18, 0x5a, 0x16, 0x6d, 0x6f, 0x64, 0x75, 0x6c, 0x65, 0x5f, 0x74, 0x6f, 0x75, 0x72,
-	0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x74, 0x6f, 0x75, 0x72, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x00, 0x32, 0xc3, 0x02, 0x0a, 0x10, 0x45, 0x71, 0x75, 0x69, 0x70, 0x6d, 0x65, 0x6e, 0x74, 0x53,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x39, 0x0a, 0x0f, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
+	0x45, 0x71, 0x75, 0x69, 0x70, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x0f, 0x2e, 0x74, 0x6f, 0x75, 0x72,
+	0x2e, 0x45, 0x71, 0x75, 0x69, 0x70, 0x6d, 0x65, 0x6e, 0x74, 0x1a, 0x13, 0x2e, 0x74, 0x6f, 0x75,
+	0x72, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
+	0x00, 0x12, 0x3e, 0x0a, 0x0f, 0x47, 0x65, 0x74, 0x41, 0x6c, 0x6c, 0x45, 0x71, 0x75, 0x69, 0x70,
+	0x6d, 0x65, 0x6e, 0x74, 0x12, 0x0b, 0x2e, 0x74, 0x6f, 0x75, 0x72, 0x2e, 0x45, 0x6d, 0x70, 0x74,
+	0x79, 0x1a, 0x1c, 0x2e, 0x74, 0x6f, 0x75, 0x72, 0x2e, 0x4d, 0x75, 0x6c, 0x74, 0x69, 0x45, 0x71,
+	0x75, 0x69, 0x70, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
+	0x00, 0x12, 0x37, 0x0a, 0x10, 0x47, 0x65, 0x74, 0x45, 0x71, 0x75, 0x69, 0x70, 0x6d, 0x65, 0x6e,
+	0x74, 0x42, 0x79, 0x49, 0x64, 0x12, 0x08, 0x2e, 0x74, 0x6f, 0x75, 0x72, 0x2e, 0x49, 0x64, 0x1a,
+	0x17, 0x2e, 0x74, 0x6f, 0x75, 0x72, 0x2e, 0x45, 0x71, 0x75, 0x69, 0x70, 0x6d, 0x65, 0x6e, 0x74,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x40, 0x0a, 0x14, 0x47, 0x65,
+	0x74, 0x45, 0x71, 0x75, 0x69, 0x70, 0x6d, 0x65, 0x6e, 0x74, 0x42, 0x79, 0x54, 0x6f, 0x75, 0x72,
+	0x49, 0x64, 0x12, 0x08, 0x2e, 0x74, 0x6f, 0x75, 0x72, 0x2e, 0x49, 0x64, 0x1a, 0x1c, 0x2e, 0x74,
+	0x6f, 0x75, 0x72, 0x2e, 0x4d, 0x75, 0x6c, 0x74, 0x69, 0x45, 0x71, 0x75, 0x69, 0x70, 0x6d, 0x65,
+	0x6e, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x39, 0x0a, 0x0f,
+	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x45, 0x71, 0x75, 0x69, 0x70, 0x6d, 0x65, 0x6e, 0x74, 0x12,
+	0x0f, 0x2e, 0x74, 0x6f, 0x75, 0x72, 0x2e, 0x45, 0x71, 0x75, 0x69, 0x70, 0x6d, 0x65, 0x6e, 0x74,
+	0x1a, 0x13, 0x2e, 0x74, 0x6f, 0x75, 0x72, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x18, 0x5a, 0x16, 0x6d, 0x6f, 0x64, 0x75, 0x6c,
+	0x65, 0x5f, 0x74, 0x6f, 0x75, 0x72, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x74, 0x6f, 0x75,
+	0x72, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1720,7 +1911,7 @@ func file_proto_tour_service_proto_rawDescGZIP() []byte {
 	return file_proto_tour_service_proto_rawDescData
 }
 
-var file_proto_tour_service_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
+var file_proto_tour_service_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
 var file_proto_tour_service_proto_goTypes = []interface{}{
 	(*Empty)(nil),                      // 0: tour.Empty
 	(*Id)(nil),                         // 1: tour.Id
@@ -1744,87 +1935,102 @@ var file_proto_tour_service_proto_goTypes = []interface{}{
 	(*TourReview)(nil),                 // 19: tour.TourReview
 	(*TourReviewResponse)(nil),         // 20: tour.TourReviewResponse
 	(*MultiTourReviewResponse)(nil),    // 21: tour.MultiTourReviewResponse
-	(*timestamppb.Timestamp)(nil),      // 22: google.protobuf.Timestamp
+	(*Equipment)(nil),                  // 22: tour.Equipment
+	(*EquipmentResponse)(nil),          // 23: tour.EquipmentResponse
+	(*MultiEquipmentResponse)(nil),     // 24: tour.MultiEquipmentResponse
+	(*timestamppb.Timestamp)(nil),      // 25: google.protobuf.Timestamp
 }
 var file_proto_tour_service_proto_depIdxs = []int32{
-	22, // 0: tour.TourProgress.startTime:type_name -> google.protobuf.Timestamp
-	22, // 1: tour.TourProgress.lastActivity:type_name -> google.protobuf.Timestamp
+	25, // 0: tour.TourProgress.startTime:type_name -> google.protobuf.Timestamp
+	25, // 1: tour.TourProgress.lastActivity:type_name -> google.protobuf.Timestamp
 	2,  // 2: tour.TourProgressResponse.tourProgress:type_name -> tour.TourProgress
 	2,  // 3: tour.MultiTourProgressResponse.tourProgress:type_name -> tour.TourProgress
 	2,  // 4: tour.TouristPosition.tourProgress:type_name -> tour.TourProgress
-	22, // 5: tour.TouristPosition.updatedAt:type_name -> google.protobuf.Timestamp
+	25, // 5: tour.TouristPosition.updatedAt:type_name -> google.protobuf.Timestamp
 	6,  // 6: tour.TouristPositionResponse.position:type_name -> tour.TouristPosition
 	8,  // 7: tour.MultiKeypointResponse.keypoint:type_name -> tour.Keypoint
 	10, // 8: tour.Tour.tags:type_name -> tour.TourTag
 	8,  // 9: tour.Tour.keypoints:type_name -> tour.Keypoint
-	22, // 10: tour.Tour.statusupdatetime:type_name -> google.protobuf.Timestamp
+	25, // 10: tour.Tour.statusupdatetime:type_name -> google.protobuf.Timestamp
 	2,  // 11: tour.Tour.tourprogress:type_name -> tour.TourProgress
 	11, // 12: tour.TourResponse.tour:type_name -> tour.Tour
 	11, // 13: tour.MultiTourResponse.tours:type_name -> tour.Tour
 	15, // 14: tour.MultiTourEquipmentResponse.tourequipment:type_name -> tour.TourEquipment
-	22, // 15: tour.TourReview.visitdate:type_name -> google.protobuf.Timestamp
-	22, // 16: tour.TourReview.ratingdate:type_name -> google.protobuf.Timestamp
+	25, // 15: tour.TourReview.visitdate:type_name -> google.protobuf.Timestamp
+	25, // 16: tour.TourReview.ratingdate:type_name -> google.protobuf.Timestamp
 	17, // 17: tour.TourReview.imagelinks:type_name -> tour.ImageLink
 	18, // 18: tour.TourReview.userinfo:type_name -> tour.UserInfo
 	19, // 19: tour.TourReviewResponse.tourreview:type_name -> tour.TourReview
 	19, // 20: tour.MultiTourReviewResponse.tourreviews:type_name -> tour.TourReview
-	2,  // 21: tour.TourProgressService.CreateTourProgress:input_type -> tour.TourProgress
-	0,  // 22: tour.TourProgressService.GetAllTourProgress:input_type -> tour.Empty
-	1,  // 23: tour.TourProgressService.GetTourProgressById:input_type -> tour.Id
-	2,  // 24: tour.TourProgressService.UpdateTourProgress:input_type -> tour.TourProgress
-	1,  // 25: tour.TourProgressService.DeleteTourProgress:input_type -> tour.Id
-	6,  // 26: tour.TouristPositionService.CreateTouristPosition:input_type -> tour.TouristPosition
-	1,  // 27: tour.TouristPositionService.GetTouristPositionById:input_type -> tour.Id
-	1,  // 28: tour.TouristPositionService.GetTouristPositionByUser:input_type -> tour.Id
-	6,  // 29: tour.TouristPositionService.UpdateTouristPosition:input_type -> tour.TouristPosition
-	8,  // 30: tour.KeypointService.CreateKeypoint:input_type -> tour.Keypoint
-	1,  // 31: tour.KeypointService.GetKeypointsByTourId:input_type -> tour.Id
-	8,  // 32: tour.KeypointService.UpdateKeypoint:input_type -> tour.Keypoint
-	1,  // 33: tour.KeypointService.DeleteKeypoint:input_type -> tour.Id
-	11, // 34: tour.TourService.CreateTour:input_type -> tour.Tour
-	1,  // 35: tour.TourService.GetTourById:input_type -> tour.Id
-	13, // 36: tour.TourService.GetTourByStatus:input_type -> tour.Status
-	1,  // 37: tour.TourService.GetTourByAuthor:input_type -> tour.Id
-	11, // 38: tour.TourService.UpdateTour:input_type -> tour.Tour
-	3,  // 39: tour.TourService.GetAllTours:input_type -> tour.EmptyResponse
-	15, // 40: tour.TourEquipmentService.CreateTourEquipment:input_type -> tour.TourEquipment
-	0,  // 41: tour.TourEquipmentService.GetAllTourEquipment:input_type -> tour.Empty
-	15, // 42: tour.TourEquipmentService.DeleteTourEquipment:input_type -> tour.TourEquipment
-	19, // 43: tour.TourReviewService.CreateReview:input_type -> tour.TourReview
-	0,  // 44: tour.TourReviewService.GetAllReviews:input_type -> tour.Empty
-	1,  // 45: tour.TourReviewService.GetReviewById:input_type -> tour.Id
-	19, // 46: tour.TourReviewService.UpdateReview:input_type -> tour.TourReview
-	3,  // 47: tour.TourProgressService.CreateTourProgress:output_type -> tour.EmptyResponse
-	5,  // 48: tour.TourProgressService.GetAllTourProgress:output_type -> tour.MultiTourProgressResponse
-	4,  // 49: tour.TourProgressService.GetTourProgressById:output_type -> tour.TourProgressResponse
-	3,  // 50: tour.TourProgressService.UpdateTourProgress:output_type -> tour.EmptyResponse
-	3,  // 51: tour.TourProgressService.DeleteTourProgress:output_type -> tour.EmptyResponse
-	3,  // 52: tour.TouristPositionService.CreateTouristPosition:output_type -> tour.EmptyResponse
-	7,  // 53: tour.TouristPositionService.GetTouristPositionById:output_type -> tour.TouristPositionResponse
-	7,  // 54: tour.TouristPositionService.GetTouristPositionByUser:output_type -> tour.TouristPositionResponse
-	3,  // 55: tour.TouristPositionService.UpdateTouristPosition:output_type -> tour.EmptyResponse
-	3,  // 56: tour.KeypointService.CreateKeypoint:output_type -> tour.EmptyResponse
-	9,  // 57: tour.KeypointService.GetKeypointsByTourId:output_type -> tour.MultiKeypointResponse
-	3,  // 58: tour.KeypointService.UpdateKeypoint:output_type -> tour.EmptyResponse
-	3,  // 59: tour.KeypointService.DeleteKeypoint:output_type -> tour.EmptyResponse
-	3,  // 60: tour.TourService.CreateTour:output_type -> tour.EmptyResponse
-	12, // 61: tour.TourService.GetTourById:output_type -> tour.TourResponse
-	14, // 62: tour.TourService.GetTourByStatus:output_type -> tour.MultiTourResponse
-	14, // 63: tour.TourService.GetTourByAuthor:output_type -> tour.MultiTourResponse
-	3,  // 64: tour.TourService.UpdateTour:output_type -> tour.EmptyResponse
-	14, // 65: tour.TourService.GetAllTours:output_type -> tour.MultiTourResponse
-	3,  // 66: tour.TourEquipmentService.CreateTourEquipment:output_type -> tour.EmptyResponse
-	16, // 67: tour.TourEquipmentService.GetAllTourEquipment:output_type -> tour.MultiTourEquipmentResponse
-	3,  // 68: tour.TourEquipmentService.DeleteTourEquipment:output_type -> tour.EmptyResponse
-	3,  // 69: tour.TourReviewService.CreateReview:output_type -> tour.EmptyResponse
-	21, // 70: tour.TourReviewService.GetAllReviews:output_type -> tour.MultiTourReviewResponse
-	20, // 71: tour.TourReviewService.GetReviewById:output_type -> tour.TourReviewResponse
-	3,  // 72: tour.TourReviewService.UpdateReview:output_type -> tour.EmptyResponse
-	47, // [47:73] is the sub-list for method output_type
-	21, // [21:47] is the sub-list for method input_type
-	21, // [21:21] is the sub-list for extension type_name
-	21, // [21:21] is the sub-list for extension extendee
-	0,  // [0:21] is the sub-list for field type_name
+	22, // 21: tour.EquipmentResponse.equipment:type_name -> tour.Equipment
+	22, // 22: tour.MultiEquipmentResponse.equipment:type_name -> tour.Equipment
+	2,  // 23: tour.TourProgressService.CreateTourProgress:input_type -> tour.TourProgress
+	0,  // 24: tour.TourProgressService.GetAllTourProgress:input_type -> tour.Empty
+	1,  // 25: tour.TourProgressService.GetTourProgressById:input_type -> tour.Id
+	2,  // 26: tour.TourProgressService.UpdateTourProgress:input_type -> tour.TourProgress
+	1,  // 27: tour.TourProgressService.DeleteTourProgress:input_type -> tour.Id
+	6,  // 28: tour.TouristPositionService.CreateTouristPosition:input_type -> tour.TouristPosition
+	1,  // 29: tour.TouristPositionService.GetTouristPositionById:input_type -> tour.Id
+	1,  // 30: tour.TouristPositionService.GetTouristPositionByUser:input_type -> tour.Id
+	6,  // 31: tour.TouristPositionService.UpdateTouristPosition:input_type -> tour.TouristPosition
+	8,  // 32: tour.KeypointService.CreateKeypoint:input_type -> tour.Keypoint
+	1,  // 33: tour.KeypointService.GetKeypointsByTourId:input_type -> tour.Id
+	8,  // 34: tour.KeypointService.UpdateKeypoint:input_type -> tour.Keypoint
+	1,  // 35: tour.KeypointService.DeleteKeypoint:input_type -> tour.Id
+	11, // 36: tour.TourService.CreateTour:input_type -> tour.Tour
+	1,  // 37: tour.TourService.GetTourById:input_type -> tour.Id
+	13, // 38: tour.TourService.GetTourByStatus:input_type -> tour.Status
+	1,  // 39: tour.TourService.GetTourByAuthor:input_type -> tour.Id
+	11, // 40: tour.TourService.UpdateTour:input_type -> tour.Tour
+	3,  // 41: tour.TourService.GetAllTours:input_type -> tour.EmptyResponse
+	15, // 42: tour.TourEquipmentService.CreateTourEquipment:input_type -> tour.TourEquipment
+	0,  // 43: tour.TourEquipmentService.GetAllTourEquipment:input_type -> tour.Empty
+	15, // 44: tour.TourEquipmentService.DeleteTourEquipment:input_type -> tour.TourEquipment
+	19, // 45: tour.TourReviewService.CreateReview:input_type -> tour.TourReview
+	0,  // 46: tour.TourReviewService.GetAllReviews:input_type -> tour.Empty
+	1,  // 47: tour.TourReviewService.GetReviewById:input_type -> tour.Id
+	19, // 48: tour.TourReviewService.UpdateReview:input_type -> tour.TourReview
+	22, // 49: tour.EquipmentService.CreateEquipment:input_type -> tour.Equipment
+	0,  // 50: tour.EquipmentService.GetAllEquipment:input_type -> tour.Empty
+	1,  // 51: tour.EquipmentService.GetEquipmentById:input_type -> tour.Id
+	1,  // 52: tour.EquipmentService.GetEquipmentByTourId:input_type -> tour.Id
+	22, // 53: tour.EquipmentService.UpdateEquipment:input_type -> tour.Equipment
+	3,  // 54: tour.TourProgressService.CreateTourProgress:output_type -> tour.EmptyResponse
+	5,  // 55: tour.TourProgressService.GetAllTourProgress:output_type -> tour.MultiTourProgressResponse
+	4,  // 56: tour.TourProgressService.GetTourProgressById:output_type -> tour.TourProgressResponse
+	3,  // 57: tour.TourProgressService.UpdateTourProgress:output_type -> tour.EmptyResponse
+	3,  // 58: tour.TourProgressService.DeleteTourProgress:output_type -> tour.EmptyResponse
+	3,  // 59: tour.TouristPositionService.CreateTouristPosition:output_type -> tour.EmptyResponse
+	7,  // 60: tour.TouristPositionService.GetTouristPositionById:output_type -> tour.TouristPositionResponse
+	7,  // 61: tour.TouristPositionService.GetTouristPositionByUser:output_type -> tour.TouristPositionResponse
+	3,  // 62: tour.TouristPositionService.UpdateTouristPosition:output_type -> tour.EmptyResponse
+	3,  // 63: tour.KeypointService.CreateKeypoint:output_type -> tour.EmptyResponse
+	9,  // 64: tour.KeypointService.GetKeypointsByTourId:output_type -> tour.MultiKeypointResponse
+	3,  // 65: tour.KeypointService.UpdateKeypoint:output_type -> tour.EmptyResponse
+	3,  // 66: tour.KeypointService.DeleteKeypoint:output_type -> tour.EmptyResponse
+	3,  // 67: tour.TourService.CreateTour:output_type -> tour.EmptyResponse
+	12, // 68: tour.TourService.GetTourById:output_type -> tour.TourResponse
+	14, // 69: tour.TourService.GetTourByStatus:output_type -> tour.MultiTourResponse
+	14, // 70: tour.TourService.GetTourByAuthor:output_type -> tour.MultiTourResponse
+	3,  // 71: tour.TourService.UpdateTour:output_type -> tour.EmptyResponse
+	14, // 72: tour.TourService.GetAllTours:output_type -> tour.MultiTourResponse
+	3,  // 73: tour.TourEquipmentService.CreateTourEquipment:output_type -> tour.EmptyResponse
+	16, // 74: tour.TourEquipmentService.GetAllTourEquipment:output_type -> tour.MultiTourEquipmentResponse
+	3,  // 75: tour.TourEquipmentService.DeleteTourEquipment:output_type -> tour.EmptyResponse
+	3,  // 76: tour.TourReviewService.CreateReview:output_type -> tour.EmptyResponse
+	21, // 77: tour.TourReviewService.GetAllReviews:output_type -> tour.MultiTourReviewResponse
+	20, // 78: tour.TourReviewService.GetReviewById:output_type -> tour.TourReviewResponse
+	3,  // 79: tour.TourReviewService.UpdateReview:output_type -> tour.EmptyResponse
+	3,  // 80: tour.EquipmentService.CreateEquipment:output_type -> tour.EmptyResponse
+	24, // 81: tour.EquipmentService.GetAllEquipment:output_type -> tour.MultiEquipmentResponse
+	23, // 82: tour.EquipmentService.GetEquipmentById:output_type -> tour.EquipmentResponse
+	24, // 83: tour.EquipmentService.GetEquipmentByTourId:output_type -> tour.MultiEquipmentResponse
+	3,  // 84: tour.EquipmentService.UpdateEquipment:output_type -> tour.EmptyResponse
+	54, // [54:85] is the sub-list for method output_type
+	23, // [23:54] is the sub-list for method input_type
+	23, // [23:23] is the sub-list for extension type_name
+	23, // [23:23] is the sub-list for extension extendee
+	0,  // [0:23] is the sub-list for field type_name
 }
 
 func init() { file_proto_tour_service_proto_init() }
@@ -2097,6 +2303,42 @@ func file_proto_tour_service_proto_init() {
 				return nil
 			}
 		}
+		file_proto_tour_service_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Equipment); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_tour_service_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*EquipmentResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_tour_service_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MultiEquipmentResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -2104,9 +2346,9 @@ func file_proto_tour_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_proto_tour_service_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   22,
+			NumMessages:   25,
 			NumExtensions: 0,
-			NumServices:   6,
+			NumServices:   7,
 		},
 		GoTypes:           file_proto_tour_service_proto_goTypes,
 		DependencyIndexes: file_proto_tour_service_proto_depIdxs,

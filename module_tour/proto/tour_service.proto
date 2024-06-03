@@ -50,6 +50,14 @@ service TourReviewService {
     rpc UpdateReview(TourReview) returns(EmptyResponse){}
 }
 
+service EquipmentService {
+    rpc CreateEquipment(Equipment) returns (EmptyResponse){}
+    rpc GetAllEquipment(Empty) returns (MultiEquipmentResponse) {}
+    rpc GetEquipmentById(Id) returns (EquipmentResponse) {}
+    rpc GetEquipmentByTourId(Id) returns (MultiEquipmentResponse) {}
+    rpc UpdateEquipment(Equipment) returns(EmptyResponse) {}
+}
+
 message Empty{}
 
 message Id{
@@ -180,4 +188,18 @@ message TourReviewResponse {
 
 message MultiTourReviewResponse {
     repeated TourReview tourreviews = 1;
+}
+
+message Equipment {
+    int64 id = 1;
+    string name = 2;
+    string description = 3;
+}
+
+message EquipmentResponse {
+    Equipment equipment = 1;
+}
+
+message MultiEquipmentResponse {
+    repeated Equipment equipment = 1;
 }

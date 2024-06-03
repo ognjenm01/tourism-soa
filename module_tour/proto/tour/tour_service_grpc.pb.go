@@ -1241,3 +1241,231 @@ var TourReviewService_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "proto/tour_service.proto",
 }
+
+// EquipmentServiceClient is the client API for EquipmentService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type EquipmentServiceClient interface {
+	CreateEquipment(ctx context.Context, in *Equipment, opts ...grpc.CallOption) (*EmptyResponse, error)
+	GetAllEquipment(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*MultiEquipmentResponse, error)
+	GetEquipmentById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*EquipmentResponse, error)
+	GetEquipmentByTourId(ctx context.Context, in *Id, opts ...grpc.CallOption) (*MultiEquipmentResponse, error)
+	UpdateEquipment(ctx context.Context, in *Equipment, opts ...grpc.CallOption) (*EmptyResponse, error)
+}
+
+type equipmentServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewEquipmentServiceClient(cc grpc.ClientConnInterface) EquipmentServiceClient {
+	return &equipmentServiceClient{cc}
+}
+
+func (c *equipmentServiceClient) CreateEquipment(ctx context.Context, in *Equipment, opts ...grpc.CallOption) (*EmptyResponse, error) {
+	out := new(EmptyResponse)
+	err := c.cc.Invoke(ctx, "/tour.EquipmentService/CreateEquipment", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *equipmentServiceClient) GetAllEquipment(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*MultiEquipmentResponse, error) {
+	out := new(MultiEquipmentResponse)
+	err := c.cc.Invoke(ctx, "/tour.EquipmentService/GetAllEquipment", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *equipmentServiceClient) GetEquipmentById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*EquipmentResponse, error) {
+	out := new(EquipmentResponse)
+	err := c.cc.Invoke(ctx, "/tour.EquipmentService/GetEquipmentById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *equipmentServiceClient) GetEquipmentByTourId(ctx context.Context, in *Id, opts ...grpc.CallOption) (*MultiEquipmentResponse, error) {
+	out := new(MultiEquipmentResponse)
+	err := c.cc.Invoke(ctx, "/tour.EquipmentService/GetEquipmentByTourId", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *equipmentServiceClient) UpdateEquipment(ctx context.Context, in *Equipment, opts ...grpc.CallOption) (*EmptyResponse, error) {
+	out := new(EmptyResponse)
+	err := c.cc.Invoke(ctx, "/tour.EquipmentService/UpdateEquipment", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// EquipmentServiceServer is the server API for EquipmentService service.
+// All implementations should embed UnimplementedEquipmentServiceServer
+// for forward compatibility
+type EquipmentServiceServer interface {
+	CreateEquipment(context.Context, *Equipment) (*EmptyResponse, error)
+	GetAllEquipment(context.Context, *Empty) (*MultiEquipmentResponse, error)
+	GetEquipmentById(context.Context, *Id) (*EquipmentResponse, error)
+	GetEquipmentByTourId(context.Context, *Id) (*MultiEquipmentResponse, error)
+	UpdateEquipment(context.Context, *Equipment) (*EmptyResponse, error)
+}
+
+// UnimplementedEquipmentServiceServer should be embedded to have forward compatible implementations.
+type UnimplementedEquipmentServiceServer struct {
+}
+
+func (UnimplementedEquipmentServiceServer) CreateEquipment(context.Context, *Equipment) (*EmptyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateEquipment not implemented")
+}
+func (UnimplementedEquipmentServiceServer) GetAllEquipment(context.Context, *Empty) (*MultiEquipmentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllEquipment not implemented")
+}
+func (UnimplementedEquipmentServiceServer) GetEquipmentById(context.Context, *Id) (*EquipmentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetEquipmentById not implemented")
+}
+func (UnimplementedEquipmentServiceServer) GetEquipmentByTourId(context.Context, *Id) (*MultiEquipmentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetEquipmentByTourId not implemented")
+}
+func (UnimplementedEquipmentServiceServer) UpdateEquipment(context.Context, *Equipment) (*EmptyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateEquipment not implemented")
+}
+
+// UnsafeEquipmentServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to EquipmentServiceServer will
+// result in compilation errors.
+type UnsafeEquipmentServiceServer interface {
+	mustEmbedUnimplementedEquipmentServiceServer()
+}
+
+func RegisterEquipmentServiceServer(s grpc.ServiceRegistrar, srv EquipmentServiceServer) {
+	s.RegisterService(&EquipmentService_ServiceDesc, srv)
+}
+
+func _EquipmentService_CreateEquipment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Equipment)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EquipmentServiceServer).CreateEquipment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tour.EquipmentService/CreateEquipment",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EquipmentServiceServer).CreateEquipment(ctx, req.(*Equipment))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EquipmentService_GetAllEquipment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EquipmentServiceServer).GetAllEquipment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tour.EquipmentService/GetAllEquipment",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EquipmentServiceServer).GetAllEquipment(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EquipmentService_GetEquipmentById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EquipmentServiceServer).GetEquipmentById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tour.EquipmentService/GetEquipmentById",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EquipmentServiceServer).GetEquipmentById(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EquipmentService_GetEquipmentByTourId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EquipmentServiceServer).GetEquipmentByTourId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tour.EquipmentService/GetEquipmentByTourId",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EquipmentServiceServer).GetEquipmentByTourId(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EquipmentService_UpdateEquipment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Equipment)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EquipmentServiceServer).UpdateEquipment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tour.EquipmentService/UpdateEquipment",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EquipmentServiceServer).UpdateEquipment(ctx, req.(*Equipment))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// EquipmentService_ServiceDesc is the grpc.ServiceDesc for EquipmentService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var EquipmentService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "tour.EquipmentService",
+	HandlerType: (*EquipmentServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreateEquipment",
+			Handler:    _EquipmentService_CreateEquipment_Handler,
+		},
+		{
+			MethodName: "GetAllEquipment",
+			Handler:    _EquipmentService_GetAllEquipment_Handler,
+		},
+		{
+			MethodName: "GetEquipmentById",
+			Handler:    _EquipmentService_GetEquipmentById_Handler,
+		},
+		{
+			MethodName: "GetEquipmentByTourId",
+			Handler:    _EquipmentService_GetEquipmentByTourId_Handler,
+		},
+		{
+			MethodName: "UpdateEquipment",
+			Handler:    _EquipmentService_UpdateEquipment_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/tour_service.proto",
+}

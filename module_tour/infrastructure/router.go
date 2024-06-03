@@ -29,10 +29,10 @@ func InitRouter(handler *handler.TourHandler) *mux.Router {
 	router.HandleFunc("/api/keypoints/{id}", handler.DeleteKeypoint).Methods("DELETE")*/
 
 	// EQUIPMENT
-	router.HandleFunc("/api/equipment", handler.CreateEquipment).Methods("POST")
-	router.HandleFunc("/api/equipment", handler.GetAllEquipment).Methods("GET")
-	router.HandleFunc("/api/equipment/tour/{id}", handler.GetEquipmentByTourId).Methods("GET")
-	router.HandleFunc("/api/equipment/{id}", handler.UpdateEquipment).Methods("PUT")
+	//router.HandleFunc("/api/equipment", handler.CreateEquipment).Methods("POST")
+	//router.HandleFunc("/api/equipment", handler.GetAllEquipment).Methods("GET")
+	//router.HandleFunc("/api/equipment/tour/{id}", handler.GetEquipmentByTourId).Methods("GET")
+	//router.HandleFunc("/api/equipment/{id}", handler.UpdateEquipment).Methods("PUT")
 
 	// TOUR EQUIPMENT
 	//router.HandleFunc("/api/tourequipment", handler.GetAllTourEquipment).Methods("GET")

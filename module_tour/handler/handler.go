@@ -1,12 +1,7 @@
 package handler
 
 import (
-	"encoding/json"
-	"net/http"
-	"tour/model"
 	"tour/service"
-
-	"github.com/gorilla/mux"
 )
 
 type TourHandler struct {
@@ -279,7 +274,7 @@ func (handler *TourHandler) UpdateReview(writer http.ResponseWriter, req *http.R
 }*/
 
 //---------------------------------------------------------------------------------------- EQUIPMENT CRUD
-
+/*
 func (handler *TourHandler) CreateEquipment(writer http.ResponseWriter, req *http.Request) {
 	var equipment model.Equipment
 
@@ -356,7 +351,7 @@ func (handler *TourHandler) UpdateEquipment(writer http.ResponseWriter, req *htt
 	writer.WriteHeader(http.StatusCreated)
 	writer.Header().Set("Content-Type", "application/json")
 }
-
+*/
 //---------------------------------------------------------------------------------------- TOUR EQUIPMENT CRUD
 
 /*func (handler *TourHandler) CreateTourEquipment(writer http.ResponseWriter, req *http.Request) {
