@@ -113,7 +113,7 @@ func (handler *NewTourHandler) CreateTour(ctx context.Context, to *tour.Tour) (*
 	t := MapGrpcTourToModel(to)
 	err := handler.TourService.CreateTour(t)
 	if err != nil {
-		log.Print(err)
+		log.Print(err.Error())
 		return nil, err
 	}
 	return &tour.EmptyResponse{}, nil
@@ -123,7 +123,7 @@ func (handler *NewTourHandler) GetTourById(ctx context.Context, req *tour.Id) (*
 	id := strconv.FormatInt(req.Id, 10)
 	tourOld, err := handler.TourService.GetTourById(id)
 	if err != nil {
-		log.Print(err)
+		log.Print(err.Error())
 		return nil, err
 	}
 	tt := mapModelTourToGrpc(tourOld)

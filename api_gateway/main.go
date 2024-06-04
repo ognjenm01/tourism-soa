@@ -49,6 +49,10 @@ func main() {
 	err3 := tour.RegisterTouristPositionServiceHandlerFromEndpoint(ctx, mux, "tours-module:7777", opts)
 	err4 := tour.RegisterKeypointServiceHandlerFromEndpoint(ctx, mux, "tours-module:7777", opts)
 	err5 := stakeholders.RegisterAccessTokenServiceHandlerFromEndpoint(ctx, mux, "stakeholders-module:4119", opts)
+	err6 := tour.RegisterTourServiceHandlerFromEndpoint(ctx, mux, "tours-module:7777", opts)
+	err7 := tour.RegisterEquipmentServiceHandlerFromEndpoint(ctx, mux, "tours-module:7777", opts)
+	err8 := tour.RegisterTourEquipmentServiceHandlerFromEndpoint(ctx, mux, "tours-module:7777", opts)
+	err9 := tour.RegisterTourReviewServiceHandlerFromEndpoint(ctx, mux, "tours-module:7777", opts)
 
 	if err1 != nil {
 		log.Fatalf("Failed to start HTTP gateway: %v", err1)
@@ -66,6 +70,18 @@ func main() {
 	}
 	if err5 != nil {
 		log.Fatalf("Failed to start HTTP gateway: %v", err5)
+	}
+	if err6 != nil {
+		log.Fatalf("Failed to start HTTP gateway: %v", err6)
+	}
+	if err7 != nil {
+		log.Fatalf("Failed to start HTTP gateway: %v", err7)
+	}
+	if err8 != nil {
+		log.Fatalf("Failed to start HTTP gateway: %v", err8)
+	}
+	if err9 != nil {
+		log.Fatalf("Failed to start HTTP gateway: %v", err9)
 	}
 
 	authMux := authenticate(mux) // Create a new ServeMux with authentication middleware
