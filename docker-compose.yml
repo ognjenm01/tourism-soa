@@ -1,4 +1,10 @@
 version: "3.7"
+
+x-logging: &fluent-bit
+  driver: fluentd
+  options:
+    fluentd-address: 0.0.0.0:24224
+
 services:
   tours-module:
     build:
@@ -7,8 +13,10 @@ services:
     image: toursmodule
     container_name: tours_module
     restart: always
+    logging: *fluent-bit
     networks:
       - servers
+      - monitoring
     ports:
       - "${TOURS_APP_PORT}:${TOURS_APP_PORT}"
     environment:
@@ -28,9 +36,11 @@ services:
       dockerfile: module_stakeholders/Dockerfile
     image: stakeholdersmodule
     container_name: stakeholders_module
+    logging: *fluent-bit
     restart: always
     networks:
       - servers
+      - monitoring 
     ports:
       - "${STAKEHOLDERS_APP_PORT}:${STAKEHOLDERS_APP_PORT}"
     environment:
@@ -50,9 +60,11 @@ services:
       dockerfile: Dockerfile
     image: followersmodule
     container_name: followers_module
+    logging: *fluent-bit
     restart: always
     networks:
       - servers
+      - monitoring
     ports:
       - "${FOLLOWERS_APP_PORT}:${FOLLOWERS_APP_PORT}"
     environment:
@@ -69,9 +81,11 @@ services:
       target: final
     image: explorer
     container_name: explorer
+    logging: *fluent-bit
     restart: on-failure
     networks:
       - servers
+      - monitoring
     ports:
       - "44333:443"
       - "1234:80"
@@ -90,8 +104,10 @@ services:
     image: postgres
     container_name: postgres_container
     restart: always
+    logging: *fluent-bit
     networks:
       - servers
+      - monitoring
     ports:
       - 5432:5432
     environment:
@@ -103,6 +119,7 @@ services:
   mongo-db:
     image: mongo
     container_name: mongo-db
+    logging: *fluent-bit
     restart: always
     ports:
       - "${MONGO_DB_PORT}:${MONGO_DB_PORT}"
@@ -110,10 +127,12 @@ services:
       MONGO_INITDB_DATABASE: mongoDemo
     networks:
       - servers
+      - monitoring
 
   neo4j-db:
     image: neo4j
     container_name: neo4j-db
+    logging: *fluent-bit
     ports:
     - "${NEO4J_PORT}:${NEO4J_PORT}"
     - "${NEO4J_PORT_BOLT}:${NEO4J_PORT_BOLT}"
@@ -121,6 +140,7 @@ services:
       NEO4J_AUTH: none
     networks:
     - servers
+    - monitoring
   
   blogs-module:
     build: 
@@ -128,9 +148,11 @@ services:
       dockerfile: module_blog/Dockerfile
     image: blogsmodule
     container_name: blogs_module
+    logging: *fluent-bit
     restart: always
     networks:
       - servers
+      - monitoring
     ports:
       - "${BLOGS_APP_PORT}:${BLOGS_APP_PORT}"
     environment:
@@ -151,9 +173,11 @@ services:
       dockerfile: api_gateway/Dockerfile
     image: api_gateway
     container_name: api-gateway
+    logging: *fluent-bit
     restart: always
     networks:
       - servers
+      - monitoring
     ports:
       - "${API_GATEWAY_PORT}:${API_GATEWAY_PORT}"
     depends_on:
@@ -168,3 +192,5 @@ networks:
   servers:
     name: servers
     driver: bridge
+  monitoring:
+    external: true
