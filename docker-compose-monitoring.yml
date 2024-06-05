@@ -4,6 +4,8 @@ services:
   # Loki:
   loki:
     image: grafana/loki:main-5206e3a
+    ports:
+      - "3100:3100"
     networks:
       - monitoring
     restart: always  # Dodajemo opciju restart: always za automatsko restartovanje
@@ -32,11 +34,12 @@ services:
 
   # Fluent Bit:
   fluent-bit:
-    image: grafana/fluent-bit-plugin-loki:main-5206e3a-amd64
+    image: grafana/fluent-bit-plugin-loki:main
     environment:
       LOKI_URL: http://loki:3100/loki/api/v1/push
     volumes:
       - ./fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - ./fluent-bit/parsers.conf:/fluent-bit/etc/parsers.conf
     ports:
       - "24224:24224"
       - "24224:24224/udp"

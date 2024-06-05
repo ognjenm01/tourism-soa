@@ -4,6 +4,7 @@ x-logging: &fluent-bit
   driver: fluentd
   options:
     fluentd-address: 0.0.0.0:24224
+    tag: docker.{{.Name}}
 
 services:
   tours-module:
@@ -27,6 +28,7 @@ services:
       TOURS_DB_PORT: ${TOURS_DB_PORT}
       TOURS_SCHEMA: ${TOURS_SCHEMA}
       TOURS_APP_PORT: ${TOURS_APP_PORT}
+      FLUENTD_TAG: docker.{{.Name}}
     depends_on:
       - database
 
@@ -51,6 +53,7 @@ services:
       STAKEHOLDERS_DB_PORT: ${STAKEHOLDERS_DB_PORT}
       STAKEHOLDERS_SCHEMA: ${STAKEHOLDERS_SCHEMA}
       STAKEHOLDERS_APP_PORT: ${STAKEHOLDERS_APP_PORT}
+      FLUENTD_TAG: docker.{{.Name}}
     depends_on:
       - database
 
@@ -71,6 +74,7 @@ services:
       NEO4J_PORT: ${NEO4J_PORT}
       NEO4J_PORT_BOLT: ${NEO4J_PORT_BOLT}
       NEO4J_DB_URI: ${NEO4J_DB_URI}
+      FLUENTD_TAG: docker.{{.Name}}
     depends_on:
       - database
 
@@ -95,6 +99,7 @@ services:
       DATABASE_PASSWORD: super
       DATABASE_USER: postgres
       DATABASE_SCHEMA: explorer-v1
+      FLUENTD_TAG: docker.{{.Name}}
       TOURS_APP_PORT: ${TOURS_APP_PORT}
       ASPNETCORE_URLS: https://+:443;http://+:80
     depends_on:
@@ -113,6 +118,7 @@ services:
     environment:
       POSTGRES_PASSWORD: super
       POSTGRES_DB: explorer-v1
+      FLUENTD_TAG: docker.{{.Name}}
     volumes:
       - database-data:/var/lib/postgresql/data
     
@@ -138,6 +144,7 @@ services:
     - "${NEO4J_PORT_BOLT}:${NEO4J_PORT_BOLT}"
     environment:
       NEO4J_AUTH: none
+      FLUENTD_TAG: docker.{{.Name}}
     networks:
     - servers
     - monitoring
@@ -163,6 +170,7 @@ services:
       BLOGS_DB_PORT: ${BLOGS_DB_PORT}
       BLOGS_SCHEMA: ${BLOGS_SCHEMA}
       BLOGS_APP_PORT: ${BLOGS_APP_PORT}
+      FLUENTD_TAG: docker.{{.Name}}
     depends_on:
       - mongo-db
       - database
